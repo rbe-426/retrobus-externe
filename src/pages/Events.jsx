@@ -174,7 +174,7 @@ export default function Events() {
       return null;
     }
     
-    // 2. Sortie Privée spéciale → Bouton inactif "Sortie Privée"
+    // 2. Évènement Privé spécial → Bouton inactif "Évènement Privé"
     if (info.eventType === 'private_outing' || (!info.requiresRegistration && !info.allowPublicRegistration && info.eventType !== 'public_open_access')) {
       console.log(`🔒 Private outing → Disabled button`);
       return (
@@ -187,7 +187,7 @@ export default function Events() {
           isDisabled
           cursor="not-allowed"
         >
-          Sortie Privée
+          Évènement Privé
         </Button>
       );
     }

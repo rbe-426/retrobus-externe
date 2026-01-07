@@ -360,6 +360,9 @@ export default function EventRegistration() {
   }
 
   const eventInfo = getEventTypeInfo(event);
+  
+  console.log('🔍 Event extras:', event?.extras);
+  console.log('🔍 Registration method:', eventInfo.registrationMethod);
 
   return (
   <Container maxW="container.md" py={10}>

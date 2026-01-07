@@ -755,14 +755,18 @@ export default function EventRegistration() {
             <VStack align="start" spacing={3}>
               <Heading size="sm">Finaliser votre inscription</Heading>
               <Button
-                as="a"
-                href={event?.helloAssoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+                onClick={() => {
+                  // Créer l'inscription d'abord
+                  handleSubmitRegistration();
+                  // Le handleSubmitRegistration va rediriger vers HelloAsso
+                  onHelloAssoClose();
+                }}
                 colorScheme="blue"
                 size="lg"
                 w="100%"
                 leftIcon={<Icon as={FiExternalLink} />}
+                isLoading={submitting}
+                loadingText="Traitement..."
               >
                 Procéder au paiement sur HelloAsso
               </Button>

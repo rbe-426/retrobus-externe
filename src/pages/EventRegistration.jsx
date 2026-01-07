@@ -26,7 +26,15 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
   SimpleGrid,
-  Checkbox
+  Checkbox,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  useDisclosure
 } from "@chakra-ui/react";
 import { FiArrowLeft, FiCalendar, FiMapPin, FiUsers, FiGift, FiExternalLink, FiMail, FiUser } from "react-icons/fi";
 
@@ -54,6 +62,7 @@ export default function EventRegistration() {
     isClubMember: false
   });
   const [submitting, setSubmitting] = useState(false);
+  const { isOpen: isHelloAssoOpen, onOpen: onHelloAssoOpen, onClose: onHelloAssoClose } = useDisclosure();
   const toast = useToast();
 
   // Récupération des détails de l'événement
@@ -601,7 +610,13 @@ export default function EventRegistration() {
               colorScheme="red"
               bg="var(--rbe-red)"
               _hover={{ bg: "var(--rbe-accent)" }}
-              onClick={handleSubmitRegistration}
+              onClick={() => {
+                if (eventInfo.registrationMethod === 'helloasso') {
+                  onHelloAssoOpen();
+                } else {
+                  handleSubmitRegistration();
+                }
+              }}
               isLoading={submitting}
               loadingText="Inscription en cours..."
               w="100%"
@@ -618,7 +633,7 @@ export default function EventRegistration() {
               <Alert status="info" borderRadius="md">
                 <AlertIcon />
                 <Text fontSize="sm">
-                  Vous serez redirigé vers HelloAsso pour finaliser votre inscription et le paiement sécurisé.
+                  Cliquez sur le bouton ci-dessus pour accéder à la plateforme HelloAsso et finaliser votre inscription avec paiement sécurisé.
                 </Text>
               </Alert>
             )}
@@ -689,5 +704,78 @@ export default function EventRegistration() {
         </Alert>
       </VStack>
     )}
+
+    {/* Modale HelloAsso */}
+    <Modal isOpen={isHelloAssoOpen} onClose={onHelloAssoClose} size="2xl" scrollBehavior="inside">
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>
+          <VStack align="start" spacing={1}>
+            <Heading size="md">{event?.title}</Heading>
+            <Text fontSize="sm" color="gray.600">Inscription et paiement sécurisé via HelloAsso</Text>
+          </VStack>
+        </ModalHeader>
+        <ModalCloseButton />
+        <ModalBody pb={6}>
+          <VStack align="stretch" spacing={4}>
+            <Box bg="gray.50" p={4} borderRadius="md">
+              <VStack align="start" spacing={3}>
+                <Heading size="sm" color="var(--rbe-red)">Récapitulatif</Heading>
+                {event?.date && (
+                  <HStack>
+                    <Icon as={FiCalendar} color="var(--rbe-red)" />
+                    <Text fontWeight="600">{event.date}</Text>
+                  </HStack>
+                )}
+                {event?.location && (
+                  <HStack>
+                    <Icon as={FiMapPin} color="var(--rbe-red)" />
+                    <Text>{event.location}</Text>
+                  </HStack>
+                )}
+                <Divider my={2} />
+                <HStack justify="space-between" w="100%">
+                  <Text>Adultes: {formData.adultTickets}x</Text>
+                  <Text fontWeight="bold">{formData.adultTickets * (event?.adultPrice || 0)}€</Text>
+                </HStack>
+                {formData.childTickets > 0 && (
+                  <HStack justify="space-between" w="100%">
+                    <Text>Enfants: {formData.childTickets}x</Text>
+                    <Text fontWeight="bold">{formData.childTickets * (event?.childPrice || 0)}€</Text>
+                  </HStack>
+                )}
+                <Divider my={2} />
+                <HStack justify="space-between" w="100%" fontSize="lg">
+                  <Text fontWeight="bold">Total</Text>
+                  <Text fontWeight="bold" color="var(--rbe-red)">{calculateTotal()}€</Text>
+                </HStack>
+              </VStack>
+            </Box>
+            <Divider />
+            <VStack align="start" spacing={3}>
+              <Heading size="sm">Finaliser votre inscription</Heading>
+              <Button
+                as="a"
+                href={event?.helloAssoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                colorScheme="blue"
+                size="lg"
+                w="100%"
+                leftIcon={<Icon as={FiExternalLink} />}
+              >
+                Procéder au paiement sur HelloAsso
+              </Button>
+            </VStack>
+            <Box bg="blue.50" p={3} borderRadius="md" borderLeft="4px solid" borderLeftColor="blue.400">
+              <Text fontSize="xs" color="blue.800">🔒 Paiement sécurisé par HelloAsso</Text>
+            </Box>
+          </VStack>
+        </ModalBody>
+        <ModalFooter>
+          <Button variant="ghost" onClick={onHelloAssoClose}>Fermer</Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
   </Container>
 )}

@@ -3,7 +3,9 @@ import { Helmet } from "react-helmet-async";
 import { 
   Box, Container, Heading, Text, VStack, Button, Badge, HStack, 
   Spinner, Center, Alert, AlertIcon, Icon, Tooltip, SimpleGrid,
-  Card, CardBody, CardHeader, useToast
+  Card, CardBody, CardHeader, useToast, Modal, ModalOverlay, ModalContent,
+  ModalHeader, ModalCloseButton, ModalBody, ModalFooter, useDisclosure,
+  Divider
 } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 import { FiUsers, FiLock, FiGlobe, FiClock, FiMapPin, FiCalendar, FiDownload, FiEyeOff } from 'react-icons/fi';
@@ -36,6 +38,8 @@ export default function Events() {
   const [events, setEvents] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
   useEffect(() => {
@@ -258,11 +262,10 @@ export default function Events() {
             console.log(`🔗 HelloAsso registration`);
             return (
               <Button
-                as="a"
-                href={event.helloAssoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                leftIcon={<FiUsers />}
+                onClick={() => {
+                  setSelectedEvent(event);
+                  onOpen();
+                }}
                 size="lg"
                 className="event-btn event-btn-primary"
               >
@@ -599,6 +602,94 @@ export default function Events() {
             })}
           </SimpleGrid>
         )}
+
+        {/* Modale HelloAsso pour inscription payante */}
+        <Modal isOpen={isOpen} onClose={onClose} size="xl" scrollBehavior="inside">
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>
+              <VStack align="start" spacing={1}>
+                <Heading size="md">{selectedEvent?.title}</Heading>
+                <Text fontSize="sm" color="gray.600">
+                  Inscription et paiement via HelloAsso
+                </Text>
+              </VStack>
+            </ModalHeader>
+            <ModalCloseButton />
+            <ModalBody pb={6}>
+              <VStack align="stretch" spacing={4}>
+                {/* Infos de l'événement */}
+                <Box bg="gray.50" p={4} borderRadius="md">
+                  <VStack align="start" spacing={3}>
+                    {selectedEvent?.date && (
+                      <HStack>
+                        <Icon as={FiCalendar} color="var(--rbe-red)" />
+                        <Text fontWeight="600">{selectedEvent.date}</Text>
+                        {selectedEvent.time && <Text>{selectedEvent.time}</Text>}
+                      </HStack>
+                    )}
+                    {selectedEvent?.location && (
+                      <HStack>
+                        <Icon as={FiMapPin} color="var(--rbe-red)" />
+                        <Text>{selectedEvent.location}</Text>
+                      </HStack>
+                    )}
+                    {!selectedEvent?.extras?.isFree && (
+                      <VStack align="start" spacing={1} w="100%">
+                        <Text fontSize="sm" fontWeight="bold" color="gray.700">Tarifs :</Text>
+                        <HStack spacing={6} wrap="wrap">
+                          {selectedEvent?.adultPrice && (
+                            <Text fontSize="sm" color="var(--rbe-red)" fontWeight="bold">
+                              Adulte : {selectedEvent.adultPrice}€
+                            </Text>
+                          )}
+                          {selectedEvent?.childPrice && (
+                            <Text fontSize="sm" color="var(--rbe-red)" fontWeight="bold">
+                              Enfant : {selectedEvent.childPrice}€
+                            </Text>
+                          )}
+                        </HStack>
+                      </VStack>
+                    )}
+                  </VStack>
+                </Box>
+
+                <Divider />
+
+                {/* Intégration HelloAsso */}
+                <Box w="100%">
+                  <Text fontSize="sm" mb={3} color="gray.600">
+                    Cliquez sur le bouton ci-dessous pour procéder à l'inscription et au paiement sécurisé.
+                  </Text>
+                  <Button
+                    as="a"
+                    href={selectedEvent?.helloAssoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    colorScheme="blue"
+                    size="lg"
+                    w="100%"
+                    leftIcon={<Icon as={FiUsers} />}
+                  >
+                    S'inscrire maintenant sur HelloAsso
+                  </Button>
+                </Box>
+
+                {/* Note sur la sécurité */}
+                <Box bg="blue.50" p={3} borderRadius="md" w="100%" borderLeft="4px solid" borderLeftColor="blue.400">
+                  <Text fontSize="xs" color="blue.800">
+                    ℹ️ La plateforme HelloAsso est sécurisée et certifiée. Vos données de paiement ne sont jamais conservées par nos serveurs.
+                  </Text>
+                </Box>
+              </VStack>
+            </ModalBody>
+            <ModalFooter>
+              <Button variant="ghost" mr={3} onClick={onClose}>
+                Fermer
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </Container>
     </>
   );

@@ -661,18 +661,22 @@ export default function Events() {
                   <Text fontSize="sm" mb={3} color="gray.600">
                     Cliquez sur le bouton ci-dessous pour procéder à l'inscription et au paiement sécurisé.
                   </Text>
-                  <Button
-                    as="a"
-                    href={selectedEvent?.helloAssoUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    colorScheme="blue"
-                    size="lg"
-                    w="100%"
-                    leftIcon={<Icon as={FiUsers} />}
-                  >
-                    S'inscrire maintenant sur HelloAsso
-                  </Button>
+                  {selectedEvent?.helloAssoUrl && (
+                    <Button
+                      as="a"
+                      href={`${selectedEvent.helloAssoUrl}?return_url=${encodeURIComponent(
+                        `${window.location.origin}/helloasso-callback?eventId=${selectedEvent.id}&name=&email=&phone=`
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      colorScheme="blue"
+                      size="lg"
+                      w="100%"
+                      leftIcon={<Icon as={FiUsers} />}
+                    >
+                      S'inscrire maintenant sur HelloAsso
+                    </Button>
+                  )}
                 </Box>
 
                 {/* Note sur la sécurité */}

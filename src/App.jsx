@@ -16,6 +16,7 @@ import Vehicles from "./pages/Vehicles.jsx";
 import VehicleDetails from "./pages/VehicleDetails.jsx";
 import Events from "./pages/Events.jsx";
 import EventRegistration from "./pages/EventRegistration.jsx";
+import HelloAssoCallback from "./pages/HelloAssoCallback.jsx";
 import Photos from "./pages/Photos.jsx";
 import Donate from "./pages/Donate.jsx";
 import RetroMerch from "./pages/RetroMerch.jsx";
@@ -35,6 +36,7 @@ export default function App() {
             <Route path="/vehicles" element={<Navigate to="/parc" replace />} />
             <Route path="/evenements" element={<Events />} />
             <Route path="/evenement/:eventId/inscription" element={<EventRegistration />} />
+            <Route path="/helloasso-callback" element={<HelloAssoCallback />} />
             <Route path="/events" element={<Navigate to="/evenements" replace />} />
             <Route path="/event-registration" element={<Navigate to="/evenements" replace />} />
             <Route path="/retromerch" element={<RetroMerch />} />

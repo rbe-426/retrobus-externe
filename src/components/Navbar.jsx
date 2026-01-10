@@ -31,14 +31,6 @@ import { HamburgerIcon } from "@chakra-ui/icons";
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
-// Petite icône "mise à jour" (style rouge similaire)
-const UpdateIcon = ({ size = 26 }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="var(--rbe-red)" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12 6V3L8 7l4 4V8c2.8 0 5 2.2 5 5 0 .8-.2 1.6-.6 2.3l1.5 1.1C19.9 14.6 20.4 13.4 20.4 12 20.4 7.6 16.9 4 12 4z"/>
-    <path d="M6.6 6.6L5.1 5.5C4.1 6.9 3.6 8.4 3.6 10c0 4.4 3.5 8 8.4 8v3l4-4-4-4v3c-2.8 0-5-2.2-5-5 0-.8.2-1.6.6-2.3z" opacity="0.95"/>
-  </svg>
-);
-
 export default function Navbar({ donateIcon, newsletterIcon, onDonateClick, onNewsletterClick, isOpen: isOpenProp, onOpen: onOpenProp, onClose: onCloseProp, embedded = false, userName, siteVersion }) {
   const internalDisclosure = useDisclosure();
   const isControlled = typeof isOpenProp === 'boolean' && typeof onOpenProp === 'function' && typeof onCloseProp === 'function';
@@ -165,38 +157,6 @@ export default function Navbar({ donateIcon, newsletterIcon, onDonateClick, onNe
   if (!isMobile) {
     return (
       <nav className="site-nav" aria-label="Navigation principale" style={{ position: 'relative' }}>
-        {/* Icône Changelog tout à gauche (hors flux) */}
-        <HStack
-          spacing={2}
-          position="absolute"
-          left="12px"
-          top="50%"
-          transform="translateY(-50%)"
-          pl={{ base: 2, lg: 4 }}
-        >
-          <Tooltip label="Voir les modifications" hasArrow placement="bottom">
-            <Box
-              as={Link}
-              to="/changelog"
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              transition="all .25s"
-              _hover={{ transform: "scale(1.15)" }}
-              _active={{ transform: "scale(1.05)" }}
-              aria-label="Changelog"
-              style={{ textDecoration: 'none' }}
-            >
-              <UpdateIcon />
-            </Box>
-          </Tooltip>
-          {siteVersion && (
-            <Box as="span" fontSize="xs" color="gray.600" ml={1} userSelect="none">
-              v{siteVersion}
-            </Box>
-          )}
-        </HStack>
-
         {/* Contenu navigation centré */}
         <Box
             className="site-nav__inner"
@@ -295,16 +255,11 @@ export default function Navbar({ donateIcon, newsletterIcon, onDonateClick, onNe
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader bg="var(--rbe-red)" color="white" display="flex" flexDirection="column" alignItems="flex-start" gap={1}>
-            <HStack spacing={3} w="full" alignItems="center">
-              <Box as={Link} to="/changelog" aria-label="Changelog" onClick={onClose} style={{ textDecoration: 'none' }}>
-                <UpdateIcon size={22} />
-              </Box>
-              <HStack spacing={2} alignItems="baseline">
-                <Box as="span" fontWeight="bold">Association RétroBus Essonne</Box>
-                {siteVersion && (
-                  <Box as="span" fontSize="xs" color="whiteAlpha.900">v{siteVersion}</Box>
-                )}
-              </HStack>
+            <HStack spacing={2} alignItems="baseline">
+              <Box as="span" fontWeight="bold">Association RétroBus Essonne</Box>
+              {siteVersion && (
+                <Box as="span" fontSize="xs" color="whiteAlpha.900">v{siteVersion}</Box>
+              )}
             </HStack>
             {firstName && (
               <Text fontSize="sm" color="whiteAlpha.900" mt={1}>

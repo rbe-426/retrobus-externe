@@ -196,7 +196,7 @@ export default function Footer() {
             🤝 Nos Partenaires
           </Text>
           <Flex 
-            gap={6} 
+            gap={8} 
             align="center"
             wrap="wrap"
           >
@@ -211,14 +211,57 @@ export default function Footer() {
               <Image
                 src="/supporters/cars-soeur.png"
                 alt="Cars Soeur – soutien"
-                maxH="48px"
-                maxW="200px"
+                maxH="80px"
+                maxW="250px"
                 loading="lazy"
                 decoding="async"
                 style={{ filter: "drop-shadow(0 0 4px rgba(0,0,0,0.4))" }}
                 fallback={<Text fontSize="xs" color="whiteAlpha.700">Cars Soeur</Text>}
               />
             </CLink>
+
+            {/* Ajoute tes autres partenaires ici */}
+            <CLink
+              href="https://www.corbeil-essonnes.fr/"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Ville de Corbeil-Essonnes"
+              _hover={{ opacity: 0.8, transform: "translateY(-2px)" }}
+              transition="all 0.2s"
+            >
+              <Image
+                src="/supporters/ville-ce.png"
+                alt="Ville de Corbeil-Essonnes"
+                maxH="80px"
+                maxW="250px"
+                loading="lazy"
+                decoding="async"
+                style={{ filter: "drop-shadow(0 0 4px rgba(0,0,0,0.4))" }}
+                fallback={<Text fontSize="xs" color="whiteAlpha.700">Ville de Corbeil-Essonnes</Text>}
+              />
+            </CLink>
+
+            {/* 
+            <CLink
+              href="https://example.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Partenaire 2"
+              _hover={{ opacity: 0.8, transform: "translateY(-2px)" }}
+              transition="all 0.2s"
+            >
+              <Image
+                src="/supporters/partenaire2.png"
+                alt="Partenaire 2"
+                maxH="80px"
+                maxW="250px"
+                loading="lazy"
+                decoding="async"
+                style={{ filter: "drop-shadow(0 0 4px rgba(0,0,0,0.4))" }}
+                fallback={<Text fontSize="xs" color="whiteAlpha.700">Partenaire 2</Text>}
+              />
+            </CLink>
+            */}
           </Flex>
         </Box>
 

@@ -152,7 +152,7 @@ export default function Footer() {
                   <FaTiktok size={24} color="whiteAlpha.800" />
                 </CLink>
                 <CLink
-                  href="https://discord.gg/your-discord-link"
+                  href="https://discord.com/invite/RbwNrX4rdu"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Discord"

@@ -27,15 +27,17 @@ export default function Footer() {
               />
               <Text fontSize="sm" color="whiteAlpha.800" lineHeight={1.6}>
                 RNA : W912016571<br />
-                SIREN : 942 506 607 00010<br />
-                Préserver le patrimoine des transports en Essonne. Association passionnée par l'histoire des véhicules et la mobilité.
+                SIRET : 942 506 607 00010<br />
+                SIREN : 942 506 607<br />
+                Siège social : Corbeil-Essonnes, Essonne, France.<br />
+                Collection, préservation et restauration du patrimoine roulant.
               </Text>
             </Box>
             
             {/* Location */}
             <HStack spacing={2} color="whiteAlpha.700" fontSize="sm">
               <FaMapMarkerAlt size={16} color="var(--rbe-red)" />
-              <Text>Essonne, France</Text>
+              <Text>Corbeil-Essonnes, Essonne, France.</Text>
             </HStack>
           </VStack>
 

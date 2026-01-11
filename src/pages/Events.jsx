@@ -212,22 +212,10 @@ export default function Events() {
       );
     }
     
-    // 4. Inscription requise MAIS public ne peut pas s'inscrire → Contacter l'association
+    // 4. Inscription requise MAIS public ne peut pas s'inscrire → Aucun bouton
     if (info.requiresRegistration && !info.allowPublicRegistration) {
-      console.log(`📞 Registration required but not public → Contact association`);
-      return (
-        <Button
-          as={RouterLink}
-          to="/contact"
-          leftIcon={<FiUsers />}
-          variant="outline"
-          colorScheme="orange"
-          size="lg"
-          className="event-btn"
-        >
-          Contacter l'association
-        </Button>
-      );
+      console.log(`📞 Registration required but not public → No button`);
+      return null;
     }
     
     // 5. Inscription requise ET public peut s'inscrire → Vérifier deadline puis méthode
@@ -498,14 +486,6 @@ export default function Events() {
                 Nous préparons de nouveaux événements passionnants ! 
                 Revenez bientôt ou suivez-nous sur nos réseaux sociaux pour être informé en premier.
               </Text>
-              <Button
-                as={RouterLink}
-                to="/contact"
-                className="event-btn event-btn-primary"
-                size="lg"
-              >
-                Nous contacter
-              </Button>
             </VStack>
           </Center>
         ) : (

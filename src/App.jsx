@@ -22,6 +22,7 @@ import Donate from "./pages/Donate.jsx";
 import RetroMerch from "./pages/RetroMerch.jsx";
 import Changelog from "./pages/Changelog.jsx";
 import Newsletter from "./pages/Newsletter";
+import Team from "./pages/Team.jsx";
 import MentionsLegales from "./pages/MentionsLegales.jsx";
 import RGPD from "./pages/RGPD.jsx";
 
@@ -47,6 +48,7 @@ export default function App() {
             <Route path="/photos" element={<Photos />} />
             <Route path="/donate" element={<Donate />} />
             <Route path="/changelog" element={<Changelog />} />
+            <Route path="/team" element={<Team />} />
             <Route path="/newsletter" element={<Newsletter />} />
             <Route path="/mentions-legales" element={<MentionsLegales />} />
             <Route path="/rgpd" element={<RGPD />} />

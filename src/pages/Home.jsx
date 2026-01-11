@@ -163,9 +163,9 @@ export default function Home() {
         {/* DISCORD + COLLECTION SECTION */}
         <Box bg="white" py={16}>
           <Container maxW="7xl">
-            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={12} align="start">
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 6, md: 12 }} align="start">
               {/* LEFT: NOTRE COLLECTION */}
-              <VStack spacing={6} align="stretch" ml={-48} w="calc(100% + 96px)">
+              <VStack spacing={6} align="stretch" ml={{ base: 0, md: -48 }} w={{ base: "100%", md: "calc(100% + 96px)" }}>
                 <VStack spacing={2} align="start">
                   <Heading as="h2" size="lg">Notre collection</Heading>
                   <Text color="gray.600" fontSize="sm">
@@ -173,9 +173,10 @@ export default function Home() {
                   </Text>
                 </VStack>
 
-                {/* FEATURED VEHICLE - Horizontal Layout */}
-                <HStack spacing={8} align="flex-start">
-                  <Box w="100%" flexShrink={0}>
+                {/* FEATURED VEHICLE - Responsive Layout */}
+                <VStack spacing={{ base: 4, md: 8 }} align="stretch">
+                  {/* Photo */}
+                  <Box>
                     <Image
                       src={vehicles[0].src}
                       alt={`${vehicles[0].marque} ${vehicles[0].modele}`}
@@ -186,29 +187,30 @@ export default function Home() {
                     />
                   </Box>
 
-                  <VStack spacing={5} align="stretch" flex={1}>
-                    <VStack spacing={2} align="start">
-                      <Heading as="h3" size="xl" color="var(--rbe-red)">
+                  {/* Infos */}
+                  <VStack spacing={{ base: 3, md: 5 }} align="stretch">
+                    <VStack spacing={1} align="start">
+                      <Heading as="h3" size={{ base: "lg", md: "xl" }} color="var(--rbe-red)">
                         {vehicles[0].marque} {vehicles[0].modele}
                       </Heading>
-                      <Text fontSize="lg" color="gray.600" fontWeight="500">
+                      <Text fontSize={{ base: "sm", md: "lg" }} color="gray.600" fontWeight="500">
                         {vehicles[0].surnom}
                       </Text>
                     </VStack>
 
-                    <Text fontSize="lg" color="gray.700" lineHeight="tall">
+                    <Text fontSize={{ base: "sm", md: "lg" }} color="gray.700" lineHeight="tall">
                       {vehicles[0].description}
                     </Text>
 
                     <Box 
-                      p={4} 
+                      p={{ base: 3, md: 4 }} 
                       border="2px solid" 
                       borderColor="var(--rbe-red)"
                       borderRadius="lg"
                       bg="white"
                     >
-                      <Text fontSize="base" color="var(--rbe-red)" fontWeight="bold" mb={2}>✨ POINT FORT</Text>
-                      <Text fontSize="base" color="gray.800" fontWeight="500">
+                      <Text fontSize={{ base: "xs", md: "base" }} color="var(--rbe-red)" fontWeight="bold" mb={2}>✨ POINT FORT</Text>
+                      <Text fontSize={{ base: "xs", md: "base" }} color="gray.800" fontWeight="500">
                         {vehicles[0].particularite}
                       </Text>
                     </Box>
@@ -216,7 +218,7 @@ export default function Home() {
                     <Button 
                       as={RouterLink}
                       to="/parc" 
-                      size="lg" 
+                      size={{ base: "md", md: "lg" }} 
                       bg="var(--rbe-red)" 
                       color="white"
                       _hover={{ opacity: 0.9, transform: "translateY(-2px)" }}
@@ -225,12 +227,12 @@ export default function Home() {
                       Explorer notre parc complet
                     </Button>
                   </VStack>
-                </HStack>
+                </VStack>
               </VStack>
 
               {/* RIGHT: DISCORD WIDGET */}
-              <VStack spacing={4} align="flex-end" justify="flex-start" w="135%">
-                <VStack spacing={2} textAlign="center" align="center" maxW="400px" ml="auto" pr={4}>
+              <VStack spacing={4} align={{ base: "stretch", md: "flex-end" }} justify="flex-start" w={{ base: "100%", md: "135%" }}>
+                <VStack spacing={2} textAlign="center" align="center" maxW="400px" ml={{ base: "auto", md: "auto" }} pr={{ base: 0, md: 4 }}>
                   <Heading as="h3" size="md" color="var(--rbe-red)">Rejoignez notre Serveur Discord</Heading>
                   <Text color="gray.600" fontSize="sm">
                     Partageons avec la communauté : discussions, événements, et découvertes !

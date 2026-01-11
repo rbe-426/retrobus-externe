@@ -204,7 +204,7 @@ export default function Navbar({ donateIcon, newsletterIcon, onDonateClick, onNe
               {donateIcon}
             </Box>
           </Tooltip>
-          <Tooltip label="S'inscrire à la newsletter" hasArrow placement="bottom">
+          {/* <Tooltip label="S'inscrire à la newsletter" hasArrow placement="bottom">
             <Box
               as="button"
               onClick={handleNewsletterClick}
@@ -218,7 +218,7 @@ export default function Navbar({ donateIcon, newsletterIcon, onDonateClick, onNe
             >
               {newsletterIcon}
             </Box>
-          </Tooltip>
+          </Tooltip> */}
         </HStack>
       </nav>
     );
@@ -306,13 +306,13 @@ export default function Navbar({ donateIcon, newsletterIcon, onDonateClick, onNe
                 >
                   {donateIcon}
                 </Box>
-                <Box
+                {/* <Box
                   as="button"
                   onClick={() => { onNewsletterClick(); onClose(); }}
                   aria-label="Inscription newsletter"
                 >
                   {newsletterIcon}
-                </Box>
+                </Box> */}
               </Box>
             </VStack>
           </DrawerBody>

@@ -22,6 +22,8 @@ import Donate from "./pages/Donate.jsx";
 import RetroMerch from "./pages/RetroMerch.jsx";
 import Changelog from "./pages/Changelog.jsx";
 import Newsletter from "./pages/Newsletter";
+import MentionsLegales from "./pages/MentionsLegales.jsx";
+import RGPD from "./pages/RGPD.jsx";
 
 export default function App() {
   return (
@@ -46,6 +48,10 @@ export default function App() {
             <Route path="/donate" element={<Donate />} />
             <Route path="/changelog" element={<Changelog />} />
             <Route path="/newsletter" element={<Newsletter />} />
+            <Route path="/mentions-legales" element={<MentionsLegales />} />
+            <Route path="/rgpd" element={<RGPD />} />
+            <Route path="/statuts.pdf" element={<MentionsLegales />} />
+            <Route path="/rgpd.pdf" element={<RGPD />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>

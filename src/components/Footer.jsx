@@ -1,6 +1,6 @@
 ﻿import React from "react";
 import { Container, SimpleGrid, Text, Link as CLink, Image, Box, Flex, VStack, HStack } from "@chakra-ui/react";
-import { FaFacebook, FaInstagram, FaTiktok, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaTiktok, FaDiscord, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 
 export default function Footer() {
   return (
@@ -9,7 +9,7 @@ export default function Footer() {
       marginTop: "80px",
       borderTop: "3px solid var(--rbe-red)"
     }}>
-      <Container maxW="100%" px={{ base: 4, md: 8 }} py={12}>
+      <Container maxW="100%" px={{ base: 4, md: 8 }} py={6}>
         
         {/* Main Footer Grid */}
         <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={8} mb={12}>
@@ -20,11 +20,14 @@ export default function Footer() {
               <Image 
                 src="/assets/rbe_footer.png" 
                 alt="RétroBus Essonne Logo"
-                maxH="50px"
-                maxW="200px"
-                mb={2}
+                maxH="200px"
+                maxW="300px"
+                mt={-4}
+                mb={3}
               />
               <Text fontSize="sm" color="whiteAlpha.800" lineHeight={1.6}>
+                RNA : W912016571<br />
+                SIREN : 942 506 607 00010<br />
                 Préserver le patrimoine des transports en Essonne. Association passionnée par l'histoire des véhicules et la mobilité.
               </Text>
             </Box>
@@ -93,20 +96,18 @@ export default function Footer() {
                 → Statuts
               </CLink>
               <CLink 
-                href="/rgpd.pdf" 
+                href="/mentions-legales" 
                 color="whiteAlpha.800"
                 _hover={{ color: "var(--rbe-red)", pl: 2, transition: "all 0.2s" }}
                 transition="all 0.2s"
-                target="_blank"
               >
                 → Mentions légales
               </CLink>
               <CLink 
-                href="/rgpd.pdf" 
+                href="/rgpd" 
                 color="whiteAlpha.800"
                 _hover={{ color: "var(--rbe-red)", pl: 2, transition: "all 0.2s" }}
                 transition="all 0.2s"
-                target="_blank"
               >
                 → Politique RGPD
               </CLink>
@@ -149,6 +150,16 @@ export default function Footer() {
                   transition="all 0.2s"
                 >
                   <FaTiktok size={24} color="whiteAlpha.800" />
+                </CLink>
+                <CLink
+                  href="https://discord.gg/your-discord-link"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Discord"
+                  _hover={{ color: "var(--rbe-red)", transform: "scale(1.2)" }}
+                  transition="all 0.2s"
+                >
+                  <FaDiscord size={24} color="whiteAlpha.800" />
                 </CLink>
               </HStack>
             </Box>

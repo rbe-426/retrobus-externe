@@ -241,6 +241,26 @@ export default function Footer() {
               />
             </CLink>
 
+            <CLink
+              href="https://mabanque.bnpparibas/"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="BNP Paribas"
+              _hover={{ opacity: 0.8, transform: "translateY(-2px)" }}
+              transition="all 0.2s"
+            >
+              <Image
+                src="/supporters/bnp-paribas.png"
+                alt="BNP Paribas"
+                maxH="80px"
+                maxW="250px"
+                loading="lazy"
+                decoding="async"
+                style={{ filter: "drop-shadow(0 0 4px rgba(0,0,0,0.4))" }}
+                fallback={<Text fontSize="xs" color="whiteAlpha.700">BNP Paribas</Text>}
+              />
+            </CLink>
+
             {/* 
             <CLink
               href="https://example.com/"

@@ -17,9 +17,13 @@ export default function Footer() {
           {/* About Section */}
           <VStack align="start" spacing={4}>
             <Box>
-              <Text fontSize="xl" fontWeight={900} color="var(--rbe-red)" mb={2}>
-                🚌 RétroBus Essonne
-              </Text>
+              <Image 
+                src="/assets/rbe_footer.png" 
+                alt="RétroBus Essonne Logo"
+                maxH="50px"
+                maxW="200px"
+                mb={2}
+              />
               <Text fontSize="sm" color="whiteAlpha.800" lineHeight={1.6}>
                 Préserver le patrimoine des transports en Essonne. Association passionnée par l'histoire des véhicules et la mobilité.
               </Text>

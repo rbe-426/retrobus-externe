@@ -1,113 +1,242 @@
 ﻿import React from "react";
-import { Container, SimpleGrid, Text, Link as CLink, Image } from "@chakra-ui/react";
-import { FaFacebook, FaInstagram, FaTiktok } from "react-icons/fa";
+import { Container, SimpleGrid, Text, Link as CLink, Image, Box, Flex, VStack, HStack } from "@chakra-ui/react";
+import { FaFacebook, FaInstagram, FaTiktok, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
 
 export default function Footer() {
   return (
-    <footer className="site-footer" style={{ marginTop: "60px" }}>
-      <Container maxW="100%" px={8}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6} style={{ flex: 1 }}>
-            <div>
-              {/* Association (désormais en premier) */}
-              <Text fontWeight={700} color="white">
-                Association RétroBus Essonne
+    <footer className="site-footer" style={{ 
+      background: "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)",
+      marginTop: "80px",
+      borderTop: "3px solid var(--rbe-red)"
+    }}>
+      <Container maxW="100%" px={{ base: 4, md: 8 }} py={12}>
+        
+        {/* Main Footer Grid */}
+        <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={8} mb={12}>
+          
+          {/* About Section */}
+          <VStack align="start" spacing={4}>
+            <Box>
+              <Text fontSize="xl" fontWeight={900} color="var(--rbe-red)" mb={2}>
+                🚌 RétroBus Essonne
               </Text>
-              <Text fontSize="sm" opacity={0.8} color="white">
-                Patrimoine des transports en Essonne.
+              <Text fontSize="sm" color="whiteAlpha.800" lineHeight={1.6}>
+                Préserver le patrimoine des transports en Essonne. Association passionnée par l'histoire des véhicules et la mobilité.
               </Text>
+            </Box>
+            
+            {/* Location */}
+            <HStack spacing={2} color="whiteAlpha.700" fontSize="sm">
+              <FaMapMarkerAlt size={16} color="var(--rbe-red)" />
+              <Text>Essonne, France</Text>
+            </HStack>
+          </VStack>
 
-              {/* Bloc nos soutiens déplacé sous l'association */}
-              <div style={{ marginTop: "18px" }}>
-                <Text
-                  fontWeight={700}
-                  fontSize="sm"
-                  color="white"
-                  mb={1}
-                  textTransform="uppercase"
-                  letterSpacing="0.5px"
-                >
-                  Nos soutiens
-                </Text>
+          {/* Links Section */}
+          <VStack align="start" spacing={3}>
+            <Text fontSize="lg" fontWeight={700} color="white" textTransform="uppercase" letterSpacing="1px">
+              Ressources
+            </Text>
+            <VStack align="start" spacing={2} fontSize="sm">
+              <CLink 
+                href="/" 
+                color="whiteAlpha.800"
+                _hover={{ color: "var(--rbe-red)", pl: 2, transition: "all 0.2s" }}
+                transition="all 0.2s"
+              >
+                → Accueil
+              </CLink>
+              <CLink 
+                href="/events" 
+                color="whiteAlpha.800"
+                _hover={{ color: "var(--rbe-red)", pl: 2, transition: "all 0.2s" }}
+                transition="all 0.2s"
+              >
+                → Événements
+              </CLink>
+              <CLink 
+                href="/vehicles" 
+                color="whiteAlpha.800"
+                _hover={{ color: "var(--rbe-red)", pl: 2, transition: "all 0.2s" }}
+                transition="all 0.2s"
+              >
+                → Véhicules
+              </CLink>
+              <CLink 
+                href="/contact" 
+                color="whiteAlpha.800"
+                _hover={{ color: "var(--rbe-red)", pl: 2, transition: "all 0.2s" }}
+                transition="all 0.2s"
+              >
+                → Contact
+              </CLink>
+            </VStack>
+          </VStack>
+
+          {/* Legal Section */}
+          <VStack align="start" spacing={3}>
+            <Text fontSize="lg" fontWeight={700} color="white" textTransform="uppercase" letterSpacing="1px">
+              Légal
+            </Text>
+            <VStack align="start" spacing={2} fontSize="sm">
+              <CLink 
+                href="/statuts.pdf" 
+                color="whiteAlpha.800"
+                _hover={{ color: "var(--rbe-red)", pl: 2, transition: "all 0.2s" }}
+                transition="all 0.2s"
+                target="_blank"
+              >
+                → Statuts
+              </CLink>
+              <CLink 
+                href="/rgpd.pdf" 
+                color="whiteAlpha.800"
+                _hover={{ color: "var(--rbe-red)", pl: 2, transition: "all 0.2s" }}
+                transition="all 0.2s"
+                target="_blank"
+              >
+                → Mentions légales
+              </CLink>
+              <CLink 
+                href="/rgpd.pdf" 
+                color="whiteAlpha.800"
+                _hover={{ color: "var(--rbe-red)", pl: 2, transition: "all 0.2s" }}
+                transition="all 0.2s"
+                target="_blank"
+              >
+                → Politique RGPD
+              </CLink>
+            </VStack>
+          </VStack>
+
+          {/* Contact & Socials */}
+          <VStack align="start" spacing={4}>
+            <Box>
+              <Text fontSize="lg" fontWeight={700} color="white" textTransform="uppercase" letterSpacing="1px" mb={3}>
+                Nous Suivre
+              </Text>
+              <HStack spacing={4}>
                 <CLink
-                  href="https://www.cars-soeur.com/"
+                  href="https://www.facebook.com/AssociationRBE/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  title="Cars Soeur – Mobilité éco-responsable"
-                  display="inline-block"
+                  aria-label="Facebook"
+                  _hover={{ color: "var(--rbe-red)", transform: "scale(1.2)" }}
+                  transition="all 0.2s"
                 >
-                  <Image
-                    src="/supporters/cars-soeur.png"
-                    alt="Cars Soeur – soutien"
-                    maxH="48px"
-                    maxW="200px"
-                    loading="lazy"
-                    decoding="async"
-                    style={{ filter: "drop-shadow(0 0 4px rgba(0,0,0,0.4))" }}
-                    fallback={<Text fontSize="xs" color="whiteAlpha.700">Cars Soeur</Text>}
-                  />
+                  <FaFacebook size={24} color="whiteAlpha.800" />
                 </CLink>
-              </div>
-            </div>
+                <CLink
+                  href="https://www.instagram.com/asso.rbe/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram"
+                  _hover={{ color: "var(--rbe-red)", transform: "scale(1.2)" }}
+                  transition="all 0.2s"
+                >
+                  <FaInstagram size={24} color="whiteAlpha.800" />
+                </CLink>
+                <CLink
+                  href="https://www.tiktok.com/@asso_rbe"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="TikTok"
+                  _hover={{ color: "var(--rbe-red)", transform: "scale(1.2)" }}
+                  transition="all 0.2s"
+                >
+                  <FaTiktok size={24} color="whiteAlpha.800" />
+                </CLink>
+              </HStack>
+            </Box>
 
-            <div>
-              <Text fontWeight={700} color="white">
-                Liens utiles
-              </Text>
-              <CLink href="/statuts.pdf" color="white">
-                Statuts
-              </CLink>
-              <br />
-              <CLink href="/rgpd.pdf" color="white">
-                Mentions légales & RGPD
-              </CLink>
-            </div>
-
-            <div>
-              <Text fontWeight={700} color="white">
-                Contact
-              </Text>
-              <Text fontSize="sm" color="white">
+            {/* Email */}
+            <HStack spacing={2} color="whiteAlpha.700" fontSize="sm">
+              <FaEnvelope size={16} color="var(--rbe-red)" />
+              <CLink 
+                href="mailto:association.rbe@gmail.com"
+                color="whiteAlpha.800"
+                _hover={{ color: "var(--rbe-red)" }}
+              >
                 association.rbe@gmail.com
-              </Text>
-            </div>
-          </SimpleGrid>
+              </CLink>
+            </HStack>
+          </VStack>
+        </SimpleGrid>
 
-          <div className="social-icons">
-            <a
-              href="https://www.facebook.com/AssociationRBE/"
+        {/* Supporters Section */}
+        <Box 
+          py={8} 
+          borderTop="1px solid" 
+          borderTopColor="whiteAlpha.200"
+          mb={8}
+        >
+          <Text 
+            fontSize="sm" 
+            fontWeight={700} 
+            color="var(--rbe-red)" 
+            textTransform="uppercase" 
+            letterSpacing="1px"
+            mb={4}
+          >
+            🤝 Nos Partenaires
+          </Text>
+          <Flex 
+            gap={6} 
+            align="center"
+            wrap="wrap"
+          >
+            <CLink
+              href="https://www.cars-soeur.com/"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Facebook"
-              style={{ transform: "translateY(20px) translateX(40px)" }}
+              title="Cars Soeur – Mobilité éco-responsable"
+              _hover={{ opacity: 0.8, transform: "translateY(-2px)" }}
+              transition="all 0.2s"
             >
-              <FaFacebook />
-            </a>
-            <a
-              href="https://www.instagram.com/asso.rbe/"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Instagram"
-              style={{ transform: "translateY(20px) translateX(40px)" }}
-            >
-              <FaInstagram />
-            </a>
-            <a
-              href="https://www.tiktok.com/@asso_rbe"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="TikTok"
-              style={{ transform: "translateY(20px) translateX(40px)" }}
-            >
-              <FaTiktok />
-            </a>
-          </div>
-        </div>
+              <Image
+                src="/supporters/cars-soeur.png"
+                alt="Cars Soeur – soutien"
+                maxH="48px"
+                maxW="200px"
+                loading="lazy"
+                decoding="async"
+                style={{ filter: "drop-shadow(0 0 4px rgba(0,0,0,0.4))" }}
+                fallback={<Text fontSize="xs" color="whiteAlpha.700">Cars Soeur</Text>}
+              />
+            </CLink>
+          </Flex>
+        </Box>
 
-        <Text mt={6} fontSize="xs" opacity={0.6} textAlign="center" color="white">
-          &copy; {new Date().getFullYear()} RetroBus Essonne - Tous droits réservés.
-        </Text>
+        {/* Divider */}
+        <Box 
+          height="1px" 
+          background="linear-gradient(90deg, transparent, var(--rbe-red), transparent)"
+          mb={6}
+        />
+
+        {/* Bottom Section */}
+        <Flex 
+          justify="space-between" 
+          align="center"
+          flexDirection={{ base: "column", md: "row" }}
+          gap={4}
+        >
+          <Text 
+            fontSize="xs" 
+            color="whiteAlpha.600"
+          >
+            &copy; {new Date().getFullYear()} <strong>RétroBus Essonne</strong> • Tous droits réservés
+          </Text>
+          
+          <Text 
+            fontSize="xs" 
+            color="whiteAlpha.500"
+          >
+            Fait avec ❤️ pour le patrimoine des transports
+          </Text>
+        </Flex>
       </Container>
     </footer>
   );
 }
+

@@ -1,56 +1,68 @@
 import { Helmet } from "react-helmet-async";
 import {
-  Box, Container, Heading, SimpleGrid, VStack, Text, HStack, Badge, Button
+  Box, Container, Heading, VStack, Text, HStack, Badge, Button
 } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 
 const teamMembers = [
   {
     id: 1,
-    name: "Jean Dubois",
-    role: "Président & Mécanicien",
-    passion: "Restauration complète de moteurs",
-    image: "https://via.placeholder.com/200?text=Jean",
-    expertise: ["Moteurs", "Transmission", "Diagnostique"]
+    name: "Waiyl Belaidi",
+    role: "Président de l'association",
+    joinDate: "Mars 2025",
+    memberType: "Membre fondateur",
+    catchphrase: "RBE c'est surtout une famille de mordus d'automobile",
+    image: "https://via.placeholder.com/250x300?text=Waiyl",
+    expertise: ["Infos techniques", "SAEIV", "Médias"]
   },
   {
     id: 2,
-    name: "Marie Bernard",
-    role: "Trésorière & Carrossière",
-    passion: "Peinture et tôlerie",
-    image: "https://via.placeholder.com/200?text=Marie",
-    expertise: ["Carrosserie", "Peinture", "Restauration"]
+    name: "Méthusan Ravichandran",
+    role: "Vice-Président",
+    joinDate: "Mars 2025",
+    memberType: "Membre fondateur",
+    catchphrase: "RBE c'est surtout une famille de mordus d'automobile",
+    image: "https://via.placeholder.com/250x300?text=Méthusan",
+    expertise: ["Médias", "Formations"]
   },
   {
     id: 3,
-    name: "Pierre Lefevre",
-    role: "Électricien Senior",
-    passion: "Systèmes électriques historiques",
-    image: "https://via.placeholder.com/200?text=Pierre",
-    expertise: ["Électricité", "Systèmes", "Câblage"]
+    name: "Jaffer-Salim Camaroudine",
+    role: "Membre du Bureau",
+    joinDate: "Mars 2025",
+    memberType: "Membre fondateur",
+    catchphrase: "Préserver les véhicules que je voyais rouler quand j'étais enfant, c'est un rêve",
+    image: "https://via.placeholder.com/250x300?text=Jaffer-Salim",
+    expertise: ["Conduite", "Formations", "Itinéraires", "Idées"]
   },
   {
     id: 4,
     name: "Sophie Martin",
     role: "Historienne & Documentaliste",
-    passion: "Archivage et mémoire RATP",
-    image: "https://via.placeholder.com/200?text=Sophie",
+    joinDate: "2008",
+    memberType: "Membre",
+    catchphrase: "Préserver la mémoire, c'est aussi écrire l'avenir.",
+    image: "https://via.placeholder.com/250x300?text=Sophie",
     expertise: ["Historique", "Documentation", "Recherche"]
   },
   {
     id: 5,
     name: "Luc Rousseau",
     role: "Responsable Événements",
-    passion: "Sorties patrimoine & animation",
-    image: "https://via.placeholder.com/200?text=Luc",
+    joinDate: "2010",
+    memberType: "Membre",
+    catchphrase: "Les sorties patrimoine, c'est notre passion partagée !",
+    image: "https://via.placeholder.com/250x300?text=Luc",
     expertise: ["Événements", "Coordination", "Communication"]
   },
   {
     id: 6,
     name: "Isabelle Leclerc",
     role: "Webmaster & Communication",
-    passion: "Digital et présence en ligne",
-    image: "https://via.placeholder.com/200?text=Isabelle",
+    joinDate: "2015",
+    memberType: "Membre",
+    catchphrase: "Connecter les passionnés sur le digital.",
+    image: "https://via.placeholder.com/250x300?text=Isabelle",
     expertise: ["Web", "Communication", "Social Media"]
   }
 ];
@@ -76,50 +88,45 @@ export default function Team() {
             </Text>
           </VStack>
 
-          {/* Team Grid */}
-          <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={8} mb={16}>
-            {teamMembers.map(member => (
-              <Box
-                key={member.id}
-                bg="white"
-                borderRadius="xl"
-                overflow="hidden"
-                boxShadow="sm"
-                transition="all 0.3s ease"
-                _hover={{
-                  boxShadow: "lg",
-                  transform: "translateY(-4px)"
-                }}
-                border="1px solid"
-                borderColor="gray.200"
-              >
-                {/* Photo Placeholder */}
-                <Box
-                  bg="gray.100"
-                  h="200px"
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="center"
-                  fontSize="4xl"
-                  fontWeight="bold"
-                  color="gray.400"
-                >
-                  {member.name.split(" ")[0][0]}{member.name.split(" ")[1][0]}
+          {/* Team Grid - Card Layout */}
+          <VStack spacing={8} align="stretch" mb={16}>
+            {teamMembers.map((member, index) => {
+              const isEven = index % 2 === 0;
+              const photoBox = (
+                <Box w={{ base: "100%", md: "40%" }} flexShrink={0}>
+                  <Box
+                    bg="gray.100"
+                    h="250px"
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    fontSize="5xl"
+                    fontWeight="bold"
+                    color="var(--rbe-red)"
+                    borderRadius="lg"
+                    boxShadow="md"
+                  >
+                    {member.name.split(" ")[0][0]}{member.name.split(" ")[1][0]}
+                  </Box>
                 </Box>
+              );
 
-                {/* Content */}
-                <VStack spacing={3} p={6} align="stretch">
+              const contentBox = (
+                <VStack spacing={4} align="start" w={{ base: "100%", md: "60%" }}>
                   <VStack spacing={1} align="start">
-                    <Heading as="h3" size="md" color="var(--rbe-red)">
+                    <Heading as="h3" size="lg" color="var(--rbe-red)">
                       {member.name}
                     </Heading>
                     <Text fontSize="sm" fontWeight="600" color="gray.600">
                       {member.role}
                     </Text>
+                    <Text fontSize="sm" color="gray.500">
+                      Depuis {member.joinDate} - {member.memberType}
+                    </Text>
                   </VStack>
 
-                  <Text fontSize="sm" color="gray.700" fontStyle="italic">
-                    "{member.passion}"
+                  <Text fontSize="md" color="gray.700" fontStyle="italic" fontWeight="500">
+                    "{member.catchphrase}"
                   </Text>
 
                   {/* Expertise Tags */}
@@ -128,7 +135,7 @@ export default function Team() {
                       <Badge
                         key={idx}
                         colorScheme="red"
-                        variant="subtle"
+                        variant="outline"
                         fontSize="xs"
                       >
                         {exp}
@@ -136,9 +143,53 @@ export default function Team() {
                     ))}
                   </HStack>
                 </VStack>
-              </Box>
-            ))}
-          </SimpleGrid>
+              );
+
+              return (
+                <Box
+                  key={member.id}
+                  p={{ base: 4, md: 6 }}
+                  borderRadius="2xl"
+                  bg="rgba(255, 255, 255, 0.7)"
+                  backdropFilter="blur(10px)"
+                  position="relative"
+                  overflow="hidden"
+                  boxShadow="0 0 30px rgba(220, 38, 38, 0.4), 0 0 60px rgba(220, 38, 38, 0.2)"
+                  _before={{
+                    content: '""',
+                    position: "absolute",
+                    inset: 0,
+                    borderRadius: "2xl",
+                    padding: "2px",
+                    background: "linear-gradient(135deg, var(--rbe-red), #000000, var(--rbe-red))",
+                    WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+                    WebkitMaskComposite: "xor",
+                    maskComposite: "exclude",
+                    pointerEvents: "none"
+                  }}
+                >
+                  <HStack
+                    spacing={{ base: 4, md: 8 }}
+                    align="stretch"
+                    position="relative"
+                    zIndex={1}
+                  >
+                    {isEven ? (
+                      <>
+                        {photoBox}
+                        {contentBox}
+                      </>
+                    ) : (
+                      <>
+                        {contentBox}
+                        {photoBox}
+                      </>
+                    )}
+                  </HStack>
+                </Box>
+              );
+            })}
+          </VStack>
 
           {/* CTA Section */}
           <Box

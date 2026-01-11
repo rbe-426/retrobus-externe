@@ -178,7 +178,7 @@ a:hover {
    ========================================================================== */
 
 .site-main {
-  padding-top: var(--mobile-header-h);
+  padding-top: calc(var(--mobile-header-h) - 20px);
   width: 100%;
   margin: 0;
   padding-left: var(--mobile-gutter);
@@ -575,7 +575,7 @@ a:hover {
   }
   
   .site-main {
-    padding-top: calc(var(--header-h) + var(--nav-h) - 12px);
+    padding-top: calc(var(--header-h) + var(--nav-h) - 32px);
     width: min(var(--layout-max), calc(100% - (var(--gutter) * 2)));
     margin-left: auto;
     margin-right: auto;

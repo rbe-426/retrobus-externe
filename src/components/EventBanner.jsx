@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { FiCalendar, FiMapPin, FiExternalLink } from 'react-icons/fi';
 import { Link as RouterLink } from 'react-router-dom';
+import { formatDateFrLong, formatDateTimeFullFr } from '../utils/dateFormat.js';
 
 // Thèmes de couleurs selon le type d'événement
 const getEventTheme = (eventTitle) => {
@@ -69,11 +70,7 @@ const EventBanner = ({ events }) => {
   
   const eventDate = new Date(event.date);
   const isUpcoming = eventDate > new Date();
-  const formattedDate = eventDate.toLocaleDateString('fr-FR', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-  });
+  const formattedDate = formatDateTimeFullFr(event.date, event.time);
 
   return (
     <Box

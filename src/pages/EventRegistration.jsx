@@ -37,6 +37,7 @@ import {
   useDisclosure
 } from "@chakra-ui/react";
 import { FiArrowLeft, FiCalendar, FiMapPin, FiUsers, FiGift, FiExternalLink, FiMail, FiUser } from "react-icons/fi";
+import { formatDateFrLong } from "../utils/dateFormat.js";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
@@ -388,7 +389,7 @@ export default function EventRegistration() {
         <HStack>
           <Icon as={FiCalendar} color="var(--rbe-red)" />
           <Badge colorScheme="orange" fontSize="md" px={3} py={1}>
-            {event.date}
+            {formatDateFrLong(event.date)}
           </Badge>
         </HStack>
         {event.time && (
@@ -671,7 +672,7 @@ export default function EventRegistration() {
           <Text fontWeight="600" mb={2}>Détails de votre inscription</Text>
           <Text fontSize="sm">N° de réservation : {ticketData.id}</Text>
           <Text fontSize="sm">Événement : {event.title}</Text>
-          <Text fontSize="sm">Date : {event.date} {event.time && `• ${event.time}`}</Text>
+          <Text fontSize="sm">Date : {formatDateFrLong(event.date)} {event.time && `• ${event.time}`}</Text>
           <Text fontSize="sm">Lieu : {event.location}</Text>
           <Text fontSize="sm">Billets : {formData.adultTickets} adulte(s) + {formData.childTickets} enfant(s)</Text>
           {!eventInfo.isFree && (
@@ -727,7 +728,7 @@ export default function EventRegistration() {
                 {event?.date && (
                   <HStack>
                     <Icon as={FiCalendar} color="var(--rbe-red)" />
-                    <Text fontWeight="600">{event.date}</Text>
+                    <Text fontWeight="600">{formatDateFrLong(event.date)}</Text>
                   </HStack>
                 )}
                 {event?.location && (

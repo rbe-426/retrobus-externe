@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
 import { FiUsers, FiLock, FiGlobe, FiClock, FiMapPin, FiCalendar, FiDownload, FiEyeOff } from 'react-icons/fi';
+import { formatDateFrLong, formatDateTimeFullFr } from '../utils/dateFormat.js';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
@@ -509,8 +510,7 @@ export default function Events() {
                       <HStack spacing={4} wrap="wrap">
                         <HStack className="event-meta">
                           <Icon as={FiCalendar} />
-                          <Text fontWeight="600">{event.date}</Text>
-                          {event.time && <Text>à {event.time}</Text>}
+                          <Text fontWeight="600">{formatDateTimeFullFr(event.date, event.time)}</Text>
                         </HStack>
                         {getEventBadges(event)}
                       </HStack>
@@ -604,8 +604,7 @@ export default function Events() {
                     {selectedEvent?.date && (
                       <HStack>
                         <Icon as={FiCalendar} color="var(--rbe-red)" />
-                        <Text fontWeight="600">{selectedEvent.date}</Text>
-                        {selectedEvent.time && <Text>{selectedEvent.time}</Text>}
+                        <Text fontWeight="600">{formatDateTimeFullFr(selectedEvent.date, selectedEvent.time)}</Text>
                       </HStack>
                     )}
                     {selectedEvent?.location && (

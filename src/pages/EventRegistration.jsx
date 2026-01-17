@@ -60,7 +60,9 @@ export default function EventRegistration() {
     vehicleModel: '',
     vehicleYear: '',
     clubName: '',
-    isClubMember: false
+    isClubMember: false,
+    // Réponses aux questions customisées
+    customAnswers: {}
   });
   const [submitting, setSubmitting] = useState(false);
   const { isOpen: isHelloAssoOpen, onOpen: onHelloAssoOpen, onClose: onHelloAssoClose } = useDisclosure();
@@ -533,6 +535,101 @@ export default function EventRegistration() {
                 </VStack>
               </Box>
             )}
+
+            {/* Questions customisées du formulaire */}
+            {event && (() => {
+              const extras = typeof event.extras === 'string' ? JSON.parse(event.extras) : event.extras;
+              const templateCustomizations = extras?.templateCustomizations;
+              const questions = templateCustomizations?.registrationQuestions || [];
+              
+              if (questions.length === 0) return null;
+              
+              return (
+                <Box w="100%" p={4} borderWidth="1px" borderRadius="md" bg="gray.50">
+                  <Heading size="sm" mb={4}>📝 Questions additionnelles</Heading>
+                  <VStack spacing={4} align="start" w="100%">
+                    {questions.map((question, index) => (
+                      <FormControl key={index} isRequired={question.required}>
+                        <FormLabel>{question.text}</FormLabel>
+                        {question.type === 'text' && (
+                          <Input
+                            value={formData.customAnswers[index] || ''}
+                            onChange={(e) =>
+                              setFormData((prev) => ({
+                                ...prev,
+                                customAnswers: {
+                                  ...prev.customAnswers,
+                                  [index]: e.target.value
+                                }
+                              }))
+                            }
+                            placeholder={question.text}
+                          />
+                        )}
+                        {question.type === 'textarea' && (
+                          <Input
+                            as="textarea"
+                            value={formData.customAnswers[index] || ''}
+                            onChange={(e) =>
+                              setFormData((prev) => ({
+                                ...prev,
+                                customAnswers: {
+                                  ...prev.customAnswers,
+                                  [index]: e.target.value
+                                }
+                              }))
+                            }
+                            placeholder={question.text}
+                            rows={4}
+                          />
+                        )}
+                        {question.type === 'select' && (
+                          <select
+                            style={{
+                              width: '100%',
+                              padding: '8px',
+                              borderRadius: '4px',
+                              border: '1px solid #ccc'
+                            }}
+                            value={formData.customAnswers[index] || ''}
+                            onChange={(e) =>
+                              setFormData((prev) => ({
+                                ...prev,
+                                customAnswers: {
+                                  ...prev.customAnswers,
+                                  [index]: e.target.value
+                                }
+                              }))
+                            }
+                          >
+                            <option value="">Sélectionner...</option>
+                            {(question.options || []).map((opt, i) => (
+                              <option key={i} value={opt}>{opt}</option>
+                            ))}
+                          </select>
+                        )}
+                        {question.type === 'checkbox' && (
+                          <Checkbox
+                            isChecked={formData.customAnswers[index] === true}
+                            onChange={(e) =>
+                              setFormData((prev) => ({
+                                ...prev,
+                                customAnswers: {
+                                  ...prev.customAnswers,
+                                  [index]: e.target.checked
+                                }
+                              }))
+                            }
+                          >
+                            {question.text}
+                          </Checkbox>
+                        )}
+                      </FormControl>
+                    ))}
+                  </VStack>
+                </Box>
+              );
+            })()}
 
             {/* Sélection des billets */}
             <Box w="100%">

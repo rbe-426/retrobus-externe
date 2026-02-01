@@ -32,7 +32,7 @@ const teamMembers = [
     joinDate: "Mars 2025",
     memberType: "Membre fondateur",
     catchphrase: "Préserver les véhicules que je voyais rouler quand j'étais enfant, c'est un rêve",
-    image: "https://via.placeholder.com/250x300?text=Jaffer-Salim",
+    image: "/assets/team/jaffer-camaroudine.jpg",
     expertise: ["Conduite", "Formations", "Itinéraires", "Idées"]
   },
   {
@@ -94,20 +94,33 @@ export default function Team() {
               const isEven = index % 2 === 0;
               const photoBox = (
                 <Box w={{ base: "100%", md: "40%" }} flexShrink={0}>
-                  <Box
-                    bg="gray.100"
-                    h="250px"
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    fontSize="5xl"
-                    fontWeight="bold"
-                    color="var(--rbe-red)"
-                    borderRadius="lg"
-                    boxShadow="md"
-                  >
-                    {member.name.split(" ")[0][0]}{member.name.split(" ")[1][0]}
-                  </Box>
+                  {member.image && member.image.startsWith('/') ? (
+                    <Box
+                      as="img"
+                      src={member.image}
+                      alt={member.name}
+                      w="100%"
+                      h="250px"
+                      objectFit="cover"
+                      borderRadius="lg"
+                      boxShadow="md"
+                    />
+                  ) : (
+                    <Box
+                      bg="gray.100"
+                      h="250px"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      fontSize="5xl"
+                      fontWeight="bold"
+                      color="var(--rbe-red)"
+                      borderRadius="lg"
+                      boxShadow="md"
+                    >
+                      {member.name.split(" ")[0][0]}{member.name.split(" ")[1][0]}
+                    </Box>
+                  )}
                 </Box>
               );
 

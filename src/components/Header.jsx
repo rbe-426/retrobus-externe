@@ -92,7 +92,7 @@ export default function Header() {
           style={{
             backgroundImage: `url(/assets/header.jpg)`,
             backgroundSize: headerBgSize || 'cover',
-            backgroundPosition: `50% 28%`
+            backgroundPosition: `50% 35%`
           }}
         />
         

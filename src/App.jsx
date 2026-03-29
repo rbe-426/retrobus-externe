@@ -50,7 +50,7 @@ export default function App() {
             <Route path="/photos" element={<Photos />} />
             <Route path="/donate" element={<Donate />} />
             <Route path="/changelog" element={<Changelog />} />
-            {isDev && <Route path="/team" element={<Team />} />}
+            <Route path="/team" element={<Team />} />
             <Route path="/newsletter" element={<Newsletter />} />
             <Route path="/mentions-legales" element={<MentionsLegales />} />
             <Route path="/rgpd" element={<RGPD />} />

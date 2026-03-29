@@ -3,6 +3,62 @@ import {
   Box, Container, Heading, VStack, Text, HStack, Badge, Button
 } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
+import { useEffect } from "react";
+
+// Bloquer screenshots et téléchargements
+useScreenshotProtection = () => {
+  useEffect(() => {
+    // Bloquer les screenshots via Ctrl+Shift+S
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && (e.shiftKey) && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        console.warn('Capture d\'écran bloquée');
+        return false;
+      }
+      // Bloquer Print Screen
+      if (e.key === 'PrintScreen') {
+        e.preventDefault();
+        return false;
+      }
+    };
+
+    // Bloquer clic droit + drag/drop
+    const handleContextMenu = (e) => {
+      e.preventDefault();
+      return false;
+    };
+
+    const handleDragStart = (e) => {
+      e.preventDefault();
+      return false;
+    };
+
+    // Bloquer la sélection et la copie
+    const handleSelectStart = (e) => {
+      e.preventDefault();
+      return false;
+    };
+
+    const handleCopy = (e) => {
+      e.preventDefault();
+      return false;
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('contextmenu', handleContextMenu);
+    document.addEventListener('dragstart', handleDragStart);
+    document.addEventListener('selectstart', handleSelectStart);
+    document.addEventListener('copy', handleCopy);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('contextmenu', handleContextMenu);
+      document.removeEventListener('dragstart', handleDragStart);
+      document.removeEventListener('selectstart', handleSelectStart);
+      document.removeEventListener('copy', handleCopy);
+    };
+  }, []);
+};
 
 const teamMembers = [
   {
@@ -27,8 +83,8 @@ const teamMembers = [
   },
   {
     id: 3,
-    name: "Jaffer-Salim Camaroudine",
-    role: "Membre du Bureau",
+    name: "Jaffer Camaroudine",
+    role: "Membre du Conseil d'Administration",
     joinDate: "Mars 2025",
     memberType: "Membre fondateur",
     catchphrase: "Préserver les véhicules que je voyais rouler quand j'étais enfant, c'est un rêve",
@@ -37,37 +93,29 @@ const teamMembers = [
   },
   {
     id: 4,
-    name: "Sophie Martin",
-    role: "Historienne & Documentaliste",
-    joinDate: "2008",
+    name: "Jarina Amolotpavanathan",
+    role: "Service Juridique",
+    joinDate: "2026",
     memberType: "Membre",
-    catchphrase: "Préserver la mémoire, c'est aussi écrire l'avenir.",
-    image: "https://via.placeholder.com/250x300?text=Sophie",
-    expertise: ["Historique", "Documentation", "Recherche"]
+    catchphrase: "Encadrer juridiquement nos actions pour protéger l'association et ses projets.",
+    image: "https://via.placeholder.com/250x300?text=Jarina",
+    expertise: ["Droit", "Conformité", "Contrats"]
   },
   {
     id: 5,
-    name: "Luc Rousseau",
-    role: "Responsable Événements",
-    joinDate: "2010",
+    name: "Nour Bayoudh",
+    role: "Responsable de l'Administration",
+    joinDate: "2026",
     memberType: "Membre",
-    catchphrase: "Les sorties patrimoine, c'est notre passion partagée !",
-    image: "https://via.placeholder.com/250x300?text=Luc",
-    expertise: ["Événements", "Coordination", "Communication"]
-  },
-  {
-    id: 6,
-    name: "Isabelle Leclerc",
-    role: "Webmaster & Communication",
-    joinDate: "2015",
-    memberType: "Membre",
-    catchphrase: "Connecter les passionnés sur le digital.",
-    image: "https://via.placeholder.com/250x300?text=Isabelle",
-    expertise: ["Web", "Communication", "Social Media"]
+    catchphrase: "Une bonne organisation est la clé de nos succès.",
+    image: "https://via.placeholder.com/250x300?text=Nour",
+    expertise: ["Administration", "Organisation", "Gestion"]
   }
 ];
 
 export default function Team() {
+  useScreenshotProtection();
+
   return (
     <>
       <Helmet>
@@ -75,7 +123,7 @@ export default function Team() {
         <meta name="description" content="Rencontrez l'équipe de RétroBus Essonne : passionnés d'automobile, mécaniciens, carrossiers, historiens et bénévoles." />
       </Helmet>
 
-      <Box pt={20} pb={20} bg="white">
+      <Box pt={8} pb={20} bg="white" userSelect="none" sx={{ WebkitUserSelect: 'none' }}>
         <Container maxW="7xl">
           {/* Header */}
           <VStack spacing={6} textAlign="center" mb={16}>

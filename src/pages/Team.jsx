@@ -5,14 +5,13 @@ import {
 import { Link as RouterLink } from "react-router-dom";
 import { useEffect } from "react";
 
-// Bloquer screenshots et téléchargements
-useScreenshotProtection = () => {
+// Hooks pour bloquer screenshots et téléchargements
+const useScreenshotProtection = () => {
   useEffect(() => {
     // Bloquer les screenshots via Ctrl+Shift+S
     const handleKeyDown = (e) => {
       if ((e.ctrlKey || e.metaKey) && (e.shiftKey) && e.key.toLowerCase() === 's') {
         e.preventDefault();
-        console.warn('Capture d\'écran bloquée');
         return false;
       }
       // Bloquer Print Screen
@@ -22,24 +21,14 @@ useScreenshotProtection = () => {
       }
     };
 
-    // Bloquer clic droit + drag/drop
+    // Bloquer clic droit
     const handleContextMenu = (e) => {
       e.preventDefault();
       return false;
     };
 
+    // Bloquer drag/drop
     const handleDragStart = (e) => {
-      e.preventDefault();
-      return false;
-    };
-
-    // Bloquer la sélection et la copie
-    const handleSelectStart = (e) => {
-      e.preventDefault();
-      return false;
-    };
-
-    const handleCopy = (e) => {
       e.preventDefault();
       return false;
     };
@@ -47,15 +36,11 @@ useScreenshotProtection = () => {
     document.addEventListener('keydown', handleKeyDown);
     document.addEventListener('contextmenu', handleContextMenu);
     document.addEventListener('dragstart', handleDragStart);
-    document.addEventListener('selectstart', handleSelectStart);
-    document.addEventListener('copy', handleCopy);
 
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('contextmenu', handleContextMenu);
       document.removeEventListener('dragstart', handleDragStart);
-      document.removeEventListener('selectstart', handleSelectStart);
-      document.removeEventListener('copy', handleCopy);
     };
   }, []);
 };
@@ -141,7 +126,7 @@ export default function Team() {
             {teamMembers.map((member, index) => {
               const isEven = index % 2 === 0;
               const photoBox = (
-                <Box w={{ base: "100%", md: "40%" }} flexShrink={0}>
+                <Box w={{ base: "100%", md: "40%" }} flexShrink={0} onContextMenu={(e) => e.preventDefault()} onDragStart={(e) => e.preventDefault()}>
                   {member.image && member.image.startsWith('/') ? (
                     <Box
                       as="img"
@@ -152,6 +137,13 @@ export default function Team() {
                       objectFit="cover"
                       borderRadius="lg"
                       boxShadow="md"
+                      draggable={false}
+                      onContextMenu={(e) => e.preventDefault()}
+                      sx={{
+                        WebkitUserDrag: 'none',
+                        userDrag: 'none',
+                        pointerEvents: 'none'
+                      }}
                     />
                   ) : (
                     <Box

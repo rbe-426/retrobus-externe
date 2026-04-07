@@ -107,7 +107,7 @@ export default function Vehicles() {
               transition="all 0.2s"
             >
               <Image
-                src={defaultImages[vehicle.parc]?.[0] || vehicleImage1}
+                src={vehicle.thumbnailImage || defaultImages[vehicle.parc]?.[0] || vehicleImage1}
                 alt={vehicle.modele}
                 objectFit="cover"
                 w="100%"
@@ -115,6 +115,13 @@ export default function Vehicles() {
                 mb={4}
                 borderRadius="md"
               />
+              
+              {vehicle.marque && (
+                <Text fontSize="xs" color="gray.500" mb={1} fontWeight="500">
+                  {vehicle.marque}
+                  {vehicle.type && ` • ${vehicle.type}`}
+                </Text>
+              )}
               
               <Heading as="h2" size="md" mb={2}>
                 {vehicle.modele}

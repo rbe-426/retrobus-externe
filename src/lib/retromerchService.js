@@ -73,11 +73,18 @@ export const getStats = async () => {
   return makeRequest('/stats');
 };
 
+// ========== CONFIGURATION DU SITE ==========
+
+export const getSiteConfig = async () => {
+  return makeRequest('/site-config');
+};
+
 export default {
   getProducts,
   getProduct,
   getCategories,
   getOrder,
   createOrder,
-  getStats
+  getStats,
+  getSiteConfig
 };

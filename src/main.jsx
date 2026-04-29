@@ -6,12 +6,8 @@ import { ChakraProvider, Center, Spinner, Box, Heading, Text, Image } from "@cha
 import { HelmetProvider } from "react-helmet-async";
 import system from "./theme";
 
-// Désactivation du mode événement en dev
-if (import.meta.env.DEV) {
-  // Supprimer le mode événement du localStorage
-  localStorage.removeItem('rbe:public-event-mode');
-  console.log('🎪 Mode événement désactivé');
-}
+// Mode événement désactivé en auto-dev
+// Pour activer : aller sur /dashboard/event-mode ou créer un événement JEP
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

@@ -1,15 +1,17 @@
 ﻿import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, useDisclosure } from "@chakra-ui/react";
 import theme from "./theme.js";
 import "./styles.css"; // CSS personnalisé AVANT Chakra
 
 // Components
 import Header from "./components/Header.jsx";
+import EventHeader from "./components/EventHeader.jsx";
 import Footer from "./components/Footer.jsx";
 
 // Pages
 import Home from "./pages/Home.jsx";
+import EventHome from "./pages/EventHome.jsx";
 import About from "./pages/About.jsx";
 import Contact from "./pages/Contact.jsx";
 import Vehicles from "./pages/Vehicles.jsx";
@@ -26,16 +28,37 @@ import Team from "./pages/Team.jsx";
 import MentionsLegales from "./pages/MentionsLegales.jsx";
 import RGPD from "./pages/RGPD.jsx";
 
+// Event Mode
+import { useEventMode } from "./utils/eventModeConfig.js";
+
 const isDev = import.meta.env.DEV; // true en dev, false en prod
 
 export default function App() {
+  const { isActive: isEventModeActive } = useEventMode();
+  const navDisclosure = useDisclosure();
+  const newsletterDisclosure = useDisclosure();
+
+  // Choisir le bon composant Header selon le mode événement
+  const HeaderComponent = isEventModeActive ? EventHeader : Header;
+  
+  // Choisir le bon composant Home selon le mode événement
+  const HomeComponent = isEventModeActive ? EventHome : Home;
+
+  console.log('🎪 Mode événement actif:', isEventModeActive);
+
   return (
     <ChakraProvider theme={theme}>
       <Router>
-        <Header />
-        <main className="site-main">
+        <HeaderComponent 
+          navDisclosure={navDisclosure}
+          onNewsletterClick={newsletterDisclosure.onOpen}
+        />
+        <main 
+          className="site-main"
+          style={isEventModeActive ? { paddingTop: '150px' } : undefined}
+        >
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<HomeComponent />} />
             <Route path="/parc" element={<Vehicles />} />
             <Route path="/vehicles/:id" element={<VehicleDetails />} />
             <Route path="/vehicles" element={<Navigate to="/parc" replace />} />

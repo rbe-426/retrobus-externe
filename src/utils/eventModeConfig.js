@@ -76,7 +76,7 @@ export function getEventModeConfig() {
 export function isEventModeActive() {
   const config = getEventModeConfig();
   
-  if (!config || !config.active) return false;
+  if (!config || config.enabled === false) return false;
   
   const now = new Date();
   const startDate = new Date(config.startDate);
@@ -88,13 +88,17 @@ export function isEventModeActive() {
     return false;
   }
   
-  // Vérifier que nous sommes dans la période
-  const isInPeriod = now >= startDate && now <= endDate;
+  // Activation précoce : 150 jours avant l'événement pour préparer et tester
+  const activationStart = new Date(startDate.getTime() - 150 * 24 * 60 * 60 * 1000);
+  
+  // Vérifier que nous sommes dans la période (60 jours avant → fin événement)
+  const isInPeriod = now >= activationStart && now <= endDate;
   
   if (!isInPeriod) {
     console.log('📅 Mode événement inactif (hors période)', {
       now: now.toISOString(),
-      start: startDate.toISOString(),
+      activationStart: activationStart.toISOString(),
+      eventStart: startDate.toISOString(),
       end: endDate.toISOString()
     });
   }

@@ -122,11 +122,10 @@ export default function Home() {
           <div className="hero-content">
             <div className="hero-box">
               <Heading as="h1" size="2xl" lineHeight="1.05">
-                Préserver & partager le patrimoine autobus en Essonne
+                Préserver & partager le patrimoine automobile en Essonne
               </Heading>
               <Text mt={4} fontSize="lg" color="whiteAlpha.800">
-                RétroBus Essonne restaure des autobus emblématiques, organise des sorties et des
-                animations pour faire découvrir l'histoire des transports.
+                L'association RétroBus Essonne est une association régie par la Loi 1901 qui préserve et partage le patrimoine automobile en Essonne.
               </Text>
               <Stack 
                 direction="column"
@@ -142,7 +141,7 @@ export default function Home() {
                   color="white"
                   _hover={{ opacity: 0.9 }}
                 >
-                  Découvrir nos véhicules
+                  Découvrir notre collection
                 </Button>
 
                 <Button
@@ -169,7 +168,7 @@ export default function Home() {
                 <VStack spacing={2} align="start">
                   <Heading as="h2" size="lg">Notre collection</Heading>
                   <Text color="gray.600" fontSize="sm">
-                    Notre véhicule phare, un Mercedes Citaro de première génération, est le témoin vivant de l'évolution des transports en commun en Île-de-France. Découvrez-le ci-dessous ainsi que d'autres trésors de notre collection.
+                    Découvrez un condensé de notre collection de véhicules historiques, témoins de l'évolution des transports en commun en Île-de-France. Chaque véhicule a une histoire unique à raconter !
                   </Text>
                 </VStack>
 
@@ -283,7 +282,7 @@ export default function Home() {
                   <Box fontSize="3xl" mb={4}>🎯</Box>
                   <Heading as="h3" size="sm" mb={3} color="var(--rbe-red)">Mission</Heading>
                   <Text fontSize="sm">
-                    Préserver, restaurer et faire revivre le patrimoine des transports publics franciliens à travers nos véhicules.
+                    Préserver, restaurer et faire revivre le patrimoine automobile à travers nos véhicules.
                   </Text>
                 </Box>
                 
@@ -303,7 +302,7 @@ export default function Home() {
                   <Box fontSize="3xl" mb={4}>🚍</Box>
                   <Heading as="h3" size="sm" mb={3} color="var(--rbe-red)">Passion</Heading>
                   <Text fontSize="sm">
-                    Sauvegarder des autobus emblématiques qui ont marqué l'histoire des transports en Île-de-France.
+                    Sauvegarder des véhicules emblématiques qui ont marqué l'histoire des mobilités partout dans le monde.
                   </Text>
                 </Box>
                 

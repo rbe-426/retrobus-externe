@@ -392,187 +392,28 @@ export default function EventHome() {
                       scrollBehavior: 'smooth'
                     }}
                   >
-                    {/* Logos partenaires depuis event_jep26 */}
-                    <Box
-                      minW="250px"
-                      h="120px"
-                      bg="white"
-                      borderRadius="md"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      boxShadow="md"
-                      p={3}
-                      transition="all 0.3s"
-                      _hover={{ transform: 'scale(1.05)', boxShadow: 'lg' }}
-                      flexShrink={0}
-                    >
-                      <img 
-                        src="/assets/event_jep26/pngegg.png" 
-                        alt="Partenaire"
-                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
-                      />
-                    </Box>
-                    <Box
-                      minW="250px"
-                      h="120px"
-                      bg="white"
-                      borderRadius="md"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      boxShadow="md"
-                      p={3}
-                      transition="all 0.3s"
-                      _hover={{ transform: 'scale(1.05)', boxShadow: 'lg' }}
-                      flexShrink={0}
-                    >
-                      <img 
-                        src="/assets/event_jep26/IdFMobilités.svg.png" 
-                        alt="Île-de-France Mobilités"
-                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
-                      />
-                    </Box>
-                    <Box
-                      minW="250px"
-                      h="120px"
-                      bg="white"
-                      borderRadius="md"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      boxShadow="md"
-                      p={3}
-                      transition="all 0.3s"
-                      _hover={{ transform: 'scale(1.05)', boxShadow: 'lg' }}
-                      flexShrink={0}
-                    >
-                      <img 
-                        src="/assets/event_jep26/Logo_commune_de_Corbeil-Essonnes.svg.png" 
-                        alt="Commune de Corbeil-Essonnes"
-                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
-                      />
-                    </Box>
-                    <Box
-                      minW="250px"
-                      h="120px"
-                      bg="white"
-                      borderRadius="md"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      boxShadow="md"
-                      p={3}
-                      transition="all 0.3s"
-                      _hover={{ transform: 'scale(1.05)', boxShadow: 'lg' }}
-                      flexShrink={0}
-                    >
-                      <img 
-                        src="/assets/event_jep26/Logo_SNCF_(2011).svg.png" 
-                        alt="SNCF"
-                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
-                      />
-                    </Box>
-                    <Box
-                      minW="250px"
-                      h="120px"
-                      bg="white"
-                      borderRadius="md"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      boxShadow="md"
-                      p={3}
-                      transition="all 0.3s"
-                      _hover={{ transform: 'scale(1.05)', boxShadow: 'lg' }}
-                      flexShrink={0}
-                    >
-                      <img 
-                        src="/assets/event_jep26/27.png" 
-                        alt="Partenaire 27"
-                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
-                      />
-                    </Box>
-                    <Box
-                      minW="250px"
-                      h="120px"
-                      bg="white"
-                      borderRadius="md"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      boxShadow="md"
-                      p={3}
-                      transition="all 0.3s"
-                      _hover={{ transform: 'scale(1.05)', boxShadow: 'lg' }}
-                      flexShrink={0}
-                    >
-                      <img 
-                        src="/assets/event_jep26/28.png" 
-                        alt="Partenaire 28"
-                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
-                      />
-                    </Box>
-                    <Box
-                      minW="250px"
-                      h="120px"
-                      bg="white"
-                      borderRadius="md"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      boxShadow="md"
-                      p={3}
-                      transition="all 0.3s"
-                      _hover={{ transform: 'scale(1.05)', boxShadow: 'lg' }}
-                      flexShrink={0}
-                    >
-                      <img 
-                        src="/assets/event_jep26/29.png" 
-                        alt="Partenaire 29"
-                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
-                      />
-                    </Box>
-                    <Box
-                      minW="250px"
-                      h="120px"
-                      bg="white"
-                      borderRadius="md"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      boxShadow="md"
-                      p={3}
-                      transition="all 0.3s"
-                      _hover={{ transform: 'scale(1.05)', boxShadow: 'lg' }}
-                      flexShrink={0}
-                    >
-                      <img 
-                        src="/assets/event_jep26/30.png" 
-                        alt="Partenaire 30"
-                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
-                      />
-                    </Box>
-                    <Box
-                      minW="250px"
-                      h="120px"
-                      bg="white"
-                      borderRadius="md"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      boxShadow="md"
-                      p={3}
-                      transition="all 0.3s"
-                      _hover={{ transform: 'scale(1.05)', boxShadow: 'lg' }}
-                      flexShrink={0}
-                    >
-                      <img 
-                        src="/assets/event_jep26/31.png" 
-                        alt="Partenaire 31"
-                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
-                      />
-                    </Box>
+                    {/* Logos partenaires - Cartes génériques */}
+                    {[1, 2, 3, 4, 5, 6].map((num) => (
+                      <Box
+                        key={num}
+                        minW="250px"
+                        h="120px"
+                        bg="white"
+                        borderRadius="md"
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="center"
+                        boxShadow="md"
+                        p={3}
+                        transition="all 0.3s"
+                        _hover={{ transform: 'scale(1.05)', boxShadow: 'lg' }}
+                        flexShrink={0}
+                      >
+                        <Text fontSize="lg" fontWeight="bold" color="gray.400">
+                          Partenaire {num}
+                        </Text>
+                      </Box>
+                    ))}
                   </Box>
                 </Box>
 

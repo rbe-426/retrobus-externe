@@ -5,9 +5,9 @@ import {
   Card, CardBody, Badge, Icon, Divider, useColorModeValue,
   Grid, SimpleGrid
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
-  FiCalendar, FiMapPin, FiClock, FiUsers, FiInfo
+  FiCalendar, FiMapPin, FiClock, FiUsers, FiInfo, FiChevronLeft, FiChevronRight
 } from "react-icons/fi";
 import { getEventModeConfig, EVENT_TYPES } from "../utils/eventModeConfig.js";
 import pageBg from "../assets/logo_arriere_plan.svg";
@@ -16,6 +16,7 @@ import Home from "./Home.jsx";
 export default function EventHome() {
   const [eventConfig, setEventConfig] = useState(null);
   const [timeUntil, setTimeUntil] = useState(null);
+  const scrollRef = useRef(null);
 
   const bgColor = useColorModeValue('gray.50', 'gray.900');
   const cardBg = useColorModeValue('white', 'gray.800');
@@ -124,14 +125,14 @@ export default function EventHome() {
                 lg: 'minmax(0px, 2.5fr) minmax(300px, 2fr) minmax(300px, 2fr) minmax(320px, 1.5fr) minmax(320px, 0.9fr)'
               }}
               columnGap={{ base: 0, lg: 6, xl: 8 }}
-              rowGap={{ base: 6, lg: 0 }}
+              rowGap={{ base: 6, lg: 6 }}
               alignItems="start"
             >
               {/* Colonne 1 : Titre principal */}
-              <VStack 
+             <VStack 
                 spacing={4} 
                 align="flex-start"
-                ml={{ base: 0, lg: '10px', xl: '-300px' }}
+                ml={{ base: 0, lg: '10px', xl: '-400px' }}
                 maxW="800px"
               >
                 <HStack spacing={3} flexWrap="wrap">
@@ -185,161 +186,421 @@ export default function EventHome() {
               </VStack>
 
               {/* Colonne 2 : Date & Horaires */}
-              <VStack 
-                spacing={2} 
-                align="stretch"
-                h="50%"
+              <Card 
+                bg={cardBg}
+                boxShadow="xl"
+                w="full"
                 maxW="340px"
-                ml={{ base: 0, lg: '50px', xl: 'px' }}
-                transform={{ base: 'none', lg: 'translateX(10px)', xl: 'translateX(110px)' }}
+                minH="180px"
+                ml={{ base: 0, lg: 32 }}
               >
-                <Card 
-                  bg={cardBg}
-                  boxShadow="xl"
-                  h="100%"
-                >
-                  <CardBody>
-                    <VStack spacing={3} align="flex-start">
-                      <HStack spacing={2}>
-                        <Icon as={FiCalendar} color={mainColor} boxSize={5} />
-                        <Heading size="sm" color={mainColor}>
-                          Date & Horaires
-                        </Heading>
-                      </HStack>
-                      <Text fontWeight="medium">
-                        {formatDate(displayStartDate)}
+                <CardBody>
+                  <VStack spacing={3} align="flex-start">
+                    <HStack spacing={2}>
+                      <Icon as={FiCalendar} color={mainColor} boxSize={5} />
+                      <Heading size="sm" color={mainColor}>
+                        Date & Horaires
+                      </Heading>
+                    </HStack>
+                    <Text fontWeight="medium">
+                      {formatDate(displayStartDate)}
+                    </Text>
+                    <Divider />
+                    <HStack spacing={2}>
+                      <Icon as={FiClock} color={mainColor} />
+                      <Text fontSize="sm" fontWeight="medium">
+                        {formatTime(displayStartDate)} - {formatTime(displayEndDate)}
                       </Text>
-                      <Divider />
-                      <HStack spacing={2}>
-                        <Icon as={FiClock} color={mainColor} />
-                        <Text fontSize="sm" fontWeight="medium">
-                          {formatTime(displayStartDate)} - {formatTime(displayEndDate)}
-                        </Text>
-                      </HStack>
-                    </VStack>
-                  </CardBody>
-                </Card>
-              </VStack>
+                    </HStack>
+                  </VStack>
+                </CardBody>
+              </Card>
 
               {/* Colonne 3 : Lieu */}
-              <VStack 
-                spacing={4} 
-                align="stretch"
-                h="50%"
+              <Card 
+                bg={cardBg}
+                boxShadow="xl"
+                w="full"
                 maxW="340px"
-                ml={{ base: 0, lg: '40px', xl: '10px' }}
-                transform={{ base: 'none', lg: 'translateX(25px)', xl: 'translateX(110px)' }}
+                minH="180px"
+                ml={{ base: 0, lg: 32 }}
               >
-                <Card 
-                  bg={cardBg}
-                  boxShadow="xl"
-                  h="100%"
-                >
-                  <CardBody>
-                    <VStack spacing={3} align="flex-start">
-                      <HStack spacing={2}>
-                        <Icon as={FiMapPin} color={mainColor} boxSize={5} />
-                        <Heading size="sm" color={mainColor}>
-                          Lieu
-                        </Heading>
-                      </HStack>
-                      <Text fontSize="sm" fontWeight="medium">
-                        {event.location || 'Parking Crété, Corbeil-Essonnes'}
-                      </Text>
-                      <Button 
-                        size="sm" 
-                        variant="outline" 
-                        colorScheme="red"
-                        leftIcon={<Icon as={FiMapPin} />}
-                      >
-                        Voir sur la carte
-                      </Button>
-                    </VStack>
-                  </CardBody>
-                </Card>
-              </VStack>
+                <CardBody>
+                  <VStack spacing={3} align="flex-start">
+                    <HStack spacing={2}>
+                      <Icon as={FiMapPin} color={mainColor} boxSize={5} />
+                      <Heading size="sm" color={mainColor}>
+                        Lieu
+                      </Heading>
+                    </HStack>
+                    <Text fontSize="sm" fontWeight="medium">
+                      {event.location || 'Parking Crété, Corbeil-Essonnes'}
+                    </Text>
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      colorScheme="red"
+                      leftIcon={<Icon as={FiMapPin} />}
+                    >
+                      Voir sur la carte
+                    </Button>
+                  </VStack>
+                </CardBody>
+              </Card>
 
               {/* Colonne 4 : Compte à rebours */}
               {customContent.showCountdown && timeUntil && (
-                <VStack
-                  spacing={2}
-                  align="stretch"
-                  h="50%"
-                  justifySelf="center"
-                  w="full"
-                  maxW="340px"
-                  ml={{ base: 0, lg: '60px', xl: '150px' }}
-                  transform={{ base: 'none', lg: 'translateX(10px)', xl: 'translateX(50px)' }}
-                >
-                  <Card bg="white" boxShadow="lg" w="full" h="100%">
-                    <CardBody>
-                      <VStack spacing={3}>
-                        <Text fontSize="xs" fontWeight="bold" color={mainColor} textTransform="uppercase" textAlign="center">
-                          ⏰ L'événement commence dans
-                        </Text>
-                        <Text fontSize="3xl" fontWeight="bold" color="#000000" textAlign="center">
-                          {timeUntil.days} {timeUntil.days > 1 ? 'jours' : 'jour'}, {timeUntil.hours} h et {timeUntil.minutes} min
-                        </Text>
-                      </VStack>
-                    </CardBody>
-                  </Card>
-                </VStack>
-              )}
-
-              {/* Colonne 5 : Inscription */}
-              <VStack 
-                spacing={2} 
-                align="stretch"
-                h="50%"
-                justifySelf={{ base: 'flex-start', lg: 'flex-end' }}
-                maxW="340px"
-                transform={{ base: 'none', lg: 'translateX(150px)', xl: 'translateX(150px)' }}
-              >
                 <Card 
-                  bg="white"
-                  boxShadow="xl"
-                  h="100%"
+                  bg="white" 
+                  boxShadow="lg" 
+                  w="full" 
+                  maxW="340px"
+                  minH="180px"
+                  ml={{ base: 0, lg: 32 }}
                 >
                   <CardBody>
-                    <VStack spacing={2}>
-                      <HStack spacing={2}>
-                        <Icon as={FiUsers} color={mainColor} boxSize={5} />
-                        <Heading size="md" color={mainColor}>
-                          {registration.enabled ? "Inscription" : "Participation"}
-                        </Heading>
-                      </HStack>
-                      
-                      {registration.enabled ? (
-                        <>
-                          <Text fontSize="sm" color="gray.600" textAlign="center">
-                            Réservez votre place pour cet événement exceptionnel
-                          </Text>
-                          <Button
-                            as={RouterLink}
-                            to={`/evenement/${registration.eventId}/inscription`}
-                            bg={mainColor}
-                            color="white"
-                            w="full"
-                            size="lg"
-                            _hover={{ bg: mainColor, opacity: 0.9 }}
-                          >
-                            S'inscrire maintenant
-                          </Button>
-                        </>
-                      ) : (
-                        <>
-                          <Text fontSize="sm" color="gray.600" textAlign="center">
-                            Entrée gratuite sur inscription
-                          </Text>
-                          <Text fontSize="xs" color="gray.500" textAlign="center">
-                            Aucune inscription nécessaire
-                          </Text>
-                        </>
-                      )}
+                    <VStack spacing={3}>
+                      <Text fontSize="xs" fontWeight="bold" color={mainColor} textTransform="uppercase" textAlign="center">
+                        ⏰ L'événement commence dans
+                      </Text>
+                      <Text fontSize="3xl" fontWeight="bold" color="#000000" textAlign="center">
+                        {timeUntil.days} {timeUntil.days > 1 ? 'jours' : 'jour'}, {timeUntil.hours} h et {timeUntil.minutes} min
+                      </Text>
                     </VStack>
                   </CardBody>
                 </Card>
-              </VStack>
+              )}
+
+              {/* Colonne 5 : Inscription */}
+              <Card 
+                bg="white"
+                boxShadow="xl"
+                w="full"
+                maxW="340px"
+                minH="180px"
+                ml={{ base: 0, lg: 32 }}
+              >
+                <CardBody>
+                  <VStack spacing={2}>
+                    <HStack spacing={2}>
+                      <Icon as={FiUsers} color={mainColor} boxSize={5} />
+                      <Heading size="md" color={mainColor}>
+                        {registration.enabled ? "Inscription" : "Participation"}
+                      </Heading>
+                    </HStack>
+                    
+                    {registration.enabled ? (
+                      <>
+                        <Text fontSize="sm" color="gray.600" textAlign="center">
+                          Réservez votre place pour cet événement exceptionnel
+                        </Text>
+                        <Button
+                          as={RouterLink}
+                          to={`/evenement/${registration.eventId}/inscription`}
+                          bg={mainColor}
+                          color="white"
+                          w="full"
+                          size="lg"
+                          _hover={{ bg: mainColor, opacity: 0.9 }}
+                        >
+                          S'inscrire maintenant
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <Text fontSize="sm" color="gray.600" textAlign="center">
+                          Entrée gratuite sur inscription
+                        </Text>
+                        <Text fontSize="xs" color="gray.500" textAlign="center">
+                          Aucune inscription nécessaire
+                        </Text>
+                      </>
+                    )}
+                  </VStack>
+                </CardBody>
+              </Card>
+
+              {/* Carrousel des logos partenaires - S'étend sur les colonnes 2-5 */}
+              <Box 
+                gridColumn={{ base: "1", lg: "2 / 6" }}
+                position="relative"
+                w="full"
+                mt={{ base: 4, lg: -28 }}
+                ml={{ base: 0, lg: 20 }}
+              >
+                {/* Bouton gauche */}
+                <Button
+                  position="absolute"
+                  left="-15px"
+                  top="50%"
+                  transform="translateY(-50%)"
+                  zIndex={2}
+                  onClick={() => {
+                    if (scrollRef.current) {
+                      scrollRef.current.scrollTo({
+                        left: scrollRef.current.scrollLeft - 280,
+                        behavior: 'smooth'
+                      });
+                    }
+                  }}
+                  bg="white"
+                  color={mainColor}
+                  borderRadius="full"
+                  boxShadow="lg"
+                  _hover={{ bg: 'gray.100' }}
+                  size="sm"
+                >
+                  <Icon as={FiChevronLeft} boxSize={5} />
+                </Button>
+
+                {/* Conteneur avec gradients */}
+                <Box position="relative" overflow="hidden" px={8}>
+                  {/* Gradient gauche */}
+                  <Box
+                    position="absolute"
+                    left={0}
+                    top={0}
+                    bottom={0}
+                    w="80px"
+                    bgGradient="linear(to-r, #d30c4c, transparent)"
+                    zIndex={1}
+                    pointerEvents="none"
+                  />
+
+                  {/* Gradient droite */}
+                  <Box
+                    position="absolute"
+                    right={0}
+                    top={0}
+                    bottom={0}
+                    w="80px"
+                    bgGradient="linear(to-l, #d30c4c, transparent)"
+                    zIndex={1}
+                    pointerEvents="none"
+                  />
+
+                  {/* Conteneur scrollable des logos */}
+                  <Box
+                    ref={scrollRef}
+                    display="flex"
+                    gap={8}
+                    overflowX="auto"
+                    py={4}
+                    css={{
+                      '&::-webkit-scrollbar': { display: 'none' },
+                      scrollbarWidth: 'none',
+                      scrollBehavior: 'smooth'
+                    }}
+                  >
+                    {/* Logos partenaires depuis event_jep26 */}
+                    <Box
+                      minW="250px"
+                      h="120px"
+                      bg="white"
+                      borderRadius="md"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      boxShadow="md"
+                      p={3}
+                      transition="all 0.3s"
+                      _hover={{ transform: 'scale(1.05)', boxShadow: 'lg' }}
+                      flexShrink={0}
+                    >
+                      <img 
+                        src="/assets/event_jep26/pngegg.png" 
+                        alt="Partenaire"
+                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+                      />
+                    </Box>
+                    <Box
+                      minW="250px"
+                      h="120px"
+                      bg="white"
+                      borderRadius="md"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      boxShadow="md"
+                      p={3}
+                      transition="all 0.3s"
+                      _hover={{ transform: 'scale(1.05)', boxShadow: 'lg' }}
+                      flexShrink={0}
+                    >
+                      <img 
+                        src="/assets/event_jep26/IdFMobilités.svg.png" 
+                        alt="Île-de-France Mobilités"
+                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+                      />
+                    </Box>
+                    <Box
+                      minW="250px"
+                      h="120px"
+                      bg="white"
+                      borderRadius="md"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      boxShadow="md"
+                      p={3}
+                      transition="all 0.3s"
+                      _hover={{ transform: 'scale(1.05)', boxShadow: 'lg' }}
+                      flexShrink={0}
+                    >
+                      <img 
+                        src="/assets/event_jep26/Logo_commune_de_Corbeil-Essonnes.svg.png" 
+                        alt="Commune de Corbeil-Essonnes"
+                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+                      />
+                    </Box>
+                    <Box
+                      minW="250px"
+                      h="120px"
+                      bg="white"
+                      borderRadius="md"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      boxShadow="md"
+                      p={3}
+                      transition="all 0.3s"
+                      _hover={{ transform: 'scale(1.05)', boxShadow: 'lg' }}
+                      flexShrink={0}
+                    >
+                      <img 
+                        src="/assets/event_jep26/Logo_SNCF_(2011).svg.png" 
+                        alt="SNCF"
+                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+                      />
+                    </Box>
+                    <Box
+                      minW="250px"
+                      h="120px"
+                      bg="white"
+                      borderRadius="md"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      boxShadow="md"
+                      p={3}
+                      transition="all 0.3s"
+                      _hover={{ transform: 'scale(1.05)', boxShadow: 'lg' }}
+                      flexShrink={0}
+                    >
+                      <img 
+                        src="/assets/event_jep26/27.png" 
+                        alt="Partenaire 27"
+                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+                      />
+                    </Box>
+                    <Box
+                      minW="250px"
+                      h="120px"
+                      bg="white"
+                      borderRadius="md"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      boxShadow="md"
+                      p={3}
+                      transition="all 0.3s"
+                      _hover={{ transform: 'scale(1.05)', boxShadow: 'lg' }}
+                      flexShrink={0}
+                    >
+                      <img 
+                        src="/assets/event_jep26/28.png" 
+                        alt="Partenaire 28"
+                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+                      />
+                    </Box>
+                    <Box
+                      minW="250px"
+                      h="120px"
+                      bg="white"
+                      borderRadius="md"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      boxShadow="md"
+                      p={3}
+                      transition="all 0.3s"
+                      _hover={{ transform: 'scale(1.05)', boxShadow: 'lg' }}
+                      flexShrink={0}
+                    >
+                      <img 
+                        src="/assets/event_jep26/29.png" 
+                        alt="Partenaire 29"
+                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+                      />
+                    </Box>
+                    <Box
+                      minW="250px"
+                      h="120px"
+                      bg="white"
+                      borderRadius="md"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      boxShadow="md"
+                      p={3}
+                      transition="all 0.3s"
+                      _hover={{ transform: 'scale(1.05)', boxShadow: 'lg' }}
+                      flexShrink={0}
+                    >
+                      <img 
+                        src="/assets/event_jep26/30.png" 
+                        alt="Partenaire 30"
+                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+                      />
+                    </Box>
+                    <Box
+                      minW="250px"
+                      h="120px"
+                      bg="white"
+                      borderRadius="md"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      boxShadow="md"
+                      p={3}
+                      transition="all 0.3s"
+                      _hover={{ transform: 'scale(1.05)', boxShadow: 'lg' }}
+                      flexShrink={0}
+                    >
+                      <img 
+                        src="/assets/event_jep26/31.png" 
+                        alt="Partenaire 31"
+                        style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+                      />
+                    </Box>
+                  </Box>
+                </Box>
+
+                {/* Bouton droite */}
+                <Button
+                  position="absolute"
+                  right="-15px"
+                  top="50%"
+                  transform="translateY(-50%)"
+                  zIndex={2}
+                  onClick={() => {
+                    if (scrollRef.current) {
+                      scrollRef.current.scrollTo({
+                        left: scrollRef.current.scrollLeft + 280,
+                        behavior: 'smooth'
+                      });
+                    }
+                  }}
+                  bg="white"
+                  color={mainColor}
+                  borderRadius="full"
+                  boxShadow="lg"
+                  _hover={{ bg: 'gray.100' }}
+                  size="sm"
+                >
+                  <Icon as={FiChevronRight} boxSize={5} />
+                </Button>
+              </Box>
             </Grid>
           </Container>
         </Box>

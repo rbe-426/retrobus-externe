@@ -164,30 +164,24 @@ export default function EventHome() {
 
                 {renderEventTitle()}
 
-                {event.subtitle && (
-                  <Text 
-                    fontSize={{ base: "md", md: "lg" }}
-                    color="white"
-                    fontWeight="medium"
-                  >
-                    {event.subtitle}
-                  </Text>
-                )}
-
-                <VStack align="flex-start" spacing={2} pt={2}>
-                  <HStack spacing={2}>
-                    <Icon as={FiCalendar} color="white" boxSize={5} />
-                    <Text color="white" fontWeight="medium">
-                      {formatDate(displayStartDate)}
-                    </Text>
-                  </HStack>
-                  <HStack spacing={2}>
-                    <Icon as={FiMapPin} color="white" boxSize={5} />
-                    <Text color="white" fontWeight="medium">
-                      {event.location || 'Parking Crété, Corbeil-Essonnes'}
-                    </Text>
-                  </HStack>
-                </VStack>
+                <Text 
+                  fontSize={{ base: "xs", md: "4xl" }}
+                  color="white"
+                  fontWeight="semibold"
+                  pt={20}
+                  mb={-5}
+                >
+                  Les partenaires
+                </Text>
+                
+                <Text 
+                  fontSize={{ base: "xs", md: "lg" }}
+                  color="white"
+                  fontStyle="italic"
+                  fontWeight="normal"
+                >
+                  Ils soutiennent l'évènement
+                </Text>
               </VStack>
 
               {/* Colonne 2 : Date & Horaires */}
@@ -195,15 +189,13 @@ export default function EventHome() {
                 spacing={2} 
                 align="stretch"
                 h="50%"
-                maxW="500px"
+                maxW="340px"
                 ml={{ base: 0, lg: '50px', xl: 'px' }}
                 transform={{ base: 'none', lg: 'translateX(10px)', xl: 'translateX(110px)' }}
               >
                 <Card 
                   bg={cardBg}
                   boxShadow="xl"
-                  borderTop="4px solid"
-                  borderColor={secondaryColor}
                   h="100%"
                 >
                   <CardBody>
@@ -234,15 +226,13 @@ export default function EventHome() {
                 spacing={4} 
                 align="stretch"
                 h="50%"
-                maxW="300px"
+                maxW="340px"
                 ml={{ base: 0, lg: '40px', xl: '10px' }}
                 transform={{ base: 'none', lg: 'translateX(25px)', xl: 'translateX(110px)' }}
               >
                 <Card 
                   bg={cardBg}
                   boxShadow="xl"
-                  borderTop="4px solid"
-                  borderColor={secondaryColor}
                   h="100%"
                 >
                   <CardBody>
@@ -298,18 +288,16 @@ export default function EventHome() {
 
               {/* Colonne 5 : Inscription */}
               <VStack 
-                spacing={4} 
+                spacing={2} 
                 align="stretch"
                 h="50%"
                 justifySelf={{ base: 'flex-start', lg: 'flex-end' }}
-                maxW="320px"
+                maxW="340px"
                 transform={{ base: 'none', lg: 'translateX(150px)', xl: 'translateX(150px)' }}
               >
                 <Card 
                   bg="white"
-                  boxShadow="2xl"
-                  borderTop="4px solid"
-                  borderColor={mainColor}
+                  boxShadow="xl"
                   h="100%"
                 >
                   <CardBody>

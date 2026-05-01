@@ -3,7 +3,7 @@ import { Link as RouterLink } from "react-router-dom";
 import {
   Box, Button, Container, Heading, SimpleGrid, Stack, Text, Image, VStack, HStack, Modal, ModalOverlay, ModalContent, ModalCloseButton, ModalBody, useDisclosure
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import pageBg from "../assets/logo_arriere_plan.svg";
 import heroImg from "../assets/photos/ma-photo-hero.jpg";
 
@@ -32,6 +32,57 @@ const vehicles = [
 export default function Home() {
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  // Force le mode événement dans le localStorage au montage (dev only)
+  // JEP 2026 : 20 septembre 2026
+  useEffect(() => {
+    const eventStart = new Date('2026-09-20T10:00:00');
+    const eventEnd = new Date('2026-09-20T18:00:00');
+    
+    const config = {
+      active: true,
+      startDate: eventStart.toISOString(),
+      endDate: eventEnd.toISOString(),
+      event: {
+        id: 'dev-jep-2026',
+        name: 'Journées Européennes du Patrimoine 2026',
+        subtitle: 'Patrimoine Roulant en Fête',
+        description: 'Venez découvrir nos véhicules historiques et participer à une journée exceptionnelle dédiée au patrimoine des transports en commun.',
+        location: 'Parking Crété, Corbeil-Essonnes',
+        type: 'EXPO',
+        bannerImage: '',
+        heroImage: '',
+        color: '#D32F2F',
+        secondaryColor: '#FFA000',
+        logo: '',
+        actualStartDate: eventStart.toISOString(),
+        actualEndDate: eventEnd.toISOString()
+      },
+      registration: {
+        enabled: true,
+        eventId: 'dev-jep-2026',
+        buttonText: "S'inscrire à l'événement",
+        requireAuth: false,
+        isPaid: false,
+        price: 0,
+        currency: 'EUR'
+      },
+      customContent: {
+        showCountdown: true,
+        showProgramSchedule: false,
+        schedule: [],
+        highlights: [],
+        partners: [],
+        practicalInfo: ''
+      },
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+    localStorage.setItem('rbe:public-event-mode', JSON.stringify(config));
+    window.dispatchEvent(new CustomEvent('eventModeChanged', { detail: config }));
+    console.log('✅ Mode événement dev activé - JEP 2026 (20 sept.)');
+  }, []);
+
   return (
     <>
       <Helmet>

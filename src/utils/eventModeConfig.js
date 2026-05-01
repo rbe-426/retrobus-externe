@@ -157,7 +157,7 @@ export function createDefaultEventConfig(overrides = {}) {
   const nextWeek = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
   
   return {
-    active: false,
+    active: true, // Activation du mode dev event
     startDate: tomorrow.toISOString(),
     endDate: nextWeek.toISOString(),
     event: {

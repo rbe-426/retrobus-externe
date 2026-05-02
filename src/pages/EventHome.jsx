@@ -132,7 +132,7 @@ export default function EventHome() {
              <VStack 
                 spacing={4} 
                 align="flex-start"
-                ml={{ base: 0, lg: '10px', xl: '-400px' }}
+                ml={{ base: 0, lg: '10px', xl: '-300px' }}
                 maxW="800px"
               >
                 <HStack spacing={3} flexWrap="wrap">

@@ -40,7 +40,7 @@ export default function Home() {
     const eventEnd = new Date('2026-09-20T18:00:00');
     
     const config = {
-      active: true,
+      active: true, // ⚠️ Mode DEV LOCAL - Passer à false en production
       startDate: eventStart.toISOString(),
       endDate: eventEnd.toISOString(),
       event: {

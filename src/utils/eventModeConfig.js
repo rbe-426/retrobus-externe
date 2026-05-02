@@ -76,7 +76,8 @@ export function getEventModeConfig() {
 export function isEventModeActive() {
   const config = getEventModeConfig();
   
-  if (!config || config.enabled === false) return false;
+  // Vérifier si le mode est manuellement activé
+  if (!config || config.active === false || config.enabled === false) return false;
   
   const now = new Date();
   const startDate = new Date(config.startDate);

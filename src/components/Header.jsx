@@ -98,6 +98,7 @@ export default function Header() {
         
         {/* Content */}
         <div className="header-inner">
+          {/* Logo temporairement commenté
           <CompatImg 
             className="header-logo" 
             path={LOGO_PATH}
@@ -105,6 +106,7 @@ export default function Header() {
             fallback={logoDefault}
             style={{ height: `115 px` }}
           />
+          */}
           {/* Mobile menu trigger on the right inside header */}
           <Box display={{ base: "block", md: "none" }}>
             <IconButton

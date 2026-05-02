@@ -36,9 +36,11 @@ export default function Home() {
   // Force le mode événement UNIQUEMENT en dev local (localhost)
   // En production, le mode événement sera activé par publication depuis l'interface interne
   useEffect(() => {
-    const isLocalDev = window.location.hostname === 'localhost' || 
-                       window.location.hostname === '127.0.0.1' ||
-                       window.location.hostname.includes('local');
+    const isLocalDev = false; // ⚠️ DÉSACTIVÉ - Mettre à true pour activer en local
+    
+    // const isLocalDev = window.location.hostname === 'localhost' || 
+    //                    window.location.hostname === '127.0.0.1' ||
+    //                    window.location.hostname.includes('local');
     
     // Ne forcer la config QUE si on est en dev local
     if (!isLocalDev) {

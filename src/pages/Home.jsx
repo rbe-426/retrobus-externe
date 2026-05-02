@@ -33,14 +33,25 @@ export default function Home() {
   const [selectedVehicle, setSelectedVehicle] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  // Force le mode événement dans le localStorage au montage (dev only)
-  // JEP 2026 : 20 septembre 2026
+  // Force le mode événement UNIQUEMENT en dev local (localhost)
+  // En production, le mode événement sera activé par publication depuis l'interface interne
   useEffect(() => {
+    const isLocalDev = window.location.hostname === 'localhost' || 
+                       window.location.hostname === '127.0.0.1' ||
+                       window.location.hostname.includes('local');
+    
+    // Ne forcer la config QUE si on est en dev local
+    if (!isLocalDev) {
+      console.log('🌐 Mode production - Mode événement géré par API');
+      return;
+    }
+
+    // Config DEV LOCAL uniquement
     const eventStart = new Date('2026-09-20T10:00:00');
     const eventEnd = new Date('2026-09-20T18:00:00');
     
     const config = {
-      active: true, // ⚠️ Mode DEV LOCAL - Passer à false en production
+      active: true, // Mode DEV LOCAL uniquement
       startDate: eventStart.toISOString(),
       endDate: eventEnd.toISOString(),
       event: {
@@ -80,7 +91,7 @@ export default function Home() {
     };
     localStorage.setItem('rbe:public-event-mode', JSON.stringify(config));
     window.dispatchEvent(new CustomEvent('eventModeChanged', { detail: config }));
-    console.log('✅ Mode événement dev activé - JEP 2026 (20 sept.)');
+    console.log('✅ Mode événement DEV LOCAL activé - JEP 2026 (20 sept.)');
   }, []);
 
   return (

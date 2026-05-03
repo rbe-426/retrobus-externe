@@ -1087,7 +1087,7 @@ export default function EventRegistration() {
                         />
                       </div>
 
-                      {/* Récapitulatif de l'immatriculation saisie */
+                      {/* Récapitulatif de l'immatriculation saisie */}
                       <div style={{ 
                         marginTop: '1.5rem',
                         padding: '1rem',
@@ -1155,10 +1155,8 @@ export default function EventRegistration() {
                           onMouseOut={(e) => e.target.style.background = '#10b981'}
                         >
                           ✅ Ajouter ce véhicule
-                            </button>
-                          </div>
-                        </>
-                      )}
+                        </button>
+                      </div>
 
                       {/* Liste des véhicules enregistrés */}
                       {registeredVehicles.length > 0 && (

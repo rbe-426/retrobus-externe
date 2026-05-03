@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useSearchParams, Link } from "react-router-dom";
+import React, { useState, useEffect, useMemo } from "react";
+import { useParams, useSearchParams, useLocation, Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import {
   Box,
@@ -38,27 +38,54 @@ import {
 } from "@chakra-ui/react";
 import { FiArrowLeft, FiCalendar, FiMapPin, FiUsers, FiGift, FiExternalLink, FiMail, FiUser } from "react-icons/fi";
 import { formatDateFrLong } from "../utils/dateFormat.js";
+import "../PremiumRegistration.css";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
 export default function EventRegistration() {
-  const { eventId } = useParams();
+  const { eventId, eventSlug } = useParams();
   const [searchParams] = useSearchParams();
+  const location = useLocation();
+  
+  // Extraire le slug depuis l'URL si eventSlug est undefined
+  const extractedSlug = useMemo(() => {
+    if (eventSlug) return eventSlug;
+    
+    // Format: /evenement/rbe-030526-inscription → extraire "rbe-030526"
+    const match = location.pathname.match(/\/evenement\/([^/]+)-inscription/);
+    return match ? match[1] : null;
+  }, [eventSlug, location.pathname]);
+  
+  // Debug logs
+  console.log('🔍 EventRegistration mounted');
+  console.log('  - eventId:', eventId);
+  console.log('  - eventSlug:', eventSlug);
+  console.log('  - extractedSlug:', extractedSlug);
+  console.log('  - location.pathname:', location.pathname);
+  console.log('  - location.state:', location.state);
+  
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [registrationStep, setRegistrationStep] = useState('form'); // 'form', 'processing', 'success'
   const [registrationId, setRegistrationId] = useState(null);
   const [ticketData, setTicketData] = useState(null);
+  const [currentStep, setCurrentStep] = useState(1); // Étape du formulaire premium (1-4)
   const [formData, setFormData] = useState({
     participantName: '',
     participantEmail: '',
+    firstName: '',
+    lastName: '',
+    phone: '',
+    club: '',
     adultTickets: 1,
     childTickets: 0,
     // Champs spécifiques au Défilé Anciennes
     vehicleName: '',
     vehicleModel: '',
     vehicleYear: '',
+    licensePlate: '',
+    plateType: '', // 'standard', 'old', 'collection'
     clubName: '',
     isClubMember: false,
     // Réponses aux questions customisées
@@ -66,6 +93,7 @@ export default function EventRegistration() {
   });
   const [submitting, setSubmitting] = useState(false);
   const { isOpen: isHelloAssoOpen, onOpen: onHelloAssoOpen, onClose: onHelloAssoClose } = useDisclosure();
+  const [isPlateModalOpen, setIsPlateModalOpen] = useState(false);
   const toast = useToast();
 
   // Récupération des détails de l'événement
@@ -73,23 +101,63 @@ export default function EventRegistration() {
     const fetchEventDetails = async () => {
       try {
         setLoading(true);
-        console.log(`🔍 Fetching event details for ID: ${eventId}`);
         
-        const response = await fetch(`${API_BASE_URL}/public/events/${eventId}`);
-        if (!response.ok) {
-          throw new Error(`Événement non trouvé (${response.status})`);
+        // Si l'événement est passé via location.state, l'utiliser directement
+        if (location.state?.event) {
+          console.log('📦 Using event from navigation state');
+          setEvent(location.state.event);
+          setLoading(false);
+          return;
         }
         
-        const eventData = await response.json();
-        console.log('📅 Event details:', eventData);
-        
-        // Vérifier si l'événement est accessible publiquement
-        const extras = eventData.extras ? JSON.parse(eventData.extras) : {};
-        if (!extras.isVisible) {
-          throw new Error('Cet événement n\'est pas accessible publiquement');
+        // Sinon, chercher par slug ou ID
+        if (extractedSlug) {
+          console.log(`🔍 Fetching event by slug: ${extractedSlug}`);
+          
+          // Retirer le suffixe "-inscription" si présent (déjà fait par extractedSlug)
+          const cleanSlug = extractedSlug.replace(/-inscription$/, '');
+          console.log(`🧹 Clean slug for search: ${cleanSlug}`);
+          
+          // Récupérer tous les événements et chercher par titre
+          const response = await fetch(`${API_BASE_URL}/public/events`);
+          if (!response.ok) {
+            throw new Error(`Impossible de charger les événements (${response.status})`);
+          }
+          const events = await response.json();
+          console.log(`📋 Found ${events.length} public events`);
+          
+          const foundEvent = events.find(e => {
+            const slug = e.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+            const matches = slug === cleanSlug;
+            console.log(`  - Checking "${e.title}" → slug: "${slug}" vs "${cleanSlug}" → ${matches ? '✅' : '❌'}`);
+            return matches;
+          });
+          
+          if (!foundEvent) {
+            console.error(`❌ No event found matching slug: ${cleanSlug}`);
+            throw new Error('Événement non trouvé');
+          }
+          
+          console.log('✅ Event found:', foundEvent.title);
+          setEvent(foundEvent);
+        } else if (eventId) {
+          console.log(`🔍 Fetching event details for ID: ${eventId}`);
+          const response = await fetch(`${API_BASE_URL}/public/events/${eventId}`);
+          if (!response.ok) {
+            throw new Error(`Événement non trouvé (${response.status})`);
+          }
+          
+          const eventData = await response.json();
+          console.log('📅 Event details:', eventData);
+          
+          // Vérifier si l'événement est accessible publiquement
+          const extras = eventData.extras ? JSON.parse(eventData.extras) : {};
+          if (!extras.isVisible) {
+            throw new Error('Cet événement n\'est pas accessible publiquement');
+          }
+          
+          setEvent(eventData);
         }
-        
-        setEvent(eventData);
       } catch (e) {
         console.error('❌ Error fetching event:', e);
         setError(e.message);
@@ -119,10 +187,15 @@ export default function EventRegistration() {
       }
     };
 
-    if (eventId) {
+    if (eventId || extractedSlug) {
       fetchEventDetails();
+    } else {
+      console.warn('⚠️ No eventId or extractedSlug provided');
+      setLoading(false);
     }
-  }, [eventId, searchParams]);
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [eventId, extractedSlug]); // Retirer location.state et searchParams pour éviter la boucle
 
   // Vérification périodique du statut de l'inscription
   useEffect(() => {
@@ -153,6 +226,81 @@ export default function EventRegistration() {
       return () => clearInterval(interval);
     }
   }, [registrationId, registrationStep]);
+
+  // Validation des champs obligatoires de l'étape 1
+  const validateStep1 = () => {
+    console.log('🔍 Validation Step 1 - FormData:', formData);
+    const errors = [];
+    if (!formData.lastName?.trim()) {
+      console.log('❌ NOM vide');
+      errors.push('NOM');
+    }
+    if (!formData.firstName?.trim()) {
+      console.log('❌ Prénom vide');
+      errors.push('Prénom');
+    }
+    if (!formData.participantEmail?.trim()) {
+      console.log('❌ Email vide');
+      errors.push('Email');
+    }
+    if (!formData.phone?.trim()) {
+      console.log('❌ Téléphone vide');
+      errors.push('Téléphone');
+    }
+    
+    if (errors.length > 0) {
+      console.log('❌ Erreurs trouvées:', errors);
+      toast({
+        status: 'error',
+        title: 'Champs obligatoires manquants',
+        description: `Veuillez remplir : ${errors.join(', ')}`,
+        duration: 4000,
+        isClosable: true
+      });
+      return false;
+    }
+    
+    // Validation email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.participantEmail)) {
+      console.log('❌ Email invalide:', formData.participantEmail);
+      toast({
+        status: 'error',
+        title: 'Email invalide',
+        description: 'Veuillez saisir une adresse email valide',
+        duration: 4000,
+        isClosable: true
+      });
+      return false;
+    }
+    
+    console.log('✅ Validation réussie');
+    return true;
+  };
+
+  // Navigation vers étape suivante
+  const handleNext = () => {
+    console.log('🔵 handleNext appelé - Étape actuelle:', currentStep);
+    console.log('📝 FormData:', formData);
+    
+    if (currentStep === 1 && !validateStep1()) {
+      console.log('❌ Validation échouée');
+      return;
+    }
+    
+    console.log('✅ Validation réussie, passage à l\'étape suivante');
+    if (currentStep < 4) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  // Navigation vers étape précédente
+  const handlePrev = () => {
+    console.log('🔙 handlePrev appelé - Étape actuelle:', currentStep);
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
 
   const getEventTypeInfo = (event) => {
     try {
@@ -366,7 +514,304 @@ export default function EventRegistration() {
   
   console.log('🔍 Event extras:', event?.extras);
   console.log('🔍 Registration method:', eventInfo.registrationMethod);
+  console.log('🔍 Registration type:', eventInfo.registrationType);
 
+  // Interface Premium pour événements JEP/Statiques
+  if (eventInfo.registrationType === 'jep_heritage') {
+    console.log('🎨 Rendu interface premium - currentStep:', currentStep);
+    console.log('📋 FormData actuel:', formData);
+    
+    // Récupérer l'URL de la bannière depuis extras
+    const extras = event.extras ? JSON.parse(event.extras) : {};
+    const bannerUrl = extras.bannerUrl || null;
+
+    return (
+      <div className="premium-registration-container">
+        <div className="premium-registration-card">
+          {/* En-tête avec Bannière ou Titre */}
+          <div className="premium-event-header">
+            {/* Bouton Annuler à droite */}
+            <button 
+              className="premium-cancel-button"
+              onClick={() => window.location.href = '/evenements'}
+            >
+              ✕ Annuler l'inscription
+            </button>
+
+            <div className="premium-event-header-content">
+              <div className="premium-event-info">
+                {bannerUrl && (
+                  <img 
+                    src={bannerUrl} 
+                    alt={event.title} 
+                    className="premium-event-banner"
+                  />
+                )}
+                
+                <h1 className="premium-event-title">{event.title}</h1>
+                
+                <div className="premium-event-subtitle">
+                  {event.date && (
+                    <div className="premium-event-detail">
+                      <FiCalendar size={18} />
+                      <span>{formatDateFrLong(event.date)}</span>
+                    </div>
+                  )}
+                  
+                  {event.time && (
+                    <div className="premium-event-detail">
+                      <span>{event.time}</span>
+                    </div>
+                  )}
+                  
+                  {event.location && (
+                    <div className="premium-event-detail">
+                      <FiMapPin size={18} />
+                      <span>{event.location}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Contenu Principal */}
+          <div className="premium-main-content">
+            {/* Barre de progression */}
+            <div className="progress-stepper">
+              <div className="progress-steps">
+                <div className="progress-step">
+                  <div className={`progress-step-label ${currentStep === 1 ? 'active' : currentStep > 1 ? 'completed' : ''}`}>Informations</div>
+                </div>
+                
+                <div className={`progress-arrow ${currentStep > 1 ? 'active' : ''}`}>&gt;&gt;</div>
+                
+                <div className="progress-step">
+                  <div className={`progress-step-label ${currentStep === 2 ? 'active' : currentStep > 2 ? 'completed' : ''}`}>Véhicules</div>
+                </div>
+                
+                <div className={`progress-arrow ${currentStep > 2 ? 'active' : ''}`}>&gt;&gt;</div>
+                
+                <div className="progress-step">
+                  <div className={`progress-step-label ${currentStep === 3 ? 'active' : currentStep > 3 ? 'completed' : ''}`}>Options</div>
+                </div>
+                
+                <div className={`progress-arrow ${currentStep > 3 ? 'active' : ''}`}>&gt;&gt;</div>
+                
+                <div className="progress-step">
+                  <div className={`progress-step-label ${currentStep === 4 ? 'active' : ''}`}>Confirmation</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Contenu du formulaire */}
+            <div className="premium-form-content">
+              {/* Titre dynamique selon l'étape */}
+              <p style={{ textAlign: 'center', fontSize: '22px', color: '#be003c', marginBottom: '2rem', fontWeight: 600 }}>
+                {currentStep === 1 && "Nous, c'est RétroBus, et vous ?"}
+                {currentStep === 2 && "Qu'allez-vous nous ramener de beau ?"}
+                {currentStep === 3 && "Personnalisez votre expérience"}
+                {currentStep === 4 && "Vérifiez vos informations"}
+              </p>
+              
+              {/* ÉTAPE 1: Informations personnelles */}
+              {currentStep === 1 && (
+                <>
+                  <div className="form-section">
+                    <h2 className="form-section-title">Vos informations</h2>
+                    
+                    <div className="premium-input-row">
+                      <div className="premium-input-group">
+                        <label className="premium-label premium-label-required">NOM</label>
+                        <input 
+                          type="text" 
+                          className="premium-input" 
+                          placeholder="DUPONT" 
+                          value={formData.lastName}
+                          onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                        />
+                      </div>
+
+                      <div className="premium-input-group">
+                        <label className="premium-label premium-label-required">Prénom</label>
+                        <input 
+                          type="text" 
+                          className="premium-input" 
+                          placeholder="Jean" 
+                          value={formData.firstName}
+                          onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="premium-input-group">
+                      <label className="premium-label premium-label-required">Email</label>
+                      <input 
+                        type="email" 
+                        className="premium-input" 
+                        placeholder="jean.dupont@example.com" 
+                        value={formData.participantEmail}
+                        onChange={(e) => setFormData({...formData, participantEmail: e.target.value})}
+                      />
+                    </div>
+
+                    <div className="premium-input-group">
+                      <label className="premium-label premium-label-required">Téléphone</label>
+                      <input 
+                        type="tel" 
+                        className="premium-input" 
+                        placeholder="+33 6 12 34 56 78" 
+                        value={formData.phone}
+                        onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                      />
+                    </div>
+
+                    <div className="premium-input-group">
+                      <label className="premium-label">Club ou Association si représentée <span style={{ fontSize: '13px', color: '#6b7280', fontWeight: 400 }}>(facultatif)</span></label>
+                      <input 
+                        type="text" 
+                        className="premium-input" 
+                        placeholder="Nom du club ou de l'association" 
+                        value={formData.club}
+                        onChange={(e) => setFormData({...formData, club: e.target.value})}
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* ÉTAPE 2: Véhicules */}
+              {currentStep === 2 && (
+                <div className="form-section">
+                  <h2 className="form-section-title">Votre véhicule</h2>
+                  
+                  <div className="premium-input-row">
+                    <div className="premium-input-group">
+                      <label className="premium-label premium-label-required">Marque</label>
+                      <input 
+                        type="text" 
+                        className="premium-input" 
+                        placeholder="Citroën, Renault, Peugeot..." 
+                        value={formData.vehicleName}
+                        onChange={(e) => setFormData({...formData, vehicleName: e.target.value})}
+                      />
+                    </div>
+
+                    <div className="premium-input-group">
+                      <label className="premium-label premium-label-required">Modèle</label>
+                      <input 
+                        type="text" 
+                        className="premium-input" 
+                        placeholder="2CV, 4L, 203..." 
+                        value={formData.vehicleModel}
+                        onChange={(e) => setFormData({...formData, vehicleModel: e.target.value})}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="premium-input-row">
+                    <div className="premium-input-group">
+                      <label className="premium-label premium-label-required">Année</label>
+                      <input 
+                        type="text" 
+                        className="premium-input" 
+                        placeholder="1965" 
+                        value={formData.vehicleYear}
+                        onChange={(e) => setFormData({...formData, vehicleYear: e.target.value})}
+                      />
+                    </div>
+
+                    <div className="premium-input-group">
+                      <label className="premium-label premium-label-required">Immatriculation</label>
+                      <input 
+                        type="text" 
+                        className="premium-input" 
+                        placeholder="AB-123-CD" 
+                        value={formData.licensePlate}
+                        onChange={(e) => setFormData({...formData, licensePlate: e.target.value.toUpperCase()})}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Sélecteur de type de plaque */}
+                  <div className="premium-input-group">
+                    <label className="premium-label premium-label-required">Type de plaque d'immatriculation</label>
+                    <button 
+                      type="button"
+                      className="premium-plate-selector"
+                      onClick={() => setIsPlateModalOpen(true)}
+                      style={{
+                        width: '100%',
+                        padding: '12px',
+                        border: '2px solid #e5e7eb',
+                        borderRadius: '8px',
+                        background: formData.plateType ? '#f9fafb' : 'white',
+                        cursor: 'pointer',
+                        textAlign: 'left',
+                        fontSize: '15px',
+                        color: formData.plateType ? '#111827' : '#6b7280',
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      {formData.plateType === 'standard' && '🇫🇷 Plaque standard (bande bleue)'}
+                      {formData.plateType === 'old' && '📅 Ancien format français'}
+                      {formData.plateType === 'collection' && '⚫ Plaque collection (fond noir)'}
+                      {!formData.plateType && 'Cliquez pour choisir le format de plaque'}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* ÉTAPE 3: Options */}
+              {currentStep === 3 && (
+                <div className="form-section">
+                  <h2 className="form-section-title">Options supplémentaires</h2>
+                  <p style={{ textAlign: 'center', color: '#6b7280', marginBottom: '2rem' }}>
+                    Contenu de l'étape 3 à venir...
+                  </p>
+                </div>
+              )}
+
+              {/* ÉTAPE 4: Confirmation */}
+              {currentStep === 4 && (
+                <div className="form-section">
+                  <h2 className="form-section-title">Confirmation</h2>
+                  <p style={{ textAlign: 'center', color: '#6b7280', marginBottom: '2rem' }}>
+                    Contenu de l'étape 4 à venir...
+                  </p>
+                </div>
+              )}
+
+              {/* Boutons de navigation */}
+              <div className="premium-buttons">
+              <button 
+                type="button"
+                className="premium-btn premium-btn-secondary" 
+                onClick={handlePrev}
+                disabled={currentStep === 1}
+                style={{ opacity: currentStep === 1 ? 0.5 : 1, cursor: currentStep === 1 ? 'not-allowed' : 'pointer' }}
+              >
+                ← Retour
+              </button>
+              <button 
+                type="button"
+                className="premium-btn premium-btn-primary" 
+                onClick={(e) => {
+                  console.log('🖱️ Clic détecté sur le bouton Suivant', e);
+                  handleNext();
+                }}
+              >
+                Suivant →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    );
+  }
+
+  // Interface Standard pour les autres événements
   return (
   <Container maxW="container.md" py={10}>
     {/* Navigation */}
@@ -883,4 +1328,5 @@ export default function EventRegistration() {
       </ModalContent>
     </Modal>
   </Container>
-)}
+);
+}

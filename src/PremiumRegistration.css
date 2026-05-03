@@ -1,0 +1,716 @@
+/* ==========================================================================
+   Styles Premium pour Inscription JEP / Événements Statiques
+   Palette: Violet/Or pour thème Patrimoine
+   ========================================================================== */
+
+:root {
+  /* Palette JEP Premium */
+  --jep-primary: #6b46c1;        /* Violet profond */
+  --jep-secondary: #d4af37;       /* Or */
+  --jep-accent: #9333ea;          /* Violet vif */
+  --jep-light: #f3e8ff;           /* Lavande clair */
+  --jep-dark: #4c1d95;            /* Violet très foncé */
+  --jep-gradient: linear-gradient(135deg, #6b46c1 0%, #9333ea 100%);
+  --jep-gradient-gold: linear-gradient(135deg, #d4af37 0%, #f59e0b 100%);
+  
+  /* Ombres */
+  --shadow-sm: 0 2px 8px rgba(107, 70, 193, 0.1);
+  --shadow-md: 0 4px 16px rgba(107, 70, 193, 0.15);
+  --shadow-lg: 0 8px 24px rgba(107, 70, 193, 0.2);
+  
+  /* Transitions */
+  --transition-fast: 200ms ease-in-out;
+  --transition-normal: 300ms ease-in-out;
+  --transition-slow: 500ms ease-in-out;
+}
+
+/* ==========================================================================
+   Conteneur Principal Pleine Largeur
+   ========================================================================== */
+
+.premium-registration-container {
+  width: 100%;
+  min-height: 100vh;
+  background: #f9fafb;
+}
+
+.premium-registration-card {
+  width: 100%;
+  background: white;
+  min-height: 100vh;
+}
+
+/* ==========================================================================
+   En-tête Simple avec Bannière ou Titre
+   ========================================================================== */
+
+.premium-event-header {
+  width: 100%;
+  background: white;
+  border-bottom: 2px solid #e5e7eb;
+  padding: 2rem 3rem;
+  position: relative;
+}
+
+.premium-event-banner {
+  width: 100%;
+  max-width: 1200px;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin: 0 auto 1.5rem auto;
+  display: block;
+  box-shadow: var(--shadow-md);
+}
+
+.premium-event-header-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.premium-event-info {
+  width: 100%;
+  text-align: center;
+}
+
+.premium-event-title {
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 700;
+  color: #be003c;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.premium-event-subtitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+  font-size: 16px;
+  color: #6b7280;
+}
+
+.premium-event-detail {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.premium-event-detail svg {
+  color: var(--jep-primary);
+}
+
+.premium-cancel-button {
+  position: absolute;
+  top: 2rem;
+  right: 3rem;
+  background: white;
+  border: 2px solid #e5e7eb;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.premium-cancel-button:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+  background: #fef2f2;
+}
+
+/* ==========================================================================
+   Conteneur de Contenu Pleine Largeur
+   ========================================================================== */
+
+.premium-main-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 3rem;
+}
+
+/* ==========================================================================
+   Barre de Progression Multi-Steps
+   ========================================================================== */
+
+.progress-stepper {
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+}
+
+.progress-steps {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.progress-step {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.progress-step-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  text-align: center;
+  transition: color var(--transition-fast);
+  white-space: nowrap;
+}
+
+.progress-step-label.active {
+  color: #be003c;
+  font-weight: 700;
+}
+
+.progress-step-label.completed {
+  color: #be003c;
+}
+
+.progress-arrow {
+  font-size: 20px;
+  font-weight: bold;
+  color: #d1d5db;
+  transition: color var(--transition-fast);
+}
+
+.progress-arrow.active {
+  color: #be003c;
+  animation: arrowPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes arrowPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* ==========================================================================
+   Formulaire Premium - Layout
+   ========================================================================== */
+
+.premium-form-content {
+  padding: 2rem 0;
+  animation: fadeInSlide var(--transition-normal);
+}
+
+@keyframes fadeInSlide {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================================================
+   Inputs & Forms Premium
+   ========================================================================== */
+
+.form-section {
+  margin-bottom: 2rem;
+}
+
+.form-section-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #be003c;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.form-section-title::before {
+  content: '';
+  width: 4px;
+  height: 24px;
+  background: #be003c;
+  border-radius: 2px;
+}
+
+/* ==========================================================================
+   Champs de Formulaire Premium
+   ========================================================================== */
+
+.premium-input-group {
+  margin-bottom: 1.5rem;
+}
+
+.premium-input-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .premium-input-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.premium-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.premium-label-required::after {
+  content: ' *';
+  color: #ef4444;
+}
+
+.premium-input,
+.premium-textarea,
+.premium-select {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 15px;
+  font-family: inherit;
+  transition: all var(--transition-fast);
+  background: white;
+}
+
+.premium-input:focus,
+.premium-textarea:focus,
+.premium-select:focus {
+  outline: none;
+  border-color: #be003c;
+  box-shadow: 0 0 0 4px rgba(190, 0, 60, 0.1);
+}
+
+.premium-input:hover,
+.premium-textarea:hover,
+.premium-select:hover {
+  border-color: var(--jep-accent);
+}
+
+.premium-textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.premium-input-icon {
+  position: relative;
+}
+
+.premium-input-icon svg {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.premium-input-icon .premium-input {
+  padding-left: 3rem;
+}
+
+/* ==========================================================================
+   Créneaux Horaires - Sélecteur Premium
+   ========================================================================== */
+
+.timeslots-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.timeslot-card {
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+.timeslot-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--jep-gradient);
+  transform: scaleY(0);
+  transition: transform var(--transition-fast);
+}
+
+.timeslot-card:hover {
+  border-color: var(--jep-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.timeslot-card:hover::before {
+  transform: scaleY(1);
+}
+
+.timeslot-card.selected {
+  background: var(--jep-light);
+  border-color: var(--jep-primary);
+  box-shadow: 0 0 0 4px rgba(107, 70, 193, 0.1);
+}
+
+.timeslot-card.selected::before {
+  transform: scaleY(1);
+}
+
+.timeslot-card.full {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #f9fafb;
+}
+
+.timeslot-card.full:hover {
+  transform: none;
+  border-color: #e5e7eb;
+}
+
+.timeslot-time {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--jep-dark);
+  margin-bottom: 0.25rem;
+}
+
+.timeslot-capacity {
+  font-size: 13px;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.timeslot-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 0.25rem 0.75rem;
+  border-radius: 100px;
+  margin-top: 0.5rem;
+}
+
+.timeslot-badge.popular {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.timeslot-badge.available {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.timeslot-badge.full {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* ==========================================================================
+   Récapitulatif Premium
+   ========================================================================== */
+
+.summary-card {
+  background: linear-gradient(135deg, #f9fafb 0%, #f3e8ff 100%);
+  border: 2px solid var(--jep-primary);
+  border-radius: 16px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.summary-section {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(107, 70, 193, 0.1);
+}
+
+.summary-section:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.summary-section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--jep-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.75rem;
+}
+
+.summary-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  font-size: 15px;
+}
+
+.summary-info-label {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.summary-info-value {
+  color: var(--jep-dark);
+  font-weight: 600;
+}
+
+.ticket-preview {
+  background: white;
+  border: 2px dashed var(--jep-primary);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.ticket-preview-icon {
+  font-size: 64px;
+  margin-bottom: 1rem;
+}
+
+/* ==========================================================================
+   Boutons Premium
+   ========================================================================== */
+
+.premium-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 2px solid #f3f4f6;
+}
+
+.premium-btn {
+  padding: 0.875rem 2rem;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: inherit;
+}
+
+.premium-btn-primary {
+  background: #be003c;
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+.premium-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  background: #9a0030;
+}
+
+.premium-btn-primary:active {
+  transform: translateY(0);
+}
+
+.premium-btn-secondary {
+  background: white;
+  color: #be003c;
+  border: 2px solid #be003c;
+}
+
+.premium-btn-secondary:hover {
+  background: #fff5f7;
+}
+
+.premium-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ==========================================================================
+   Success State
+   ========================================================================== */
+
+.success-container {
+  text-align: center;
+  padding: 3rem 2rem;
+  animation: fadeInScale var(--transition-slow);
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.success-icon {
+  width: 100px;
+  height: 100px;
+  background: var(--jep-gradient);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 2rem;
+  font-size: 48px;
+  color: white;
+  box-shadow: var(--shadow-lg);
+  animation: successPulse 1s ease-out;
+}
+
+@keyframes successPulse {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ==========================================================================
+   Responsive - Mobile
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .premium-event-header {
+    padding: 1.5rem 1rem;
+  }
+
+  .premium-event-banner {
+    height: 180px;
+    border-radius: 8px;
+  }
+
+  .premium-event-title {
+    font-size: 24px;
+  }
+
+  .premium-event-subtitle {
+    flex-direction: column;
+    gap: 0.75rem;
+    font-size: 14px;
+  }
+
+  .premium-cancel-button {
+    position: static;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .premium-main-content {
+    padding: 1.5rem 1rem;
+  }
+  
+  .progress-stepper {
+    padding: 1rem 0;
+  }
+  
+  .progress-steps {
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  
+  .progress-step-label {
+    font-size: 11px;
+  }
+  
+  .progress-arrow {
+    font-size: 16px;
+  }
+  
+  .premium-form-content {
+    padding: 1.5rem 0;
+  }
+  
+  .timeslots-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .premium-buttons {
+    flex-direction: column-reverse;
+  }
+  
+  .premium-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ==========================================================================
+   Animations & Micro-interactions
+   ========================================================================== */
+
+.fade-in {
+  animation: fadeIn var(--transition-normal);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.slide-up {
+  animation: slideUp var(--transition-normal);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Skeleton Loading pour les créneaux */
+.timeslot-skeleton {
+  background: linear-gradient(
+    90deg,
+    #f3f4f6 0%,
+    #e5e7eb 50%,
+    #f3f4f6 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 12px;
+  height: 100px;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}

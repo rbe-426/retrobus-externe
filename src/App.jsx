@@ -64,6 +64,7 @@ export default function App() {
             <Route path="/vehicles" element={<Navigate to="/parc" replace />} />
             <Route path="/evenements" element={<Events />} />
             <Route path="/evenement/:eventId/inscription" element={<EventRegistration />} />
+            <Route path="/evenement/:eventSlug-inscription" element={<EventRegistration />} />
             <Route path="/helloasso-callback" element={<HelloAssoCallback />} />
             <Route path="/events" element={<Navigate to="/evenements" replace />} />
             <Route path="/event-registration" element={<Navigate to="/evenements" replace />} />

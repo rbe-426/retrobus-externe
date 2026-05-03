@@ -286,10 +286,16 @@ export default function Events() {
         case 'internal':
         default:
           console.log(`📝 Internal registration form`);
+          // Créer un slug à partir du titre (ex: "rbe-030526" reste "rbe-030526")
+          const eventSlug = event.title.toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '');
+          
           return (
             <Button
               as={RouterLink}
-              to={`/evenement/${event.id}/inscription?title=${encodeURIComponent(event.title)}&date=${event.date}&time=${event.time || ''}&location=${encodeURIComponent(event.location || '')}&adultPrice=${event.adultPrice ?? ''}&childPrice=${event.childPrice ?? ''}`}
+              to={`/evenement/${eventSlug}-inscription`}
+              state={{ event }}
               leftIcon={<FiUsers />}
               size="lg"
               className="event-btn event-btn-primary"

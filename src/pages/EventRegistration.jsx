@@ -36,7 +36,7 @@ import {
   ModalFooter,
   useDisclosure
 } from "@chakra-ui/react";
-import { FiArrowLeft, FiCalendar, FiMapPin, FiUsers, FiGift, FiExternalLink, FiMail, FiUser } from "react-icons/fi";
+import { FiArrowLeft, FiCalendar, FiMapPin, FiUsers, FiGift, FiExternalLink, FiMail, FiUser, FiSearch } from "react-icons/fi";
 import { formatDateFrLong } from "../utils/dateFormat.js";
 import "../PremiumRegistration.css";
 
@@ -91,10 +91,78 @@ export default function EventRegistration() {
     // Réponses aux questions customisées
     customAnswers: {}
   });
+  const [registeredVehicles, setRegisteredVehicles] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const { isOpen: isHelloAssoOpen, onOpen: onHelloAssoOpen, onClose: onHelloAssoClose } = useDisclosure();
   const [isPlateModalOpen, setIsPlateModalOpen] = useState(false);
+  const [vehicleSearchStatus, setVehicleSearchStatus] = useState('idle'); // 'idle', 'searching', 'found', 'not-found'
   const toast = useToast();
+
+  // Fonction pour enregistrer un véhicule et en ajouter un autre
+  const handleAddAnotherVehicle = () => {
+    // Validation du véhicule actuel
+    if (!formData.vehicleName || !formData.vehicleModel || !formData.vehicleYear || !formData.licensePlate) {
+      toast({
+        status: "warning",
+        title: "Véhicule incomplet",
+        description: "Veuillez remplir toutes les informations du véhicule avant d'en ajouter un autre.",
+        duration: 3000
+      });
+      return;
+    }
+
+    // Ajouter le véhicule à la liste
+    const newVehicle = {
+      id: Date.now(), // Identifiant unique temporaire
+      vehicleName: formData.vehicleName,
+      vehicleModel: formData.vehicleModel,
+      vehicleYear: formData.vehicleYear,
+      licensePlate: formData.licensePlate,
+      plateType: formData.plateType,
+      clubName: formData.clubName,
+      isClubMember: formData.isClubMember
+    };
+
+    setRegisteredVehicles(prev => [...prev, newVehicle]);
+
+    // Réinitialiser TOUS les champs du véhicule de manière explicite
+    setFormData(prev => ({
+      ...prev,
+      vehicleName: '',
+      vehicleModel: '',
+      vehicleYear: '',
+      licensePlate: '',
+      plateType: '',
+      clubName: '',
+      isClubMember: false
+    }));
+    
+    // Reset du status de recherche
+    setVehicleSearchStatus('idle');
+
+    // Scroll vers le haut de la section véhicule pour voir les champs vides
+    const vehicleSection = document.querySelector('.premium-input-group');
+    if (vehicleSection) {
+      vehicleSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    toast({
+      status: "success",
+      title: "Véhicule enregistré",
+      description: `${newVehicle.vehicleName} ${newVehicle.vehicleModel} a été ajouté à votre inscription.`,
+      duration: 3000
+    });
+  };
+
+  // Fonction pour supprimer un véhicule de la liste
+  const handleRemoveVehicle = (vehicleId) => {
+    setRegisteredVehicles(registeredVehicles.filter(v => v.id !== vehicleId));
+    toast({
+      status: "info",
+      title: "Véhicule retiré",
+      duration: 2000
+    });
+  };
 
   // Récupération des détails de l'événement
   useEffect(() => {
@@ -276,6 +344,82 @@ export default function EventRegistration() {
     
     console.log('✅ Validation réussie');
     return true;
+  };
+
+  // Formatage automatique de la plaque d'immatriculation selon le type
+  const formatLicensePlate = (value, plateType) => {
+    // Retirer tous les caractères non alphanumériques
+    const cleaned = value.replace(/[^A-Z0-9]/g, '');
+    
+    if (plateType === 'standard' || plateType === 'collection') {
+      // Format XX-XXX-XX
+      if (cleaned.length <= 2) {
+        return cleaned;
+      } else if (cleaned.length <= 5) {
+        return `${cleaned.slice(0, 2)}-${cleaned.slice(2)}`;
+      } else {
+        return `${cleaned.slice(0, 2)}-${cleaned.slice(2, 5)}-${cleaned.slice(5, 7)}`;
+      }
+    } else if (plateType === 'old') {
+      // Format libre sans tirets (ex: 0920 RB 91)
+      // On garde les espaces naturels
+      return value.toUpperCase().replace(/[^A-Z0-9\s]/g, '');
+    }
+    
+    return value.toUpperCase();
+  };
+
+  // Recherche de véhicule dans le registre d'immatriculations
+  const searchVehicleByPlate = async () => {
+    if (!formData.licensePlate || !formData.plateType) {
+      toast({
+        status: 'warning',
+        title: 'Veuillez saisir une immatriculation',
+        duration: 3000
+      });
+      return;
+    }
+
+    setVehicleSearchStatus('searching');
+    console.log('🔍 Recherche du véhicule:', formData.licensePlate);
+
+    try {
+      // Appel à l'API backend
+      const response = await fetch(`http://localhost:8080/public/vehicles/search?plate=${encodeURIComponent(formData.licensePlate)}`);
+      const result = await response.json();
+
+      if (response.ok && result.success && result.data) {
+        const vehicleData = result.data;
+        console.log('✅ Véhicule trouvé:', vehicleData);
+        
+        setFormData({
+          ...formData,
+          vehicleName: vehicleData.make || vehicleData.vehicleName || '',
+          vehicleModel: vehicleData.model || vehicleData.vehicleModel || '',
+          vehicleYear: vehicleData.year?.toString() || vehicleData.vehicleYear?.toString() || ''
+        });
+        
+        setVehicleSearchStatus('found');
+        toast({
+          status: 'success',
+          title: 'Véhicule trouvé !',
+          description: `${vehicleData.make || vehicleData.vehicleName} ${vehicleData.model || vehicleData.vehicleModel} (${vehicleData.year || vehicleData.vehicleYear})`,
+          duration: 4000
+        });
+      } else {
+        console.log('❌ Véhicule non trouvé');
+        setVehicleSearchStatus('not-found');
+      }
+    } catch (error) {
+      console.error('❌ Erreur lors de la recherche:', error);
+      setVehicleSearchStatus('not-found');
+      toast({
+        status: 'error',
+        title: 'Erreur de recherche',
+        description: 'Impossible de contacter le service d\'identification',
+        duration: 3000
+      });
+    }
   };
 
   // Navigation vers étape suivante
@@ -683,82 +827,402 @@ export default function EventRegistration() {
               {/* ÉTAPE 2: Véhicules */}
               {currentStep === 2 && (
                 <div className="form-section">
-                  <h2 className="form-section-title">Votre véhicule</h2>
+                  <h2 className="form-section-title">Quel type de plaque d'immatriculation ?</h2>
                   
-                  <div className="premium-input-row">
-                    <div className="premium-input-group">
-                      <label className="premium-label premium-label-required">Marque</label>
-                      <input 
-                        type="text" 
-                        className="premium-input" 
-                        placeholder="Citroën, Renault, Peugeot..." 
-                        value={formData.vehicleName}
-                        onChange={(e) => setFormData({...formData, vehicleName: e.target.value})}
-                      />
-                    </div>
-
-                    <div className="premium-input-group">
-                      <label className="premium-label premium-label-required">Modèle</label>
-                      <input 
-                        type="text" 
-                        className="premium-input" 
-                        placeholder="2CV, 4L, 203..." 
-                        value={formData.vehicleModel}
-                        onChange={(e) => setFormData({...formData, vehicleModel: e.target.value})}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="premium-input-row">
-                    <div className="premium-input-group">
-                      <label className="premium-label premium-label-required">Année</label>
-                      <input 
-                        type="text" 
-                        className="premium-input" 
-                        placeholder="1965" 
-                        value={formData.vehicleYear}
-                        onChange={(e) => setFormData({...formData, vehicleYear: e.target.value})}
-                      />
-                    </div>
-
-                    <div className="premium-input-group">
-                      <label className="premium-label premium-label-required">Immatriculation</label>
-                      <input 
-                        type="text" 
-                        className="premium-input" 
-                        placeholder="AB-123-CD" 
-                        value={formData.licensePlate}
-                        onChange={(e) => setFormData({...formData, licensePlate: e.target.value.toUpperCase()})}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Sélecteur de type de plaque */}
-                  <div className="premium-input-group">
-                    <label className="premium-label premium-label-required">Type de plaque d'immatriculation</label>
-                    <button 
-                      type="button"
-                      className="premium-plate-selector"
-                      onClick={() => setIsPlateModalOpen(true)}
+                  {/* Sélecteur de type de plaque (inline) */}
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
+                    {/* Plaque Standard FIV */}
+                    <div 
+                      onClick={() => {
+                        setFormData({...formData, plateType: 'standard', licensePlate: '', vehicleName: '', vehicleModel: '', vehicleYear: ''});
+                        setVehicleSearchStatus('idle');
+                      }}
                       style={{
-                        width: '100%',
-                        padding: '12px',
-                        border: '2px solid #e5e7eb',
-                        borderRadius: '8px',
-                        background: formData.plateType ? '#f9fafb' : 'white',
+                        border: formData.plateType === 'standard' ? '3px solid #be003c' : '2px solid #e5e7eb',
+                        borderRadius: '12px',
+                        padding: '1.5rem',
                         cursor: 'pointer',
-                        textAlign: 'left',
-                        fontSize: '15px',
-                        color: formData.plateType ? '#111827' : '#6b7280',
-                        transition: 'all 0.2s'
+                        background: formData.plateType === 'standard' ? '#fff5f7' : 'white',
+                        transition: 'all 0.2s',
+                        boxShadow: formData.plateType === 'standard' ? '0 4px 12px rgba(190, 0, 60, 0.15)' : '0 2px 4px rgba(0,0,0,0.05)'
                       }}
                     >
-                      {formData.plateType === 'standard' && '🇫🇷 Plaque standard (bande bleue)'}
-                      {formData.plateType === 'old' && '📅 Ancien format français'}
-                      {formData.plateType === 'collection' && '⚫ Plaque collection (fond noir)'}
-                      {!formData.plateType && 'Cliquez pour choisir le format de plaque'}
-                    </button>
+                      <div style={{ 
+                        background: 'white', 
+                        border: '2px solid #333', 
+                        borderRadius: '4px', 
+                        padding: '8px 12px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        marginBottom: '1rem',
+                        fontFamily: 'monospace',
+                        fontSize: '18px',
+                        fontWeight: 'bold'
+                      }}>
+                        <div style={{ background: '#003399', color: 'white', padding: '4px 6px', borderRadius: '2px', fontSize: '14px' }}>
+                          🇪🇺 F
+                        </div>
+                        <div>AR-920-BE</div>
+                      </div>
+                      <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '16px', color: '#111827' }}>🇫🇷 Plaque standard FIV</h4>
+                      <p style={{ margin: 0, fontSize: '13px', color: '#6b7280' }}>Format actuel avec bande bleue (depuis 2009)</p>
+                    </div>
+
+                    {/* Ancien Format */}
+                    <div 
+                      onClick={() => {
+                        setFormData({...formData, plateType: 'old', licensePlate: '', vehicleName: '', vehicleModel: '', vehicleYear: ''});
+                        setVehicleSearchStatus('idle');
+                      }}
+                      style={{
+                        border: formData.plateType === 'old' ? '3px solid #be003c' : '2px solid #e5e7eb',
+                        borderRadius: '12px',
+                        padding: '1.5rem',
+                        cursor: 'pointer',
+                        background: formData.plateType === 'old' ? '#fff5f7' : 'white',
+                        transition: 'all 0.2s',
+                        boxShadow: formData.plateType === 'old' ? '0 4px 12px rgba(190, 0, 60, 0.15)' : '0 2px 4px rgba(0,0,0,0.05)'
+                      }}
+                    >
+                      <div style={{ 
+                        background: 'white', 
+                        border: '2px solid #333', 
+                        borderRadius: '4px', 
+                        padding: '8px 16px',
+                        marginBottom: '1rem',
+                        fontFamily: 'monospace',
+                        fontSize: '18px',
+                        fontWeight: 'bold',
+                        textAlign: 'center'
+                      }}>
+                        0920 RB 91
+                      </div>
+                      <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '16px', color: '#111827' }}>📅 Ancien format</h4>
+                      <p style={{ margin: 0, fontSize: '13px', color: '#6b7280' }}>Format utilisé de 1950 à 2009</p>
+                    </div>
+
+                    {/* Plaque Collection */}
+                    <div 
+                      onClick={() => {
+                        setFormData({...formData, plateType: 'collection', licensePlate: '', vehicleName: '', vehicleModel: '', vehicleYear: ''});
+                        setVehicleSearchStatus('idle');
+                      }}
+                      style={{
+                        border: formData.plateType === 'collection' ? '3px solid #be003c' : '2px solid #e5e7eb',
+                        borderRadius: '12px',
+                        padding: '1.5rem',
+                        cursor: 'pointer',
+                        background: formData.plateType === 'collection' ? '#fff5f7' : 'white',
+                        transition: 'all 0.2s',
+                        boxShadow: formData.plateType === 'collection' ? '0 4px 12px rgba(190, 0, 60, 0.15)' : '0 2px 4px rgba(0,0,0,0.05)'
+                      }}
+                    >
+                      <div style={{ 
+                        background: '#1a1a1a', 
+                        border: '2px solid #333', 
+                        borderRadius: '4px', 
+                        padding: '8px 16px',
+                        marginBottom: '1rem',
+                        fontFamily: 'monospace',
+                        fontSize: '18px',
+                        fontWeight: 'bold',
+                        color: '#c0c0c0',
+                        textAlign: 'center'
+                      }}>
+                        AR-920-BE
+                      </div>
+                      <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '16px', color: '#111827' }}>⚫ Plaque collection</h4>
+                      <p style={{ margin: 0, fontSize: '13px', color: '#6b7280' }}>Fond noir, véhicules de collection</p>
+                    </div>
                   </div>
+
+                  {/* Saisie de l'immatriculation (apparaît après sélection du type) */}
+                  {formData.plateType && (
+                    <div style={{ marginBottom: '2rem' }}>
+                      <label className="premium-label premium-label-required">
+                        Saisissez votre immatriculation
+                      </label>
+                      <div style={{ position: 'relative', display: 'flex', gap: '0.5rem', alignItems: 'stretch' }}>
+                        <input 
+                          type="text" 
+                          className="premium-input" 
+                          placeholder={
+                            formData.plateType === 'standard' ? 'AR-920-BE' :
+                            formData.plateType === 'old' ? '0920 RB 91' :
+                            'AR-920-BE'
+                          }
+                          value={formData.licensePlate}
+                          onChange={(e) => {
+                            const formatted = formatLicensePlate(e.target.value, formData.plateType);
+                            setFormData({...formData, licensePlate: formatted});
+                            setVehicleSearchStatus('idle');
+                          }}
+                          onKeyPress={(e) => {
+                            if (e.key === 'Enter') {
+                              searchVehicleByPlate();
+                            }
+                          }}
+                          maxLength={formData.plateType === 'old' ? 15 : 10}
+                          style={{ 
+                            fontSize: '18px', 
+                            fontFamily: 'monospace', 
+                            textAlign: 'center', 
+                            fontWeight: 'bold',
+                            flex: 1
+                          }}
+                        />
+                        <button
+                          type="button"
+                          onClick={searchVehicleByPlate}
+                          disabled={vehicleSearchStatus === 'searching'}
+                          style={{
+                            background: vehicleSearchStatus === 'searching' ? '#9ca3af' : '#be003c',
+                            color: 'white',
+                            border: 'none',
+                            borderRadius: '8px',
+                            padding: '0 1.5rem',
+                            cursor: vehicleSearchStatus === 'searching' ? 'not-allowed' : 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '0.5rem',
+                            fontSize: '15px',
+                            fontWeight: 600,
+                            transition: 'all 0.2s',
+                            minWidth: '120px'
+                          }}
+                        >
+                          {vehicleSearchStatus === 'searching' ? (
+                            <>
+                              <span style={{ animation: 'spin 1s linear infinite', display: 'inline-block' }}>⏳</span>
+                              Recherche...
+                            </>
+                          ) : (
+                            <>
+                              <FiSearch size={18} />
+                              Rechercher
+                            </>
+                          )}
+                        </button>
+                      </div>
+                      
+                      {/* Indication du formatage automatique */}
+                      {formData.plateType && (
+                        <p style={{ 
+                          marginTop: '0.5rem', 
+                          fontSize: '13px', 
+                          color: '#6b7280', 
+                          textAlign: 'center',
+                          fontStyle: 'italic'
+                        }}>
+                          {formData.plateType === 'standard' && '✨ Les tirets sont ajoutés automatiquement (format XX-XXX-XX)'}
+                          {formData.plateType === 'old' && 'ℹ️ Format libre avec espaces (ex: 0920 RB 91)'}
+                          {formData.plateType === 'collection' && '✨ Les tirets sont ajoutés automatiquement (format XX-XXX-XX)'}
+                        </p>
+                      )}
+                      
+                      {vehicleSearchStatus === 'not-found' && (
+                        <div style={{
+                          marginTop: '1rem',
+                          padding: '1rem',
+                          background: '#fef3c7',
+                          border: '2px solid #f59e0b',
+                          borderRadius: '8px',
+                          display: 'flex',
+                          gap: '0.75rem',
+                          alignItems: 'flex-start'
+                        }}>
+                          <span style={{ fontSize: '24px' }}>😕</span>
+                          <div>
+                            <p style={{ margin: '0 0 0.5rem 0', fontWeight: 600, color: '#92400e' }}>
+                              Oups... votre plaque d'immatriculation n'a pas voulu coopérer...
+                            </p>
+                            <p style={{ margin: 0, fontSize: '14px', color: '#78350f' }}>
+                              Pas de souci ! Saisissez les informations de votre véhicule manuellement ci-dessous.
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Formulaire du véhicule (apparaît après recherche ou échec de recherche) */}
+                  {formData.plateType && formData.licensePlate && (vehicleSearchStatus === 'found' || vehicleSearchStatus === 'not-found') && (
+                    <>
+                      <h2 className="form-section-title" style={{ marginTop: '2rem' }}>Informations du véhicule</h2>
+                      
+                      <div className="premium-input-row">
+                        <div className="premium-input-group">
+                          <label className="premium-label premium-label-required">Marque</label>
+                          <input 
+                            type="text" 
+                            className="premium-input" 
+                            placeholder="Citroën, Renault, Peugeot..." 
+                            value={formData.vehicleName}
+                            onChange={(e) => setFormData({...formData, vehicleName: e.target.value})}
+                          />
+                        </div>
+
+                        <div className="premium-input-group">
+                          <label className="premium-label premium-label-required">Modèle</label>
+                          <input 
+                            type="text" 
+                            className="premium-input" 
+                            placeholder="2CV, 4L, 203..." 
+                            value={formData.vehicleModel}
+                            onChange={(e) => setFormData({...formData, vehicleModel: e.target.value})}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="premium-input-group">
+                        <label className="premium-label premium-label-required">Année</label>
+                        <input 
+                          type="text" 
+                          className="premium-input" 
+                          placeholder="1965" 
+                          value={formData.vehicleYear}
+                          onChange={(e) => setFormData({...formData, vehicleYear: e.target.value})}
+                        />
+                      </div>
+
+                      {/* Récapitulatif de l'immatriculation saisie */
+                      <div style={{ 
+                        marginTop: '1.5rem',
+                        padding: '1rem',
+                        background: '#f9fafb',
+                        borderRadius: '8px',
+                        border: '1px solid #e5e7eb'
+                      }}>
+                        <p style={{ margin: '0 0 0.5rem 0', fontSize: '13px', color: '#6b7280', fontWeight: 600 }}>
+                          Immatriculation enregistrée :
+                        </p>
+                        <div style={{
+                          display: 'flex',
+                          justifyContent: 'center',
+                          marginTop: '0.5rem'
+                        }}>
+                          <img
+                            src={`${API_BASE_URL}/public/plaque/${formData.licensePlate.replace(/\s+/g, '-')}`}
+                            alt={formData.licensePlate}
+                            onError={(e) => {
+                              e.target.style.display = 'none';
+                              e.target.nextSibling.style.display = 'inline-block';
+                            }}
+                            style={{
+                              maxWidth: '100%',
+                              height: 'auto',
+                              maxHeight: '80px',
+                              borderRadius: '4px',
+                              boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                            }}
+                          />
+                          <div style={{
+                            display: 'none',
+                            background: 'white',
+                            border: '2px solid #333',
+                            borderRadius: '4px',
+                            padding: '6px 12px',
+                            fontFamily: 'monospace',
+                            fontSize: '16px',
+                            fontWeight: 'bold',
+                            color: '#111827'
+                          }}>
+                            🇪🇺 {formData.licensePlate}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Bouton pour ajouter ce véhicule à la liste */}
+                      <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+                        <button
+                          type="button"
+                          onClick={handleAddAnotherVehicle}
+                          style={{
+                            background: '#10b981',
+                            color: 'white',
+                            border: 'none',
+                            padding: '0.75rem 1.5rem',
+                            borderRadius: '8px',
+                            fontSize: '14px',
+                            fontWeight: 600,
+                            cursor: 'pointer',
+                            transition: 'all 0.2s',
+                            boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                          }}
+                          onMouseOver={(e) => e.target.style.background = '#059669'}
+                          onMouseOut={(e) => e.target.style.background = '#10b981'}
+                        >
+                          ✅ Ajouter ce véhicule
+                            </button>
+                          </div>
+                        </>
+                      )}
+
+                      {/* Liste des véhicules enregistrés */}
+                      {registeredVehicles.length > 0 && (
+                        <div style={{
+                          marginTop: '2rem',
+                          padding: '1rem',
+                          background: '#f0fdf4',
+                          borderRadius: '8px',
+                          border: '1px solid #86efac'
+                        }}>
+                          <p style={{ 
+                            margin: '0 0 1rem 0', 
+                            fontSize: '14px', 
+                            fontWeight: 600, 
+                            color: '#15803d'
+                          }}>
+                            ✅ Véhicules enregistrés ({registeredVehicles.length})
+                          </p>
+                          {registeredVehicles.map((vehicle) => (
+                            <div 
+                              key={vehicle.id}
+                              style={{
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                padding: '0.75rem',
+                                background: 'white',
+                                borderRadius: '6px',
+                                marginBottom: '0.5rem',
+                                border: '1px solid #bbf7d0'
+                              }}
+                            >
+                              <div style={{ flex: 1 }}>
+                                <div style={{ fontWeight: 600, color: '#166534', fontSize: '14px' }}>
+                                  {vehicle.vehicleName} {vehicle.vehicleModel} ({vehicle.vehicleYear})
+                                </div>
+                                <div style={{ fontSize: '12px', color: '#15803d', marginTop: '0.25rem' }}>
+                                  {vehicle.licensePlate}
+                                </div>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveVehicle(vehicle.id)}
+                                style={{
+                                  background: '#ef4444',
+                                  color: 'white',
+                                  border: 'none',
+                                  padding: '0.5rem 1rem',
+                                  borderRadius: '6px',
+                                  fontSize: '12px',
+                                  cursor: 'pointer',
+                                  marginLeft: '1rem'
+                                }}
+                                onMouseOver={(e) => e.target.style.background = '#dc2626'}
+                                onMouseOut={(e) => e.target.style.background = '#ef4444'}
+                              >
+                                🗑️ Retirer
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  )}
                 </div>
               )}
 

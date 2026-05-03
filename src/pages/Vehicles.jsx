@@ -131,9 +131,30 @@ export default function Vehicles() {
                 <strong>Parc:</strong> {vehicle.parc}
               </Text>
               
-              <Text color="gray.600" fontSize="sm" mb={1}>
-                <strong>Immatriculation:</strong> {vehicle.immat || "Non renseignée"}
-              </Text>
+              {vehicle.immat ? (
+                <Box mb={3}>
+                  <Text fontSize="xs" color="gray.500" mb={1} fontWeight="600">
+                    Immatriculation
+                  </Text>
+                  <Image
+                    src={`http://localhost:8080/public/plaque/${vehicle.immat.replace(/\s+/g, '-')}`}
+                    alt={vehicle.immat}
+                    maxW="260px"
+                    h="auto"
+                    borderRadius="4px"
+                    boxShadow="sm"
+                    fallback={
+                      <Text color="gray.600" fontSize="sm">
+                        {vehicle.immat}
+                      </Text>
+                    }
+                  />
+                </Box>
+              ) : (
+                <Text color="gray.600" fontSize="sm" mb={1}>
+                  <strong>Immatriculation:</strong> Non renseignée
+                </Text>
+              )}
               
               <Text color="gray.600" fontSize="sm" mb={1}>
                 <strong>État:</strong> {vehicle.etat}

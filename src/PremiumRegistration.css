@@ -714,3 +714,280 @@
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
 }
+
+/* ==========================================================================
+   Modale de Sélection de Plaque d'Immatriculation
+   ========================================================================== */
+
+.plate-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+.plate-modal-content {
+  background: white;
+  border-radius: 16px;
+  max-width: 700px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+}
+
+.plate-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 32px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.plate-modal-close {
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #6b7280;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.plate-modal-close:hover {
+  background: #f3f4f6;
+  color: #be003c;
+}
+
+.plate-modal-body {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.plate-option {
+  border: 3px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+.plate-option:hover {
+  border-color: #be003c;
+  background: #fff5f7;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(190, 0, 60, 0.1);
+}
+
+.plate-option.selected {
+  border-color: #be003c;
+  background: #fff5f7;
+  box-shadow: 0 0 0 4px rgba(190, 0, 60, 0.1);
+}
+
+.plate-option-info {
+  flex: 1;
+}
+
+.plate-option-info h4 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  color: #111827;
+  font-weight: 700;
+}
+
+.plate-option-info p {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   Aperçus des Plaques d'Immatriculation
+   ========================================================================== */
+
+.plate-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Arial', sans-serif;
+  font-weight: 700;
+  letter-spacing: 2px;
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  min-width: 200px;
+  height: 60px;
+}
+
+/* Plaque Standard FIV (depuis 2009) */
+.plate-standard {
+  background: white;
+  border: 3px solid #1e293b;
+  display: grid;
+  grid-template-columns: 30px 1fr 40px;
+  padding: 0;
+}
+
+.plate-eu-band {
+  background: #003399;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 2px;
+  gap: 2px;
+}
+
+.plate-eu-stars {
+  color: #ffcc00;
+  font-size: 10px;
+}
+
+.plate-eu-flag {
+  color: white;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.plate-standard .plate-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1e293b;
+  font-size: 22px;
+  letter-spacing: 1px;
+}
+
+.plate-region {
+  background: #003399;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  gap: 1px;
+}
+
+.plate-region-logo {
+  font-size: 12px;
+}
+
+.plate-region-number {
+  color: white;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+/* Ancien Format Français (1950-2009) */
+.plate-old {
+  background: white;
+  border: 3px solid #1e293b;
+  color: #1e293b;
+  font-size: 22px;
+  padding: 8px 16px;
+}
+
+/* Plaque Collection (fond noir) */
+.plate-collection {
+  background: #1e293b;
+  border: 3px solid #64748b;
+  color: #e2e8f0;
+  font-size: 22px;
+  padding: 8px 16px;
+  text-shadow: 0 0 2px rgba(226, 232, 240, 0.5);
+}
+
+/* Sélecteur de plaque dans le formulaire */
+.premium-plate-selector:hover {
+  border-color: #be003c !important;
+  background: white !important;
+}
+
+.premium-plate-selector:focus {
+  outline: none;
+  border-color: #be003c !important;
+  box-shadow: 0 0 0 3px rgba(190, 0, 60, 0.1);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive pour la modale */
+@media (max-width: 768px) {
+  .plate-modal-content {
+    max-width: 95%;
+    margin: 20px;
+  }
+
+  .plate-modal-header {
+    padding: 20px;
+  }
+
+  .plate-modal-body {
+    padding: 20px;
+  }
+
+  .plate-option {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+  }
+
+  .plate-preview {
+    min-width: 180px;
+    height: 50px;
+  }
+
+  .plate-standard .plate-number,
+  .plate-old,
+  .plate-collection {
+    font-size: 18px;
+  }
+}
+
+/* ==========================================================================
+   Animations
+   ========================================================================== */
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

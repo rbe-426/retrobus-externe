@@ -272,9 +272,21 @@ export default function VehicleDetails() {
                 </Badge>
               )}
               {vehicle.immat && (
-                <Badge colorScheme="green" fontSize="md" px={3} py={1} bg="green.500" color="white">
-                  {vehicle.immat}
-                </Badge>
+                <Box>
+                  <ChakraImage
+                    src={`${API_BASE_URL}/public/plaque/${vehicle.immat.replace(/\s+/g, '-')}`}
+                    alt={vehicle.immat}
+                    maxH="45px"
+                    h="auto"
+                    borderRadius="4px"
+                    boxShadow="md"
+                    fallback={
+                      <Badge colorScheme="green" fontSize="md" px={3} py={1} bg="green.500" color="white">
+                        {vehicle.immat}
+                      </Badge>
+                    }
+                  />
+                </Box>
               )}
               {vehicle.etat && (
                 <Badge colorScheme="orange" fontSize="md" px={3} py={1} bg="orange.500" color="white">

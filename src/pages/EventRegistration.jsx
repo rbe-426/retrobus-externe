@@ -98,7 +98,7 @@ export default function EventRegistration() {
   const [vehicleSearchStatus, setVehicleSearchStatus] = useState('idle'); // 'idle', 'searching', 'found', 'not-found'
   const toast = useToast();
 
-  // Fonction pour enregistrer un véhicule et en ajouter un autre
+  // Fonction pour ajouter un véhicule à la liste (SANS reset)
   const handleAddAnotherVehicle = () => {
     // Validation du véhicule actuel
     if (!formData.vehicleName || !formData.vehicleModel || !formData.vehicleYear || !formData.licensePlate) {
@@ -125,7 +125,17 @@ export default function EventRegistration() {
 
     setRegisteredVehicles(prev => [...prev, newVehicle]);
 
-    // Réinitialiser TOUS les champs du véhicule de manière explicite
+    toast({
+      status: "success",
+      title: "Véhicule enregistré",
+      description: `${newVehicle.vehicleName} ${newVehicle.vehicleModel} a été ajouté à votre inscription. Cliquez sur "Ajouter un autre véhicule" pour en saisir un nouveau.`,
+      duration: 4000
+    });
+  };
+
+  // Fonction pour réinitialiser le formulaire et saisir un autre véhicule
+  const handleResetForNewVehicle = () => {
+    // Réinitialiser TOUS les champs du véhicule
     setFormData(prev => ({
       ...prev,
       vehicleName: '',
@@ -140,17 +150,19 @@ export default function EventRegistration() {
     // Reset du status de recherche
     setVehicleSearchStatus('idle');
 
-    // Scroll vers le haut de la section véhicule pour voir les champs vides
-    const vehicleSection = document.querySelector('.premium-input-group');
-    if (vehicleSection) {
-      vehicleSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    // Scroll vers le haut de la section véhicule
+    setTimeout(() => {
+      const vehicleSection = document.querySelector('.premium-section-title');
+      if (vehicleSection) {
+        vehicleSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
 
     toast({
-      status: "success",
-      title: "Véhicule enregistré",
-      description: `${newVehicle.vehicleName} ${newVehicle.vehicleModel} a été ajouté à votre inscription.`,
-      duration: 3000
+      status: "info",
+      title: "Nouveau véhicule",
+      description: "Vous pouvez maintenant saisir les informations d'un autre véhicule.",
+      duration: 2000
     });
   };
 
@@ -1217,6 +1229,38 @@ export default function EventRegistration() {
                               </button>
                             </div>
                           ))}
+                        </div>
+                      )}
+
+                      {/* Bouton pour réinitialiser et ajouter un autre véhicule */}
+                      {registeredVehicles.length > 0 && (
+                        <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+                          <button
+                            type="button"
+                            onClick={handleResetForNewVehicle}
+                            style={{
+                              background: '#fecaca',
+                              color: '#991b1b',
+                              border: '2px solid #fca5a5',
+                              padding: '0.75rem 1.5rem',
+                              borderRadius: '8px',
+                              fontSize: '14px',
+                              fontWeight: 600,
+                              cursor: 'pointer',
+                              transition: 'all 0.2s',
+                              boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                            }}
+                            onMouseOver={(e) => {
+                              e.target.style.background = '#f87171';
+                              e.target.style.color = 'white';
+                            }}
+                            onMouseOut={(e) => {
+                              e.target.style.background = '#fecaca';
+                              e.target.style.color = '#991b1b';
+                            }}
+                          >
+                            🚗 Ajouter un autre véhicule
+                          </button>
                         </div>
                       )}
                     </>

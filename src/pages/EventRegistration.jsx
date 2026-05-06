@@ -2080,46 +2080,66 @@ export default function EventRegistration() {
     {/* ÉTAPE: success */}
     {registrationStep === 'success' && ticketData && (
       <VStack spacing={6} p={8} borderWidth="1px" borderRadius="lg" boxShadow="xl" bg="green.50">
-        <Heading size="lg" color="green.700">✅ Inscription confirmée !</Heading>
+        <Heading size="lg" color="green.700">Inscription enregistrée</Heading>
 
         <Box p={4} bg="white" borderRadius="md" w="100%" border="1px solid" borderColor="green.200">
-          <Text fontWeight="600" mb={2}>Détails de votre inscription</Text>
-          <Text fontSize="sm">N° de réservation : {ticketData.id}</Text>
-          <Text fontSize="sm">Événement : {event.title}</Text>
-          <Text fontSize="sm">Date : {formatDateFrLong(event.date)} {event.time && `• ${event.time}`}</Text>
-          <Text fontSize="sm">Lieu : {event.location}</Text>
-          <Text fontSize="sm">Billets : {formData.adultTickets} adulte(s) + {formData.childTickets} enfant(s)</Text>
-          {!eventInfo.isFree && (
-            <Text fontSize="sm">Montant : {calculateTotal()}€</Text>
-          )}
+          <VStack align="start" spacing={3}>
+            <Text fontWeight="600" fontSize="lg" color="green.700">
+              ✅ Votre inscription a bien été prise en compte
+            </Text>
+            
+            <Text fontSize="md" color="gray.700">
+              Vous recevrez prochainement un email de confirmation à l'adresse : 
+              <Text as="span" fontWeight="600" ml={1}>{formData.participantEmail}</Text>
+            </Text>
+
+            <Divider my={2} />
+
+            <Text fontSize="sm" color="gray.600">
+              📧 <strong>Cet email contiendra :</strong>
+            </Text>
+            <VStack align="start" spacing={1} pl={4}>
+              <Text fontSize="sm" color="gray.700">• La confirmation de votre inscription</Text>
+              <Text fontSize="sm" color="gray.700">• Les détails de l'événement et les informations pratiques</Text>
+              <Text fontSize="sm" color="gray.700">• Votre billet électronique avec QR Code à présenter le jour J</Text>
+              <Text fontSize="sm" color="gray.700">• Les modalités de rassemblement (placement, horaires d'arrivée, etc.)</Text>
+            </VStack>
+
+            <Divider my={2} />
+
+            <Text fontSize="sm" color="gray.600" fontWeight="600">
+              N° de réservation : {ticketData.id}
+            </Text>
+            <Text fontSize="sm" color="gray.600">
+              Événement : {event.title}
+            </Text>
+            <Text fontSize="sm" color="gray.600">
+              Date : {formatDateFrLong(event.date)} {event.time && `• ${event.time}`}
+            </Text>
+            <Text fontSize="sm" color="gray.600">
+              Lieu : {event.location}
+            </Text>
+          </VStack>
         </Box>
 
-        <Divider />
-
-        <Text fontWeight="600">🎫 Votre billet électronique</Text>
-        {ticketData.qrCode && (
-          <Image
-            src={generateQRCodeUrl(ticketData.qrCode)}
-            alt="QR Code de votre billet"
-            boxSize="256px"
-            border="2px solid"
-            borderColor="var(--rbe-red)"
-            borderRadius="md"
-          />
-        )}
-
-        <Alert status="success" borderRadius="md">
+        <Alert status="info" borderRadius="md">
           <AlertIcon />
           <VStack align="start" spacing={1}>
-            <Text fontWeight="bold">📧 Billet envoyé par email</Text>
+            <Text fontWeight="bold">💡 Conseil</Text>
             <Text fontSize="sm">
-              Un email de confirmation avec votre billet électronique a été envoyé à : {formData.participantEmail}
-            </Text>
-            <Text fontSize="xs" color="green.600" mt={2}>
-              Présentez ce QR Code à l'entrée de l'événement.
+              Conservez cet email et vérifiez vos courriers indésirables (spam) si vous ne le recevez pas dans les prochaines minutes.
             </Text>
           </VStack>
         </Alert>
+
+        <Button
+          colorScheme="green"
+          size="lg"
+          onClick={() => window.location.href = '/events'}
+          leftIcon={<Icon as={FiArrowLeft} />}
+        >
+          Retour aux événements
+        </Button>
       </VStack>
     )}
 

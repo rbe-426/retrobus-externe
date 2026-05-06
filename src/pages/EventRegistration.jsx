@@ -639,13 +639,29 @@ export default function EventRegistration() {
         })
       };
 
-      // Vérifier que le token CSRF est disponible
-      if (!csrfToken) {
-        console.error('❌ Token CSRF manquant');
+      // Vérifier que le token CSRF est disponible, sinon tenter de le récupérer
+      let tokenToUse = csrfToken;
+      if (!tokenToUse) {
+        console.warn('⚠️ Token CSRF manquant, tentative de récupération...');
+        try {
+          const tokenResponse = await fetch(`${API_BASE_URL}/api/csrf-token`);
+          if (tokenResponse.ok) {
+            const tokenData = await tokenResponse.json();
+            tokenToUse = tokenData.csrfToken;
+            setCsrfToken(tokenToUse);
+            console.log('✅ Token CSRF récupéré avec succès');
+          }
+        } catch (error) {
+          console.error('❌ Impossible de récupérer le token CSRF:', error);
+        }
+      }
+
+      if (!tokenToUse) {
+        console.error('❌ Token CSRF toujours manquant après tentative de récupération');
         toast({
           status: "error",
-          title: "Erreur de sécurité",
-          description: "Token de sécurité manquant. Veuillez recharger la page."
+          title: "Serveur inaccessible",
+          description: "Le serveur backend n'est pas démarré. Veuillez démarrer le serveur API (npm run dev dans interne/api)."
         });
         setSubmitting(false);
         return;
@@ -657,7 +673,7 @@ export default function EventRegistration() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-CSRF-Token': csrfToken
+          'X-CSRF-Token': tokenToUse
         },
         body: JSON.stringify(registrationData)
       });

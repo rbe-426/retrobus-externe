@@ -632,12 +632,12 @@ export default function EventRegistration() {
             organizerMessage: formData.organizerMessage
           }
         },
-        // Ajouter les véhicules si applicable
-        ...(eventInfo.registrationType === 'parade_vehicles' && {
+        // Ajouter les véhicules s'ils existent (peu importe le type d'événement)
+        ...(vehicles.length > 0 && {
           vehicles: vehicles
-            .filter(v => v.plateType && v.licensePlate && v.vehicleName && v.vehicleModel && v.vehicleYear)
+            .filter(v => v.licensePlate && v.vehicleName && v.vehicleModel && v.vehicleYear)
             .map(v => ({
-              plateType: v.plateType,
+              plateType: v.plateType || 'standard',
               licensePlate: v.licensePlate,
               vehicleName: v.vehicleName,
               vehicleModel: v.vehicleModel,
@@ -647,6 +647,10 @@ export default function EventRegistration() {
           clubName: formData.clubName || null
         })
       };
+
+      console.log('🚗 Type événement:', eventInfo.registrationType);
+      console.log('🚗 Véhicules avant filtre:', vehicles);
+      console.log('🚗 Véhicules après filtre:', registrationData.vehicles);
 
       // Vérifier que le token CSRF est disponible, sinon tenter de le récupérer
       let tokenToUse = csrfToken;

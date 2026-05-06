@@ -543,12 +543,17 @@ export default function EventRegistration() {
   };
 
   const handleSubmitRegistration = async () => {
+    console.log('🎯 handleSubmitRegistration appelé');
+    console.log('📋 formData:', formData);
+    console.log('🚗 vehicles:', vehicles);
+    
     const resolvedParticipantName = (
       formData.participantName?.trim() ||
       `${formData.firstName || ''} ${formData.lastName || ''}`.trim()
     );
 
     if (!resolvedParticipantName || !formData.participantEmail.trim()) {
+      console.warn('⚠️ Validation échouée : nom ou email manquant');
       toast({
         status: "error",
         title: "Champs obligatoires",
@@ -558,6 +563,7 @@ export default function EventRegistration() {
     }
 
     if (formData.adultTickets + formData.childTickets === 0) {
+      console.warn('⚠️ Validation échouée : aucun billet sélectionné');
       toast({
         status: "error",
         title: "Nombre de billets",
@@ -566,8 +572,11 @@ export default function EventRegistration() {
       return;
     }
 
+    console.log('✅ Validations de base passées');
+    
     try {
       setSubmitting(true);
+      console.log('🔄 setSubmitting(true) - Début de la soumission');
       const eventInfo = getEventTypeInfo(event);
       
       // Validation des champs requis pour défilé de véhicules anciens
@@ -669,7 +678,7 @@ export default function EventRegistration() {
 
       console.log('📝 Submitting registration:', registrationData);
 
-      const response = await fetch(`${API_BASE_URL}/registrations`, {
+      let response = await fetch(`${API_BASE_URL}/registrations`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -678,18 +687,51 @@ export default function EventRegistration() {
         body: JSON.stringify(registrationData)
       });
 
+      // Si erreur CSRF 403, récupérer un nouveau token et réessayer UNE FOIS
+      if (response.status === 403) {
+        try {
+          const errorData = await response.json();
+          if (errorData.code === 'CSRF_INVALID' || errorData.code === 'CSRF_MISSING') {
+            console.warn('⚠️ CSRF invalide, récupération d\'un nouveau token et retry...');
+            
+            const tokenResponse = await fetch(`${API_BASE_URL}/api/csrf-token`);
+            if (tokenResponse.ok) {
+              const tokenData = await tokenResponse.json();
+              tokenToUse = tokenData.csrfToken;
+              setCsrfToken(tokenToUse);
+              console.log('✅ Nouveau token CSRF récupéré, retry de la requête...');
+              
+              // Retry avec le nouveau token
+              response = await fetch(`${API_BASE_URL}/registrations`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'X-CSRF-Token': tokenToUse
+                },
+                body: JSON.stringify(registrationData)
+              });
+            }
+          }
+        } catch (parseError) {
+          console.error('❌ Erreur lors du parsing de la réponse 403:', parseError);
+        }
+      }
+
       if (!response.ok) {
-        throw new Error(`Erreur lors de l'inscription (${response.status})`);
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Erreur lors de l'inscription (${response.status})`);
       }
 
       const result = await response.json();
       console.log('✅ Registration created:', result);
+      console.log('📝 registrationId:', result.registrationId);
 
       setRegistrationId(result.registrationId);
 
       // Si HelloAsso, rediriger vers la plateforme
       if (result.helloAssoUrl && registrationData.paymentMethod === 'helloasso') {
         console.log('🔗 Redirecting to HelloAsso:', result.helloAssoUrl);
+        console.log('🎯 setRegistrationStep("processing") - HelloAsso');
         setRegistrationStep('processing');
         
         toast({
@@ -706,10 +748,13 @@ export default function EventRegistration() {
         
       } else {
         // Inscription gratuite ou interne - passage direct au succès
+        console.log('🎯 setRegistrationStep("processing") - Gratuit/Interne');
         setRegistrationStep('processing');
         
+        console.log('⏳ Attente 2 secondes avant affichage succès...');
         // Simuler un court délai pour la génération du billet
         setTimeout(() => {
+          console.log('🎯 setTicketData + setRegistrationStep("success")');
           setTicketData({
             id: result.registrationId,
             status: 'VALIDATED',
@@ -721,17 +766,20 @@ export default function EventRegistration() {
             })
           });
           setRegistrationStep('success');
+          console.log('✨ Page de succès devrait maintenant s\'afficher');
         }, 2000);
       }
 
     } catch (e) {
       console.error('❌ Registration error:', e);
+      console.error('❌ Stack trace:', e.stack);
       toast({
         status: "error",
         title: "Erreur d'inscription",
-        description: e.message
+        description: e.message || 'Une erreur est survenue lors de l\'inscription'
       });
     } finally {
+      console.log('🔄 setSubmitting(false) - Fin de la soumission');
       setSubmitting(false);
     }
   };
@@ -2085,7 +2133,9 @@ export default function EventRegistration() {
         <Box p={4} bg="white" borderRadius="md" w="100%" border="1px solid" borderColor="green.200">
           <VStack align="start" spacing={3}>
             <Text fontWeight="600" fontSize="lg" color="green.700">
-              ✅ Votre inscription a bien été prise en compte
+              ✅ {eventInfo.registrationType === 'parade_vehicles' 
+                ? 'Votre inscription au rassemblement a bien été prise en compte' 
+                : 'Votre inscription a bien été prise en compte'}
             </Text>
             
             <Text fontSize="md" color="gray.700">
@@ -2099,10 +2149,22 @@ export default function EventRegistration() {
               📧 <strong>Cet email contiendra :</strong>
             </Text>
             <VStack align="start" spacing={1} pl={4}>
-              <Text fontSize="sm" color="gray.700">• La confirmation de votre inscription</Text>
+              <Text fontSize="sm" color="gray.700">• La confirmation de votre inscription{eventInfo.registrationType === 'parade_vehicles' ? ' au rassemblement' : ''}</Text>
+              {eventInfo.registrationType === 'parade_vehicles' && (
+                <Text fontSize="sm" color="gray.700">• Le récapitulatif de vos véhicule(s) inscrit(s)</Text>
+              )}
               <Text fontSize="sm" color="gray.700">• Les détails de l'événement et les informations pratiques</Text>
-              <Text fontSize="sm" color="gray.700">• Votre billet électronique avec QR Code à présenter le jour J</Text>
-              <Text fontSize="sm" color="gray.700">• Les modalités de rassemblement (placement, horaires d'arrivée, etc.)</Text>
+              {eventInfo.registrationType === 'parade_vehicles' ? (
+                <>
+                  <Text fontSize="sm" color="gray.700">• Les modalités de rassemblement : placement, horaires d'arrivée, consignes de sécurité</Text>
+                  <Text fontSize="sm" color="gray.700">• Votre badge de participant à présenter le jour J</Text>
+                </>
+              ) : (
+                <>
+                  <Text fontSize="sm" color="gray.700">• Votre billet électronique avec QR Code à présenter le jour J</Text>
+                  <Text fontSize="sm" color="gray.700">• Les modalités de rassemblement (placement, horaires d'arrivée, etc.)</Text>
+                </>
+              )}
             </VStack>
 
             <Divider my={2} />
@@ -2119,16 +2181,28 @@ export default function EventRegistration() {
             <Text fontSize="sm" color="gray.600">
               Lieu : {event.location}
             </Text>
+            {eventInfo.registrationType === 'parade_vehicles' && vehicles.length > 0 && (
+              <Text fontSize="sm" color="gray.600">
+                Véhicule(s) : {vehicles.filter(v => v.vehicleName).map(v => v.vehicleName).join(', ')}
+              </Text>
+            )}
           </VStack>
         </Box>
 
         <Alert status="info" borderRadius="md">
           <AlertIcon />
           <VStack align="start" spacing={1}>
-            <Text fontWeight="bold">💡 Conseil</Text>
+            <Text fontWeight="bold">💡 {eventInfo.registrationType === 'parade_vehicles' ? 'Important' : 'Conseil'}</Text>
             <Text fontSize="sm">
-              Conservez cet email et vérifiez vos courriers indésirables (spam) si vous ne le recevez pas dans les prochaines minutes.
+              {eventInfo.registrationType === 'parade_vehicles' 
+                ? "Conservez l'email de confirmation avec votre badge. Présentez-vous au point de rassemblement à l'heure indiquée avec votre(vos) véhicule(s)." 
+                : "Conservez cet email et vérifiez vos courriers indésirables (spam) si vous ne le recevez pas dans les prochaines minutes."}
             </Text>
+            {eventInfo.registrationType === 'parade_vehicles' && (
+              <Text fontSize="sm" mt={1} color="gray.600">
+                N'oubliez pas de vérifier vos courriers indésirables (spam) si vous ne recevez pas l'email rapidement.
+              </Text>
+            )}
           </VStack>
         </Alert>
 

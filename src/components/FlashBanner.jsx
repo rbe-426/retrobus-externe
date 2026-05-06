@@ -11,7 +11,7 @@ import {
   useDisclosure
 } from '@chakra-ui/react';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_URL = import.meta.env.VITE_API_URL || 'https://attractive-kindness-rbe-serveurs.up.railway.app';
 
 const FLASH_TYPES = {
   info: 'info',

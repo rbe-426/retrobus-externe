@@ -7,7 +7,7 @@
 // Utiliser import.meta.env pour Vite (pas process.env)
 const API_BASE = import.meta.env.VITE_API_URL 
   ? `${import.meta.env.VITE_API_URL}/api/retromerch`
-  : 'http://localhost:4000/api/retromerch';
+  : 'https://attractive-kindness-rbe-serveurs.up.railway.app/api/retromerch';
 
 /**
  * Helper pour les requêtes

@@ -5,7 +5,7 @@ import {
 } from "@chakra-ui/react";
 import { Helmet } from "react-helmet-async";
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_BASE = import.meta.env.VITE_API_URL || 'https://attractive-kindness-rbe-serveurs.up.railway.app';
 
 const formatDate = (dateStr) => {
   return new Date(dateStr).toLocaleDateString('fr-FR', {

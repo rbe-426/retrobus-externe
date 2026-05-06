@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { FiCheckCircle, FiAlertCircle, FiArrowLeft } from "react-icons/fi";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://attractive-kindness-rbe-serveurs.up.railway.app';
 
 export default function HelloAssoCallback() {
   const [searchParams] = useSearchParams();

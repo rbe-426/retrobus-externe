@@ -40,7 +40,7 @@ import { FiArrowLeft, FiCalendar, FiMapPin, FiUsers, FiGift, FiExternalLink, FiM
 import { formatDateFrLong } from "../utils/dateFormat.js";
 import "../PremiumRegistration.css";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://attractive-kindness-rbe-serveurs.up.railway.app';
 
 export default function EventRegistration() {
   const { eventId, eventSlug } = useParams();

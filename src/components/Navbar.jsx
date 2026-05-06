@@ -29,7 +29,7 @@ import {
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_URL = import.meta.env.VITE_API_URL || 'https://attractive-kindness-rbe-serveurs.up.railway.app';
 
 export default function Navbar({ donateIcon, newsletterIcon, onDonateClick, onNewsletterClick, isOpen: isOpenProp, onOpen: onOpenProp, onClose: onCloseProp, embedded = false, userName, siteVersion }) {
   const internalDisclosure = useDisclosure();

@@ -11,7 +11,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { FiUsers, FiLock, FiGlobe, FiClock, FiMapPin, FiCalendar, FiDownload, FiEyeOff } from 'react-icons/fi';
 import { formatDateFrLong, formatDateTimeFullFr } from '../utils/dateFormat.js';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://attractive-kindness-rbe-serveurs.up.railway.app';
 
 // Événements de fallback pour le développement
 const fallbackEvents = [

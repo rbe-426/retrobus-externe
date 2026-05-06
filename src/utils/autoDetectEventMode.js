@@ -6,10 +6,8 @@
 
 import { saveEventModeConfig } from './eventModeConfig.js';
 
-// En dev local, l'API est sur le port 8080
-const API_URL = import.meta.env.DEV 
-  ? 'http://localhost:8080' 
-  : (import.meta.env.VITE_API_URL || 'http://localhost:8080');
+// URL de l'API depuis les variables d'environnement
+const API_URL = import.meta.env.VITE_API_URL || 'https://attractive-kindness-rbe-serveurs.up.railway.app';
 
 /**
  * Vérifie auprès de l'API si un événement JEP est actif

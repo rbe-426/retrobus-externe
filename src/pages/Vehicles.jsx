@@ -137,7 +137,7 @@ export default function Vehicles() {
                     Immatriculation
                   </Text>
                   <Image
-                    src={`http://localhost:8080/public/plaque/${vehicle.immat.replace(/\s+/g, '-')}`}
+                    src={`${API_BASE}/public/plaque/${vehicle.immat.replace(/\s+/g, '-')}`}
                     alt={vehicle.immat}
                     maxW="260px"
                     h="auto"

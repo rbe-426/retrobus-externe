@@ -407,7 +407,7 @@ export default function EventRegistration() {
 
     try {
       // Appel à l'API backend
-      const response = await fetch(`http://localhost:8080/public/vehicles/search?plate=${encodeURIComponent(vehicle.licensePlate)}`);
+      const response = await fetch(`${API_BASE_URL}/public/vehicles/search?plate=${encodeURIComponent(vehicle.licensePlate)}`);
       const result = await response.json();
 
       if (response.ok && result.success && result.data) {

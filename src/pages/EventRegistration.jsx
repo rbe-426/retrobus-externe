@@ -578,19 +578,36 @@ export default function EventRegistration() {
       setSubmitting(true);
       console.log('🔄 setSubmitting(true) - Début de la soumission');
       const eventInfo = getEventTypeInfo(event);
+
+      const normalizedVehicles = vehicles
+        .filter(v => v.licensePlate && v.vehicleName && v.vehicleModel && v.vehicleYear)
+        .map(v => ({
+          plateType: v.plateType || 'standard',
+          licensePlate: v.licensePlate,
+          vehicleName: v.vehicleName,
+          vehicleModel: v.vehicleModel,
+          vehicleYear: v.vehicleYear
+        }));
+
+      const fallbackVehicle = (
+        formData.vehicleName &&
+        formData.vehicleModel &&
+        formData.vehicleYear
+      ) ? {
+        plateType: 'standard',
+        licensePlate: formData.vehicleName,
+        vehicleName: formData.vehicleName,
+        vehicleModel: formData.vehicleModel,
+        vehicleYear: formData.vehicleYear
+      } : null;
+
+      const effectiveVehicles = normalizedVehicles.length > 0
+        ? normalizedVehicles
+        : (fallbackVehicle ? [fallbackVehicle] : []);
       
       // Validation des champs requis pour défilé de véhicules anciens
       if (eventInfo.registrationType === 'parade_vehicles') {
-        // Vérifier qu'au moins un véhicule est complet
-        const completeVehicles = vehicles.filter(v => 
-          v.plateType && 
-          v.licensePlate && 
-          v.vehicleName && 
-          v.vehicleModel && 
-          v.vehicleYear
-        );
-        
-        if (completeVehicles.length === 0) {
+        if (effectiveVehicles.length === 0) {
           toast({
             status: "error",
             title: "Véhicule incomplet",
@@ -633,16 +650,8 @@ export default function EventRegistration() {
           }
         },
         // Ajouter les véhicules s'ils existent (peu importe le type d'événement)
-        ...(vehicles.length > 0 && {
-          vehicles: vehicles
-            .filter(v => v.licensePlate && v.vehicleName && v.vehicleModel && v.vehicleYear)
-            .map(v => ({
-              plateType: v.plateType || 'standard',
-              licensePlate: v.licensePlate,
-              vehicleName: v.vehicleName,
-              vehicleModel: v.vehicleModel,
-              vehicleYear: v.vehicleYear
-            })),
+        ...(effectiveVehicles.length > 0 && {
+          vehicles: effectiveVehicles,
           isClubMember: formData.isClubMember,
           clubName: formData.clubName || null
         })

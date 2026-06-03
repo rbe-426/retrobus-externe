@@ -56,6 +56,20 @@ export default function EventRegistration() {
     return match ? match[1] : null;
   }, [eventSlug, location.pathname]);
   
+  // Restaurer l'état de l'inscription depuis sessionStorage si disponible
+  const [registrationStep, setRegistrationStep] = useState(() => {
+    const saved = sessionStorage.getItem('eventRegistration_step');
+    return saved || 'form';
+  });
+  const [registrationId, setRegistrationId] = useState(() => {
+    const saved = sessionStorage.getItem('eventRegistration_id');
+    return saved || null;
+  });
+  const [ticketData, setTicketData] = useState(() => {
+    const saved = sessionStorage.getItem('eventRegistration_ticketData');
+    return saved ? JSON.parse(saved) : null;
+  });
+
   // Debug logs
   console.log('🔍 EventRegistration mounted');
   console.log('  - eventId:', eventId);
@@ -63,13 +77,14 @@ export default function EventRegistration() {
   console.log('  - extractedSlug:', extractedSlug);
   console.log('  - location.pathname:', location.pathname);
   console.log('  - location.state:', location.state);
+  console.log('  🔄 État restauré depuis sessionStorage:');
+  console.log('    - registrationStep:', registrationStep);
+  console.log('    - registrationId:', registrationId);
+  console.log('    - ticketData:', ticketData);
   
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [registrationStep, setRegistrationStep] = useState('form'); // 'form', 'processing', 'success'
-  const [registrationId, setRegistrationId] = useState(null);
-  const [ticketData, setTicketData] = useState(null);
   const [currentStep, setCurrentStep] = useState(1); // Étape du formulaire premium (1-4)
   const [formData, setFormData] = useState({
     participantName: '',
@@ -111,6 +126,14 @@ export default function EventRegistration() {
   const { isOpen: isHelloAssoOpen, onOpen: onHelloAssoOpen, onClose: onHelloAssoClose } = useDisclosure();
   const [isPlateModalOpen, setIsPlateModalOpen] = useState(false);
   const toast = useToast();
+
+  // Helper pour nettoyer la session d'inscription
+  const clearRegistrationSession = () => {
+    console.log('🧹 Nettoyage de la session d\'inscription');
+    sessionStorage.removeItem('eventRegistration_step');
+    sessionStorage.removeItem('eventRegistration_id');
+    sessionStorage.removeItem('eventRegistration_ticketData');
+  };
 
   // ➕ Ajouter un nouveau véhicule (EN HAUT de la liste)
   const handleAddVehicle = () => {
@@ -264,6 +287,30 @@ export default function EventRegistration() {
     
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eventId, extractedSlug]); // Retirer location.state et searchParams pour éviter la boucle
+
+  // Persister registrationStep dans sessionStorage
+  useEffect(() => {
+    if (registrationStep !== 'form') {
+      sessionStorage.setItem('eventRegistration_step', registrationStep);
+      console.log(`💾 Sauvegarde registrationStep: ${registrationStep}`);
+    }
+  }, [registrationStep]);
+
+  // Persister registrationId dans sessionStorage
+  useEffect(() => {
+    if (registrationId) {
+      sessionStorage.setItem('eventRegistration_id', registrationId);
+      console.log(`💾 Sauvegarde registrationId: ${registrationId}`);
+    }
+  }, [registrationId]);
+
+  // Persister ticketData dans sessionStorage
+  useEffect(() => {
+    if (ticketData) {
+      sessionStorage.setItem('eventRegistration_ticketData', JSON.stringify(ticketData));
+      console.log(`💾 Sauvegarde ticketData:`, ticketData);
+    }
+  }, [ticketData]);
 
   // Récupération du token CSRF au chargement
   useEffect(() => {
@@ -824,7 +871,14 @@ export default function EventRegistration() {
               <Text fontSize="sm">{error}</Text>
             </VStack>
           </Alert>
-          <Button as={Link} to="/events" leftIcon={<FiArrowLeft />} colorScheme="blue">
+          <Button 
+            onClick={() => {
+              clearRegistrationSession();
+              window.location.href = '/events';
+            }} 
+            leftIcon={<FiArrowLeft />} 
+            colorScheme="blue"
+          >
             Retour aux événements
           </Button>
         </VStack>
@@ -879,7 +933,10 @@ export default function EventRegistration() {
             {/* Bouton Annuler à droite */}
             <button 
               className="premium-cancel-button"
-              onClick={() => window.location.href = '/evenements'}
+              onClick={() => {
+                clearRegistrationSession();
+                window.location.href = '/evenements';
+              }}
             >
               ✕ Annuler l'inscription
             </button>
@@ -1749,8 +1806,10 @@ export default function EventRegistration() {
   <Container maxW="container.md" py={10}>
     {/* Navigation */}
     <Button
-      as={Link}
-      to="/events"
+      onClick={() => {
+        clearRegistrationSession();
+        window.location.href = '/events';
+      }}
       leftIcon={<FiArrowLeft />}
       mb={6}
       variant="outline"
@@ -2222,7 +2281,10 @@ export default function EventRegistration() {
         <Button
           colorScheme="green"
           size="lg"
-          onClick={() => window.location.href = '/events'}
+          onClick={() => {
+            clearRegistrationSession();
+            window.location.href = '/events';
+          }}
           leftIcon={<Icon as={FiArrowLeft} />}
         >
           Retour aux événements

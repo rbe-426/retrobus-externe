@@ -44,7 +44,7 @@ export default function Header() {
   // Valeurs par défaut immédiates pour éviter le clignotement
   const [headerBgSize, setHeaderBgSize] = useState('cover');
   const [headerBgFocal, setHeaderBgFocal] = useState({ x: 50, y: 50 });
-  const [logoHeight, setLogoHeight] = useState(44);
+  const [logoHeight, setLogoHeight] = useState(120);
   const [configLoaded, setConfigLoaded] = useState(false);
 
     useEffect(() => {
@@ -92,21 +92,21 @@ export default function Header() {
           style={{
             backgroundImage: `url(/assets/header.jpg)`,
             backgroundSize: headerBgSize || 'cover',
-            backgroundPosition: `50% 35%`
+            backgroundPosition: `50% 50%`
           }}
         />
         
         {/* Content */}
         <div className="header-inner">
-          {/* Logo temporairement commenté
+          {/* Logo affiché en individuel */}
           <CompatImg 
             className="header-logo" 
             path={LOGO_PATH}
             alt="Logo RBE"
             fallback={logoDefault}
-            style={{ height: `115 px` }}
+            style={{ height: `${logoHeight}px` }}
           />
-          */}
+          
           {/* Mobile menu trigger on the right inside header */}
           <Box display={{ base: "block", md: "none" }}>
             <IconButton

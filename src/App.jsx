@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { ChakraProvider, useDisclosure } from "@chakra-ui/react";
 import theme from "./theme.js";
 import "./styles.css"; // CSS personnalisé AVANT Chakra
@@ -27,19 +27,48 @@ import Newsletter from "./pages/Newsletter";
 import Team from "./pages/Team.jsx";
 import MentionsLegales from "./pages/MentionsLegales.jsx";
 import RGPD from "./pages/RGPD.jsx";
+import BulletinSignature from "./pages/BulletinSignature.jsx";
 
 // Event Mode
 import { useEventMode } from "./utils/eventModeConfig.js";
 
 const isDev = import.meta.env.DEV; // true en dev, false en prod
 
-export default function App() {
+// Layout avec Header/Footer conditionnels
+function Layout({ children }) {
+  const location = useLocation();
   const { isActive: isEventModeActive } = useEventMode();
   const navDisclosure = useDisclosure();
   const newsletterDisclosure = useDisclosure();
 
-  // Choisir le bon composant Header selon le mode événement
+  // Routes sans Header/Footer (mode standalone)
+  const isStandalonePage = location.pathname.startsWith('/bulletin/sign');
+
   const HeaderComponent = isEventModeActive ? EventHeader : Header;
+
+  if (isStandalonePage) {
+    return children; // Pas de Header/Footer
+  }
+
+  return (
+    <>
+      <HeaderComponent 
+        navDisclosure={navDisclosure}
+        onNewsletterClick={newsletterDisclosure.onOpen}
+      />
+      <main 
+        className="site-main"
+        style={isEventModeActive ? { paddingTop: '150px' } : undefined}
+      >
+        {children}
+      </main>
+      <Footer />
+    </>
+  );
+}
+
+export default function App() {
+  const { isActive: isEventModeActive } = useEventMode();
   
   // Choisir le bon composant Home selon le mode événement
   const HomeComponent = isEventModeActive ? EventHome : Home;
@@ -49,14 +78,7 @@ export default function App() {
   return (
     <ChakraProvider theme={theme}>
       <Router>
-        <HeaderComponent 
-          navDisclosure={navDisclosure}
-          onNewsletterClick={newsletterDisclosure.onOpen}
-        />
-        <main 
-          className="site-main"
-          style={isEventModeActive ? { paddingTop: '150px' } : undefined}
-        >
+        <Layout>
           <Routes>
             <Route path="/" element={<HomeComponent />} />
             <Route path="/parc" element={<Vehicles />} />
@@ -80,10 +102,11 @@ export default function App() {
             <Route path="/rgpd" element={<RGPD />} />
             <Route path="/statuts.pdf" element={<MentionsLegales />} />
             <Route path="/rgpd.pdf" element={<RGPD />} />
+            {/* Route standalone sans Header/Footer */}
+            <Route path="/bulletin/sign/:token" element={<BulletinSignature />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
-        </main>
-        <Footer />
+        </Layout>
       </Router>
     </ChakraProvider>
   );

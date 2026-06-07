@@ -126,7 +126,19 @@ const BulletinSignature = () => {
   };
 
   // Navigation
-  const handleNext = () => {
+  const handleNext = async () => {
+    if (activeStep === 2) {
+      try {
+        await fetch(`${API_BASE_URL}/api/bulletin-flow/${token}/member-data`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ memberData })
+        });
+      } catch (err) {
+        console.error('Error saving additional info:', err);
+      }
+    }
+
     const currentStepName = ['welcome', 'verification', 'additional_info', 'signature', 'confirmation'][activeStep];
     updateStepStatus(currentStepName);
     setActiveStep((prev) => prev + 1);
@@ -154,7 +166,7 @@ const BulletinSignature = () => {
       const response = await fetch(`${API_BASE_URL}/api/bulletin-flow/${token}/signature`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ signatureDataUrl })
+        body: JSON.stringify({ signatureDataUrl, memberData })
       });
 
       const data = await response.json();

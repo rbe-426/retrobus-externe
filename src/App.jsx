@@ -28,7 +28,7 @@ import Newsletter from "./pages/Newsletter";
 import Team from "./pages/Team.jsx";
 import MentionsLegales from "./pages/MentionsLegales.jsx";
 import RGPD from "./pages/RGPD.jsx";
-// import BulletinSignature from "./pages/BulletinSignature.jsx"; // Désactivé - fonctionnalité non utilisée
+import BulletinSignature from "./pages/BulletinSignature.jsx";
 
 // Event Mode
 import { useEventMode } from "./utils/eventModeConfig.js";
@@ -105,7 +105,7 @@ export default function App() {
             <Route path="/statuts.pdf" element={<MentionsLegales />} />
             <Route path="/rgpd.pdf" element={<RGPD />} />
             {/* Route standalone sans Header/Footer */}
-            {/* <Route path="/bulletin/sign/:token" element={<BulletinSignature />} /> */} {/* Désactivé */}
+            <Route path="/bulletin/sign/:token" element={<BulletinSignature />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Layout>

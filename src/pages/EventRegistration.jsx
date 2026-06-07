@@ -36,7 +36,7 @@ import {
   ModalFooter,
   useDisclosure
 } from "@chakra-ui/react";
-import { FiArrowLeft, FiCalendar, FiMapPin, FiUsers, FiGift, FiExternalLink, FiMail, FiUser, FiSearch } from "react-icons/fi";
+import { FiArrowLeft, FiCalendar, FiMapPin, FiUsers, FiGift, FiExternalLink, FiMail, FiUser, FiSearch, FiCheckCircle } from "react-icons/fi";
 import { formatDateFrLong } from "../utils/dateFormat.js";
 import "../PremiumRegistration.css";
 
@@ -123,6 +123,7 @@ export default function EventRegistration() {
   
   const [submitting, setSubmitting] = useState(false);
   const [csrfToken, setCsrfToken] = useState(null);
+  const [helloAssoUrl, setHelloAssoUrl] = useState(null);
   const { isOpen: isHelloAssoOpen, onOpen: onHelloAssoOpen, onClose: onHelloAssoClose } = useDisclosure();
   const [isPlateModalOpen, setIsPlateModalOpen] = useState(false);
   const toast = useToast();
@@ -589,6 +590,41 @@ export default function EventRegistration() {
     return (adultPrice * formData.adultTickets) + (childPrice * formData.childTickets);
   };
 
+  /**
+   * Enrichir l'URL HelloAsso avec les données du formulaire pour pré-remplir les champs
+   * @param {string} baseUrl - URL HelloAsso de base
+   * @param {object} data - Données du formulaire { firstName, lastName, email, amount, quantity }
+   * @returns {string} - URL enrichie avec les paramètres
+   */
+  const enrichHelloAssoUrl = (baseUrl, data) => {
+    try {
+      const url = new URL(baseUrl);
+      
+      // Ajouter les paramètres HelloAsso (noms standards supportés par l'API HelloAsso)
+      if (data.firstName) url.searchParams.set('firstName', data.firstName);
+      if (data.lastName) url.searchParams.set('lastName', data.lastName);
+      if (data.email) url.searchParams.set('email', data.email);
+      if (data.amount) url.searchParams.set('amount', data.amount);
+      
+      // Informations supplémentaires pour le tracking
+      if (data.quantity) url.searchParams.set('quantity', data.quantity);
+      
+      console.log('✨ URL HelloAsso enrichie avec:', {
+        prénom: data.firstName,
+        nom: data.lastName,
+        email: data.email,
+        montant: data.amount,
+        billets: data.quantity
+      });
+      
+      return url.toString();
+    } catch (error) {
+      console.error('❌ Erreur enrichissement URL HelloAsso:', error);
+      // Retourner l'URL de base en cas d'erreur
+      return baseUrl;
+    }
+  };
+
   const handleSubmitRegistration = async () => {
     console.log('🎯 handleSubmitRegistration appelé');
     console.log('📋 formData:', formData);
@@ -788,23 +824,30 @@ export default function EventRegistration() {
 
       setRegistrationId(result.registrationId);
 
-      // Si HelloAsso, rediriger vers la plateforme
+      // Si HelloAsso, afficher l'iframe de paiement
       if (result.helloAssoUrl && registrationData.paymentMethod === 'helloasso') {
-        console.log('🔗 Redirecting to HelloAsso:', result.helloAssoUrl);
-        console.log('🎯 setRegistrationStep("processing") - HelloAsso');
-        setRegistrationStep('processing');
+        console.log('💳 Affichage iframe HelloAsso:', result.helloAssoUrl);
+        
+        // Enrichir l'URL HelloAsso avec les données du formulaire
+        const enrichedUrl = enrichHelloAssoUrl(result.helloAssoUrl, {
+          firstName: formData.firstName || resolvedParticipantName.split(' ')[0] || '',
+          lastName: formData.lastName || resolvedParticipantName.split(' ').slice(1).join(' ') || '',
+          email: formData.participantEmail,
+          amount: calculateTotal(),
+          quantity: formData.adultTickets + formData.childTickets
+        });
+        
+        console.log('🎯 URL enrichie HelloAsso:', enrichedUrl);
+        console.log('🎯 setRegistrationStep("payment") - HelloAsso');
+        setHelloAssoUrl(enrichedUrl);
+        setRegistrationStep('payment');
         
         toast({
           status: "info",
-          title: "Redirection vers HelloAsso",
-          description: "Vous allez être redirigé pour finaliser le paiement.",
+          title: "Paiement sécurisé",
+          description: "Finalisez votre paiement via HelloAsso ci-dessous.",
           duration: 3000
         });
-        
-        // Rediriger après un court délai
-        setTimeout(() => {
-          window.open(result.helloAssoUrl, '_blank', 'noopener,noreferrer');
-        }, 1000);
         
       } else {
         // Inscription gratuite ou interne - passage direct au succès
@@ -2143,56 +2186,186 @@ export default function EventRegistration() {
             </Box>
 
             {/* Bouton d'inscription */}
-            <Button
-              size="lg"
-              colorScheme="red"
-              bg="var(--rbe-red)"
-              _hover={{ bg: "var(--rbe-accent)" }}
-              onClick={() => {
-                if (eventInfo.registrationMethod === 'helloasso') {
-                  onHelloAssoOpen();
-                } else {
-                  handleSubmitRegistration();
-                }
-              }}
-              isLoading={submitting}
-              loadingText="Inscription en cours..."
-              w="100%"
-              leftIcon={eventInfo.registrationMethod === 'helloasso' ? <FiExternalLink /> : <FiUsers />}
-            >
-              {eventInfo.registrationMethod === 'helloasso'
-                ? "S'inscrire via HelloAsso"
-                : eventInfo.isFree
-                  ? 'Confirmer ma participation'
-                  : "S'inscrire et payer"}
-            </Button>
-
-            {eventInfo.registrationMethod === 'helloasso' && (
-              <Alert status="info" borderRadius="md">
-                <AlertIcon />
-                <Text fontSize="sm">
-                  Cliquez sur le bouton ci-dessus pour accéder à la plateforme HelloAsso et finaliser votre inscription avec paiement sécurisé.
+            {eventInfo.registrationMethod === 'helloasso' && event?.helloAssoUrl ? (
+              <VStack spacing={3} w="100%" align="stretch">
+                <Alert status="info" borderRadius="md" size="sm">
+                  <AlertIcon />
+                  <Text fontSize="sm">
+                    💳 Cliquez sur le bouton ci-dessous pour accéder directement au paiement sécurisé HelloAsso
+                  </Text>
+                </Alert>
+                
+                <Box 
+                  w="100%" 
+                  borderRadius="lg" 
+                  overflow="hidden"
+                  boxShadow="md"
+                >
+                  <iframe 
+                    id="haWidgetButton" 
+                    allowTransparency="true" 
+                    src={event.helloAssoUrl.replace('/widget', '/widget-bouton')}
+                    style={{
+                      width: '100%', 
+                      height: '70px', 
+                      border: 'none'
+                    }}
+                    title="Bouton HelloAsso"
+                  />
+                </Box>
+                
+                <Text fontSize="xs" color="gray.600" textAlign="center">
+                  🔒 Paiement 100% sécurisé par HelloAsso • Association française agréée
                 </Text>
-              </Alert>
+              </VStack>
+            ) : (
+              <>
+                {/* Debug info */}
+                {console.log('🐛 Debug bouton:', {
+                  registrationMethod: eventInfo.registrationMethod,
+                  hasHelloAssoUrl: !!event?.helloAssoUrl,
+                  helloAssoUrl: event?.helloAssoUrl,
+                  eventExtras: event?.extras
+                })}
+                
+                <Button
+                  size="lg"
+                  colorScheme="red"
+                  bg="var(--rbe-red)"
+                  _hover={{ bg: "var(--rbe-accent)" }}
+                  onClick={handleSubmitRegistration}
+                  isLoading={submitting}
+                  loadingText="Inscription en cours..."
+                  w="100%"
+                  leftIcon={<FiUsers />}
+                >
+                  {eventInfo.isFree
+                    ? 'Confirmer ma participation'
+                    : "S'inscrire et payer"}
+                </Button>
+                
+                {/* Message debug si HelloAsso configuré mais URL manquante */}
+                {eventInfo.registrationMethod === 'helloasso' && !event?.helloAssoUrl && (
+                  <Alert status="warning" borderRadius="md" size="sm">
+                    <AlertIcon />
+                    <VStack align="start" spacing={1}>
+                      <Text fontSize="sm" fontWeight="600">
+                        ⚠️ Configuration HelloAsso incomplète
+                      </Text>
+                      <Text fontSize="xs">
+                        L'URL HelloAsso n'est pas définie pour cet événement. Contactez l'administrateur.
+                      </Text>
+                    </VStack>
+                  </Alert>
+                )}
+              </>
             )}
           </VStack>
         </Box>
       </>
     )}
 
+    {/* ÉTAPE: payment (iframe HelloAsso) */}
+    {registrationStep === 'payment' && helloAssoUrl && (
+      <VStack spacing={6} w="100%" align="stretch">
+        <Box p={6} borderWidth="1px" borderRadius="lg" bg="blue.50">
+          <VStack spacing={4} align="start">
+            <HStack>
+              <Icon as={FiExternalLink} color="var(--rbe-red)" boxSize={6} />
+              <Heading size="md" color="var(--rbe-red)">Finaliser votre paiement</Heading>
+            </HStack>
+            <Text color="gray.700">
+              Complétez votre paiement sécurisé via <strong>HelloAsso</strong> ci-dessous.
+            </Text>
+            <Text fontSize="sm" color="gray.600">
+              ✅ Votre billet sera généré automatiquement après validation du paiement
+            </Text>
+          </VStack>
+        </Box>
+
+        {/* Iframe HelloAsso */}
+        <Box 
+          borderWidth="1px" 
+          borderRadius="lg" 
+          overflow="hidden"
+          bg="white"
+          boxShadow="lg"
+        >
+          <iframe 
+            id="haWidget" 
+            allowTransparency="true" 
+            scrolling="auto" 
+            src={helloAssoUrl}
+            style={{
+              width: '100%', 
+              height: '750px', 
+              border: 'none'
+            }}
+            onLoad={(e) => {
+              window.addEventListener('message', function(event) {
+                const dataHeight = event.data.height;
+                const haWidgetElement = document.getElementById('haWidget');
+                if (dataHeight > parseFloat(haWidgetElement.height || 0)) {
+                  haWidgetElement.height = dataHeight + 'px';
+                }
+              });
+            }}
+          />
+        </Box>
+
+        <Alert status="info" borderRadius="md">
+          <AlertIcon />
+          <VStack align="start" spacing={1}>
+            <Text fontWeight="bold">💡 Après le paiement</Text>
+            <Text fontSize="sm">
+              Une fois votre paiement validé sur HelloAsso, <strong>cliquez sur le bouton ci-dessous</strong> pour finaliser votre inscription.
+            </Text>
+          </VStack>
+        </Alert>
+
+        <Button
+          colorScheme="green"
+          size="lg"
+          onClick={() => {
+            console.log('✅ Paiement confirmé par l\'utilisateur');
+            setRegistrationStep('processing');
+            setTimeout(() => {
+              setTicketData({
+                id: registrationId,
+                status: 'PENDING_PAYMENT',
+                ticketSent: false,
+                event: event
+              });
+              setRegistrationStep('success');
+            }, 2000);
+          }}
+          leftIcon={<Icon as={FiCheckCircle} />}
+        >
+          J'ai finalisé mon paiement
+        </Button>
+
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => {
+            if (window.confirm('Êtes-vous sûr de vouloir annuler cette inscription ?')) {
+              clearRegistrationSession();
+              window.location.href = '/events';
+            }
+          }}
+        >
+          Annuler l'inscription
+        </Button>
+      </VStack>
+    )}
+
     {/* ÉTAPE: processing */}
     {registrationStep === 'processing' && (
       <VStack spacing={6} p={8} borderWidth="1px" borderRadius="lg" bg="blue.50">
         <Spinner size="xl" color="var(--rbe-red)" />
-        <Heading size="lg" color="blue.700">
-          {eventInfo.registrationMethod === 'helloasso'
-            ? 'En attente du paiement HelloAsso...'
-            : 'Traitement de votre inscription...'}
-        </Heading>
+        <Heading size="lg" color="blue.700">Traitement de votre inscription...</Heading>
         <Text textAlign="center" color="blue.600">
-          {eventInfo.registrationMethod === 'helloasso'
-            ? 'Finalisez votre paiement sur HelloAsso. Votre billet sera automatiquement généré et envoyé par email une fois le paiement validé.'
-            : 'Nous générons votre billet électronique...'}
+          Nous générons votre billet électronique...
         </Text>
       </VStack>
     )}
@@ -2202,8 +2375,19 @@ export default function EventRegistration() {
       <VStack spacing={6} p={8} borderWidth="1px" borderRadius="lg" boxShadow="xl" bg="green.50">
         <Heading size="lg" color="green.700">Inscription enregistrée</Heading>
 
-        <Box p={4} bg="white" borderRadius="md" w="100%" border="1px solid" borderColor="green.200">
-          <VStack align="start" spacing={3}>
+        {ticketData.status === 'PENDING_PAYMENT' && (
+          <Alert status="warning" borderRadius="md">
+            <AlertIcon />
+            <VStack align="start" spacing={1}>
+              <Text fontWeight="bold">⏳ Paiement en cours de validation</Text>
+              <Text fontSize="sm">
+                Votre paiement HelloAsso est en cours de traitement. <strong>Votre billet électronique sera généré et envoyé par email une fois le paiement validé</strong> (généralement sous quelques minutes).
+              </Text>
+            </VStack>
+          </Alert>
+        )}
+
+        <Box p={4} bg="white" borderRadius="md" w="100%" border="1px solid" borderColor="green.200">\n          <VStack align="start" spacing={3}>
             <Text fontWeight="600" fontSize="lg" color="green.700">
               ✅ {eventInfo.registrationType === 'parade_vehicles' 
                 ? 'Votre inscription au rassemblement a bien été prise en compte' 

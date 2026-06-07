@@ -22,12 +22,13 @@ import HelloAssoCallback from "./pages/HelloAssoCallback.jsx";
 import Photos from "./pages/Photos.jsx";
 import Donate from "./pages/Donate.jsx";
 import RetroMerch from "./pages/RetroMerch.jsx";
+import NousSoutenir from "./pages/NousSoutenir.jsx";
 import Changelog from "./pages/Changelog.jsx";
 import Newsletter from "./pages/Newsletter";
 import Team from "./pages/Team.jsx";
 import MentionsLegales from "./pages/MentionsLegales.jsx";
 import RGPD from "./pages/RGPD.jsx";
-import BulletinSignature from "./pages/BulletinSignature.jsx";
+// import BulletinSignature from "./pages/BulletinSignature.jsx"; // Désactivé - fonctionnalité non utilisée
 
 // Event Mode
 import { useEventMode } from "./utils/eventModeConfig.js";
@@ -91,6 +92,7 @@ export default function App() {
             <Route path="/events" element={<Navigate to="/evenements" replace />} />
             <Route path="/event-registration" element={<Navigate to="/evenements" replace />} />
             <Route path="/retromerch" element={<RetroMerch />} />
+            <Route path="/nous-soutenir" element={<NousSoutenir />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/photos" element={<Photos />} />
@@ -103,7 +105,7 @@ export default function App() {
             <Route path="/statuts.pdf" element={<MentionsLegales />} />
             <Route path="/rgpd.pdf" element={<RGPD />} />
             {/* Route standalone sans Header/Footer */}
-            <Route path="/bulletin/sign/:token" element={<BulletinSignature />} />
+            {/* <Route path="/bulletin/sign/:token" element={<BulletinSignature />} /> */} {/* Désactivé */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Layout>

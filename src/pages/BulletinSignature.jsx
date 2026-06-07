@@ -47,7 +47,33 @@ import {
 import { FiCheckCircle, FiUser, FiEdit3, FiFileText, FiCheck, FiAlertCircle } from 'react-icons/fi';
 import SignatureCanvas from 'react-signature-canvas';
 
-const API_BASE_URL = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
+const DEFAULT_API_BASE_URL = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
+
+const isSafePublicApiUrl = (value) => {
+  try {
+    const parsed = new URL(value);
+    const hn = parsed.hostname.toLowerCase();
+    const isLocalHost = hn === 'localhost' || hn === '127.0.0.1' || hn === '0.0.0.0';
+    const isPrivateIp = /^10\.|^192\.168\.|^172\.(1[6-9]|2\d|3[0-1])\./.test(hn);
+    return !isLocalHost && !isPrivateIp;
+  } catch {
+    return false;
+  }
+};
+
+const resolveApiBaseUrlFromLocation = () => {
+  try {
+    const qs = new URLSearchParams(window.location.search);
+    const api = (qs.get('api') || '').trim();
+    if (api && /^https?:\/\//i.test(api) && isSafePublicApiUrl(api)) {
+      return api.replace(/\/+$/, '');
+    }
+  } catch {
+    // ignore malformed query string
+  }
+
+  return DEFAULT_API_BASE_URL;
+};
 
 const BulletinSignature = () => {
   const { token } = useParams();
@@ -67,6 +93,7 @@ const BulletinSignature = () => {
   const [signatureDataUrl, setSignatureDataUrl] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [documentUrl, setDocumentUrl] = useState('');
+  const [apiBaseUrl] = useState(() => resolveApiBaseUrlFromLocation());
 
   // Stepper: 5 étapes
   const steps = [
@@ -89,7 +116,7 @@ const BulletinSignature = () => {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(`${API_BASE_URL}/api/bulletin-flow/${token}`);
+      const response = await fetch(`${apiBaseUrl}/api/bulletin-flow/${token}`);
       const data = await response.json();
 
       if (!response.ok) {
@@ -115,7 +142,7 @@ const BulletinSignature = () => {
   // Met à jour le statut d'une étape
   const updateStepStatus = async (step) => {
     try {
-      await fetch(`${API_BASE_URL}/api/bulletin-flow/${token}/step`, {
+      await fetch(`${apiBaseUrl}/api/bulletin-flow/${token}/step`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ step })
@@ -129,7 +156,7 @@ const BulletinSignature = () => {
   const handleNext = async () => {
     if (activeStep === 2) {
       try {
-        await fetch(`${API_BASE_URL}/api/bulletin-flow/${token}/member-data`, {
+        await fetch(`${apiBaseUrl}/api/bulletin-flow/${token}/member-data`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ memberData })
@@ -163,7 +190,7 @@ const BulletinSignature = () => {
     try {
       setIsSubmitting(true);
 
-      const response = await fetch(`${API_BASE_URL}/api/bulletin-flow/${token}/signature`, {
+      const response = await fetch(`${apiBaseUrl}/api/bulletin-flow/${token}/signature`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ signatureDataUrl, memberData })

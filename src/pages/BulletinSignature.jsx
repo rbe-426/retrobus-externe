@@ -240,7 +240,7 @@ const BulletinSignature = () => {
 
   // Navigation
   const handleNext = async () => {
-    if (!isTestMode && activeStep === 2) {
+    if (!isTestMode && (activeStep === 1 || activeStep === 2)) {
       try {
         await fetch(`${apiBaseUrl}/api/bulletin-flow/${token}/member-data`, {
           method: 'PUT',
@@ -397,6 +397,9 @@ const BulletinSignature = () => {
         );
 
       case 1: // Vérification des informations
+        const birthDateValue = memberData.birthDate
+          ? String(memberData.birthDate).split('T')[0]
+          : '';
         const rawPaymentAmount = memberData.paymentAmount ?? '0';
         const parsedPaymentAmount = Number(rawPaymentAmount);
         const isZeroCotisation = !!memberData.isExempted || !Number.isFinite(parsedPaymentAmount) || parsedPaymentAmount === 0;
@@ -406,24 +409,51 @@ const BulletinSignature = () => {
         return (
           <VStack spacing={6} align="stretch">
             <Heading size="md" color="black">📋 Vérifiez vos informations</Heading>
-            <Text color="gray.600">Ces informations ont été pré-remplies. Vérifiez leur exactitude.</Text>
+            <Text color="gray.600">Ces informations ont été pré-remplies. Corrigez si nécessaire avant de continuer.</Text>
 
             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
               <FormControl>
                 <FormLabel>Prénom</FormLabel>
-                <Input value={memberData.firstName || ''} isReadOnly bg="gray.50" />
+                <Input
+                  value={memberData.firstName || ''}
+                  onChange={(e) => setMemberData({ ...memberData, firstName: e.target.value })}
+                  bg="white"
+                />
               </FormControl>
               <FormControl>
                 <FormLabel>Nom</FormLabel>
-                <Input value={memberData.lastName || ''} isReadOnly bg="gray.50" />
+                <Input
+                  value={memberData.lastName || ''}
+                  onChange={(e) => setMemberData({ ...memberData, lastName: e.target.value })}
+                  bg="white"
+                />
               </FormControl>
               <FormControl>
                 <FormLabel>Email</FormLabel>
-                <Input value={memberData.email || ''} isReadOnly bg="gray.50" />
+                <Input
+                  type="email"
+                  value={memberData.email || ''}
+                  onChange={(e) => setMemberData({ ...memberData, email: e.target.value })}
+                  bg="white"
+                />
               </FormControl>
               <FormControl>
                 <FormLabel>Téléphone</FormLabel>
-                <Input value={memberData.phone || ''} isReadOnly bg="gray.50" />
+                <Input
+                  type="tel"
+                  value={memberData.phone || ''}
+                  onChange={(e) => setMemberData({ ...memberData, phone: e.target.value })}
+                  bg="white"
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Date de naissance</FormLabel>
+                <Input
+                  type="date"
+                  value={birthDateValue}
+                  onChange={(e) => setMemberData({ ...memberData, birthDate: e.target.value })}
+                  bg="white"
+                />
               </FormControl>
             </SimpleGrid>
 

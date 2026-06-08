@@ -33,6 +33,7 @@ import {
   FormLabel,
   Input,
   Textarea,
+  Checkbox,
   SimpleGrid,
   Badge,
   Icon,
@@ -126,6 +127,30 @@ const TEST_FLOW_DATA = {
   expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
   signedAt: null
 };
+
+const DRIVING_LICENSE_OPTIONS = [
+  { value: 'AM', label: 'Permis AM' },
+  { value: 'A1', label: 'Permis A1' },
+  { value: 'A2', label: 'Permis A2' },
+  { value: 'A', label: 'Permis A' },
+  { value: 'B', label: 'Permis B' },
+  { value: 'BE', label: 'Permis BE' },
+  { value: 'C', label: 'Permis C' },
+  { value: 'CE', label: 'Permis CE' },
+  { value: 'D', label: 'Permis D' },
+  { value: 'DE', label: 'Permis DE' }
+];
+
+const readFileAsDataUrl = (file) => new Promise((resolve, reject) => {
+  if (!file) {
+    resolve('');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = () => resolve(String(reader.result || ''));
+  reader.onerror = () => reject(new Error('Impossible de lire le fichier'));
+  reader.readAsDataURL(file);
+});
 
 const BulletinSignature = () => {
   const { token } = useParams();
@@ -240,6 +265,44 @@ const BulletinSignature = () => {
 
   // Navigation
   const handleNext = async () => {
+    if (activeStep === 2) {
+      if (!memberData.acceptedStatuts || !memberData.acceptedReglementInterieur || !memberData.acceptedCsar) {
+        toast({
+          title: 'Consentements requis',
+          description: 'Veuillez accepter les 3 documents de référence avant de continuer.',
+          status: 'warning',
+          duration: 4000
+        });
+        return;
+      }
+
+      if (memberData.hasDrivingLicenses) {
+        const selected = Array.isArray(memberData.drivingLicenses) ? memberData.drivingLicenses : [];
+        if (selected.length === 0) {
+          toast({
+            title: 'Permis requis',
+            description: 'Veuillez cocher au moins un permis.',
+            status: 'warning',
+            duration: 4000
+          });
+          return;
+        }
+
+        for (const permit of selected) {
+          const num = String(memberData.drivingLicenseNumbers?.[permit] || '').trim();
+          if (!num) {
+            toast({
+              title: 'Numéro de permis manquant',
+              description: `Veuillez renseigner le numéro du permis ${permit}.`,
+              status: 'warning',
+              duration: 4000
+            });
+            return;
+          }
+        }
+      }
+    }
+
     if (!isTestMode && (activeStep === 1 || activeStep === 2)) {
       try {
         await fetch(`${apiBaseUrl}/api/bulletin-flow/${token}/member-data`, {
@@ -290,7 +353,11 @@ const BulletinSignature = () => {
       const response = await fetch(`${apiBaseUrl}/api/bulletin-flow/${token}/signature`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ signatureDataUrl, memberData })
+        body: JSON.stringify({
+          signatureDataUrl,
+          memberData,
+          signatureChannel: 'bulletin_dematerialise_web'
+        })
       });
 
       const data = await response.json();
@@ -538,6 +605,166 @@ const BulletinSignature = () => {
                 rows={4}
               />
             </FormControl>
+
+            <Divider />
+
+            <Box borderWidth={1} borderRadius="md" p={4} bg="white">
+              <VStack align="stretch" spacing={4}>
+                <Heading size="sm" color="black">Permis de conduire</Heading>
+                <Checkbox
+                  isChecked={!!memberData.hasDrivingLicenses}
+                  onChange={(e) => setMemberData({
+                    ...memberData,
+                    hasDrivingLicenses: e.target.checked,
+                    drivingLicenses: e.target.checked ? (memberData.drivingLicenses || []) : [],
+                    drivingLicenseNumbers: e.target.checked ? (memberData.drivingLicenseNumbers || {}) : {}
+                  })}
+                >
+                  Détenteur du/des permis
+                </Checkbox>
+
+                {memberData.hasDrivingLicenses && (
+                  <>
+                    <SimpleGrid columns={{ base: 2, md: 3 }} spacing={2}>
+                      {DRIVING_LICENSE_OPTIONS.map((option) => (
+                        <Checkbox
+                          key={option.value}
+                          isChecked={(memberData.drivingLicenses || []).includes(option.value)}
+                          onChange={(e) => {
+                            const current = Array.isArray(memberData.drivingLicenses) ? memberData.drivingLicenses : [];
+                            const nextLicenses = e.target.checked
+                              ? [...new Set([...current, option.value])]
+                              : current.filter((v) => v !== option.value);
+                            const nextNumbers = { ...(memberData.drivingLicenseNumbers || {}) };
+                            if (!e.target.checked) {
+                              delete nextNumbers[option.value];
+                            }
+                            setMemberData({
+                              ...memberData,
+                              drivingLicenses: nextLicenses,
+                              drivingLicenseNumbers: nextNumbers
+                            });
+                          }}
+                        >
+                          {option.label}
+                        </Checkbox>
+                      ))}
+                    </SimpleGrid>
+
+                    {(memberData.drivingLicenses || []).length > 0 && (
+                      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
+                        {(memberData.drivingLicenses || []).map((permit) => (
+                          <FormControl key={permit} isRequired>
+                            <FormLabel>Numéro permis {permit}</FormLabel>
+                            <Input
+                              value={memberData.drivingLicenseNumbers?.[permit] || ''}
+                              onChange={(e) => setMemberData({
+                                ...memberData,
+                                drivingLicenseNumbers: {
+                                  ...(memberData.drivingLicenseNumbers || {}),
+                                  [permit]: e.target.value
+                                }
+                              })}
+                              placeholder={`Numéro du permis ${permit}`}
+                            />
+                          </FormControl>
+                        ))}
+                      </SimpleGrid>
+                    )}
+
+                    <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
+                      <FormControl>
+                        <FormLabel>Photo permis (recto)</FormLabel>
+                        <Input
+                          type="file"
+                          accept="image/*,.pdf"
+                          pt={1}
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+                            try {
+                              const dataUrl = await readFileAsDataUrl(file);
+                              setMemberData((prev) => ({
+                                ...prev,
+                                drivingLicensePhotoFrontDataUrl: dataUrl,
+                                drivingLicensePhotoFrontName: file.name
+                              }));
+                            } catch (err) {
+                              toast({ title: 'Erreur import fichier', description: err.message, status: 'error', duration: 3000 });
+                            }
+                          }}
+                        />
+                        <Text fontSize="xs" color="gray.500" mt={1}>
+                          {memberData.drivingLicensePhotoFrontName || 'Import recto (optionnel)'}
+                        </Text>
+                      </FormControl>
+                      <FormControl>
+                        <FormLabel>Photo permis (verso)</FormLabel>
+                        <Input
+                          type="file"
+                          accept="image/*,.pdf"
+                          pt={1}
+                          onChange={async (e) => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+                            try {
+                              const dataUrl = await readFileAsDataUrl(file);
+                              setMemberData((prev) => ({
+                                ...prev,
+                                drivingLicensePhotoBackDataUrl: dataUrl,
+                                drivingLicensePhotoBackName: file.name
+                              }));
+                            } catch (err) {
+                              toast({ title: 'Erreur import fichier', description: err.message, status: 'error', duration: 3000 });
+                            }
+                          }}
+                        />
+                        <Text fontSize="xs" color="gray.500" mt={1}>
+                          {memberData.drivingLicensePhotoBackName || 'Import verso (optionnel)'}
+                        </Text>
+                      </FormControl>
+                    </SimpleGrid>
+                  </>
+                )}
+              </VStack>
+            </Box>
+
+            <Box borderWidth={1} borderRadius="md" p={4} bg="white">
+              <VStack align="stretch" spacing={4}>
+                <Heading size="sm" color="black">Documents et engagements</Heading>
+
+                <Checkbox
+                  isChecked={!!memberData.acceptedStatuts}
+                  onChange={(e) => setMemberData({ ...memberData, acceptedStatuts: e.target.checked })}
+                >
+                  J'ai pris connaissance des <Text as="span" color="blue.500" textDecoration="underline">Statuts de l'association</Text>
+                </Checkbox>
+
+                <Checkbox
+                  isChecked={!!memberData.acceptedReglementInterieur}
+                  onChange={(e) => setMemberData({ ...memberData, acceptedReglementInterieur: e.target.checked })}
+                >
+                  J'accepte le <Text as="span" color="blue.500" textDecoration="underline">règlement intérieur de l'association</Text>
+                </Checkbox>
+
+                <Checkbox
+                  isChecked={!!memberData.acceptedCsar}
+                  onChange={(e) => setMemberData({ ...memberData, acceptedCsar: e.target.checked })}
+                >
+                  J'accepte le <Text as="span" color="blue.500" textDecoration="underline">CSAR de l'association</Text>
+                </Checkbox>
+
+                <Alert status="info" variant="left-accent" borderRadius="md">
+                  <AlertIcon />
+                  <VStack align="start" spacing={1}>
+                    <Text fontSize="sm" fontWeight="bold">Documents à brancher plus tard</Text>
+                    <Text fontSize="xs">Statuts: externe/public/docs/statuts-association.pdf</Text>
+                    <Text fontSize="xs">Règlement: externe/public/docs/reglement-interieur-association.pdf</Text>
+                    <Text fontSize="xs">CSAR: externe/public/docs/csar-association.pdf</Text>
+                  </VStack>
+                </Alert>
+              </VStack>
+            </Box>
 
             <HStack justify="space-between" w="100%" flexDirection={{ base: 'column', sm: 'row' }} spacing={3}>
               <Button variant="outline" borderColor="#be003c" color="#be003c" _hover={{ bg: 'red.50' }} onClick={handleBack} width={{ base: '100%', sm: 'auto' }}>

@@ -42,12 +42,16 @@ import {
   Divider,
   Spinner,
   Container,
-  useColorModeValue
+  useColorModeValue,
+  useBreakpointValue
 } from '@chakra-ui/react';
 import { FiCheckCircle, FiUser, FiEdit3, FiFileText, FiCheck, FiAlertCircle } from 'react-icons/fi';
 import SignatureCanvas from 'react-signature-canvas';
 
 const DEFAULT_API_BASE_URL = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
+const KNOWN_API_FALLBACKS = [
+  'https://attractive-kindness-rbe-serveurs.up.railway.app'
+];
 
 const isSafePublicApiUrl = (value) => {
   try {
@@ -75,6 +79,53 @@ const resolveApiBaseUrlFromLocation = () => {
   return DEFAULT_API_BASE_URL;
 };
 
+const resolveApiCandidates = () => {
+  const fromQueryOrEnv = resolveApiBaseUrlFromLocation();
+
+  const candidates = [
+    fromQueryOrEnv,
+    DEFAULT_API_BASE_URL,
+    ...KNOWN_API_FALLBACKS,
+    '' // same-origin fallback
+  ];
+
+  const unique = [];
+  for (const raw of candidates) {
+    const val = (raw || '').trim().replace(/\/+$/, '');
+    if (!unique.includes(val)) {
+      unique.push(val);
+    }
+  }
+
+  return unique;
+};
+
+const TEST_FLOW_DATA = {
+  success: true,
+  status: 'in_progress',
+  steps: {
+    welcome: false,
+    verification: false,
+    additional_info: false,
+    signature: false,
+    confirmation: false
+  },
+  memberData: {
+    firstName: 'Test',
+    lastName: 'Adherent',
+    email: 'test@association-rbe.fr',
+    phone: '07 00 00 00 00',
+    address: '12 rue du Test',
+    postalCode: '91000',
+    city: 'Evry-Courcouronnes',
+    membershipType: 'STANDARD',
+    paymentAmount: '25'
+  },
+  createdAt: new Date().toISOString(),
+  expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+  signedAt: null
+};
+
 const BulletinSignature = () => {
   const { token } = useParams();
   const navigate = useNavigate();
@@ -84,6 +135,7 @@ const BulletinSignature = () => {
   // Thème Trilogy RBE
   const cardBg = useColorModeValue('white', 'gray.800');
   const sectionBg = useColorModeValue('gray.50', 'gray.900');
+  const isMobile = useBreakpointValue({ base: true, md: false });
 
   // États
   const [loading, setLoading] = useState(true);
@@ -93,7 +145,15 @@ const BulletinSignature = () => {
   const [signatureDataUrl, setSignatureDataUrl] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [documentUrl, setDocumentUrl] = useState('');
-  const [apiBaseUrl] = useState(() => resolveApiBaseUrlFromLocation());
+  const [apiBaseUrl, setApiBaseUrl] = useState(() => resolveApiBaseUrlFromLocation());
+  const [isTestMode] = useState(() => {
+    try {
+      const qs = new URLSearchParams(window.location.search);
+      return token === 'test' || qs.get('test') === '1';
+    } catch {
+      return token === 'test';
+    }
+  });
 
   // Stepper: 5 étapes
   const steps = [
@@ -116,12 +176,36 @@ const BulletinSignature = () => {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(`${apiBaseUrl}/api/bulletin-flow/${token}`);
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Token invalide');
+      if (isTestMode) {
+        setTokenData(TEST_FLOW_DATA);
+        setMemberData(TEST_FLOW_DATA.memberData);
+        setLoading(false);
+        return;
       }
+
+      let found = null;
+      const candidates = resolveApiCandidates();
+
+      for (const candidate of candidates) {
+        try {
+          const response = await fetch(`${candidate}/api/bulletin-flow/${token}`);
+          const data = await response.json().catch(() => ({}));
+
+          if (response.ok && data?.success) {
+            found = { candidate, data };
+            break;
+          }
+        } catch {
+          // try next candidate
+        }
+      }
+
+      if (!found) {
+        throw new Error('Token invalide ou expiré');
+      }
+
+      const { candidate, data } = found;
+      setApiBaseUrl(candidate);
 
       setTokenData(data);
       setMemberData(data.memberData);
@@ -141,6 +225,7 @@ const BulletinSignature = () => {
 
   // Met à jour le statut d'une étape
   const updateStepStatus = async (step) => {
+    if (isTestMode) return;
     try {
       await fetch(`${apiBaseUrl}/api/bulletin-flow/${token}/step`, {
         method: 'POST',
@@ -154,7 +239,7 @@ const BulletinSignature = () => {
 
   // Navigation
   const handleNext = async () => {
-    if (activeStep === 2) {
+    if (!isTestMode && activeStep === 2) {
       try {
         await fetch(`${apiBaseUrl}/api/bulletin-flow/${token}/member-data`, {
           method: 'PUT',
@@ -189,6 +274,17 @@ const BulletinSignature = () => {
 
     try {
       setIsSubmitting(true);
+
+      if (isTestMode) {
+        toast({
+          title: 'Mode test',
+          description: 'Signature simulée avec succès (aucun bulletin généré).',
+          status: 'success',
+          duration: 3000
+        });
+        setActiveStep(4);
+        return;
+      }
 
       const response = await fetch(`${apiBaseUrl}/api/bulletin-flow/${token}/signature`, {
         method: 'POST',
@@ -256,7 +352,7 @@ const BulletinSignature = () => {
 
             <Card 
               bg={cardBg} 
-              borderColor="rbe.500" 
+              borderColor="blue.500" 
               borderWidth={2}
               _hover={{ transform: 'translateY(-2px)', shadow: 'lg' }}
               transition="all 0.2s"
@@ -264,7 +360,7 @@ const BulletinSignature = () => {
               <CardBody>
                 <VStack spacing={3} align="start">
                   <HStack>
-                    <Icon as={FiCheckCircle} color="rbe.500" boxSize={6} />
+                    <Icon as={FiCheckCircle} color="blue.500" boxSize={6} />
                     <Text fontWeight="bold" color="black">Parcours simple en 4 étapes</Text>
                   </HStack>
                   <Text fontSize="sm" color="gray.700" pl={7}>
@@ -272,7 +368,7 @@ const BulletinSignature = () => {
                   </Text>
 
                   <HStack>
-                    <Icon as={FiCheckCircle} color="rbe.500" boxSize={6} />
+                    <Icon as={FiCheckCircle} color="blue.500" boxSize={6} />
                     <Text fontWeight="bold" color="black">Sécurisé et confidentiel</Text>
                   </HStack>
                   <Text fontSize="sm" color="gray.700" pl={7}>
@@ -280,7 +376,7 @@ const BulletinSignature = () => {
                   </Text>
 
                   <HStack>
-                    <Icon as={FiCheckCircle} color="rbe.500" boxSize={6} />
+                    <Icon as={FiCheckCircle} color="blue.500" boxSize={6} />
                     <Text fontWeight="bold" color="black">Document généré automatiquement</Text>
                   </HStack>
                   <Text fontSize="sm" color="gray.700" pl={7}>
@@ -300,7 +396,7 @@ const BulletinSignature = () => {
               </Box>
             </Alert>
 
-            <Button colorScheme="rbe" size="lg" onClick={handleNext}>
+            <Button colorScheme="blue" size="lg" onClick={handleNext} width={{ base: '100%', md: 'auto' }}>
               Commencer →
             </Button>
           </VStack>
@@ -312,7 +408,7 @@ const BulletinSignature = () => {
             <Heading size="md" color="black">📋 Vérifiez vos informations</Heading>
             <Text color="gray.600">Ces informations ont été pré-remplies. Vérifiez leur exactitude.</Text>
 
-            <SimpleGrid columns={2} spacing={4}>
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
               <FormControl>
                 <FormLabel>Prénom</FormLabel>
                 <Input value={memberData.firstName || ''} isReadOnly bg="gray.50" />
@@ -333,7 +429,7 @@ const BulletinSignature = () => {
 
             <Divider />
 
-            <SimpleGrid columns={2} spacing={4}>
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
               <FormControl>
                 <FormLabel>Type d'adhésion</FormLabel>
                 <Badge colorScheme="green" fontSize="md" p={2}>
@@ -342,7 +438,7 @@ const BulletinSignature = () => {
               </FormControl>
               <FormControl>
                 <FormLabel>Cotisation</FormLabel>
-                <Badge colorScheme="rbe" fontSize="md" p={2}>
+                <Badge colorScheme="blue" fontSize="md" p={2}>
                   {memberData.paymentAmount || '0'} €
                 </Badge>
               </FormControl>
@@ -353,11 +449,11 @@ const BulletinSignature = () => {
               Tout semble correct ? Passez à l'étape suivante !
             </Alert>
 
-            <HStack justify="space-between">
-              <Button variant="outline" colorScheme="rbe" onClick={handleBack}>
+            <HStack justify="space-between" w="100%" flexDirection={{ base: 'column', sm: 'row' }} spacing={3}>
+              <Button variant="outline" colorScheme="blue" onClick={handleBack} width={{ base: '100%', sm: 'auto' }}>
                 ← Retour
               </Button>
-              <Button colorScheme="rbe" onClick={handleNext}>
+              <Button colorScheme="blue" onClick={handleNext} width={{ base: '100%', sm: 'auto' }}>
                 Continuer →
               </Button>
             </HStack>
@@ -379,7 +475,7 @@ const BulletinSignature = () => {
               />
             </FormControl>
 
-            <SimpleGrid columns={2} spacing={4}>
+            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
               <FormControl>
                 <FormLabel>Code postal</FormLabel>
                 <Input 
@@ -406,11 +502,11 @@ const BulletinSignature = () => {
               />
             </FormControl>
 
-            <HStack justify="space-between">
-              <Button variant="outline" colorScheme="rbe" onClick={handleBack}>
+            <HStack justify="space-between" w="100%" flexDirection={{ base: 'column', sm: 'row' }} spacing={3}>
+              <Button variant="outline" colorScheme="blue" onClick={handleBack} width={{ base: '100%', sm: 'auto' }}>
                 ← Retour
               </Button>
-              <Button colorScheme="rbe" onClick={handleNext}>
+              <Button colorScheme="blue" onClick={handleNext} width={{ base: '100%', sm: 'auto' }}>
                 Continuer →
               </Button>
             </HStack>
@@ -441,12 +537,13 @@ const BulletinSignature = () => {
               />
             </Box>
 
-            <HStack justify="space-between">
+            <HStack justify="space-between" w="100%" flexDirection={{ base: 'column', sm: 'row' }} spacing={3}>
               <Button 
                 variant="outline" 
                 colorScheme="red" 
                 onClick={handleClearSignature}
                 leftIcon={<FiAlertCircle />}
+                width={{ base: '100%', sm: 'auto' }}
               >
                 Effacer
               </Button>
@@ -465,8 +562,8 @@ const BulletinSignature = () => {
               </Box>
             </Alert>
 
-            <HStack justify="space-between">
-              <Button variant="outline" colorScheme="rbe" onClick={handleBack}>
+            <HStack justify="space-between" w="100%" flexDirection={{ base: 'column', sm: 'row' }} spacing={3}>
+              <Button variant="outline" colorScheme="blue" onClick={handleBack} width={{ base: '100%', sm: 'auto' }}>
                 ← Retour
               </Button>
               <Button 
@@ -475,6 +572,7 @@ const BulletinSignature = () => {
                 isLoading={isSubmitting}
                 isDisabled={!signatureDataUrl}
                 leftIcon={<FiCheck />}
+                width={{ base: '100%', sm: 'auto' }}
               >
                 Valider la signature
               </Button>
@@ -515,9 +613,9 @@ const BulletinSignature = () => {
                       <Divider />
                       <Button 
                         as="a" 
-                        href={`${API_BASE_URL}${documentUrl}`}
+                        href={`${apiBaseUrl}${documentUrl}`}
                         download
-                        colorScheme="rbe"
+                        colorScheme="blue"
                         leftIcon={<FiFileText />}
                       >
                         📄 Télécharger mon bulletin signé
@@ -559,7 +657,7 @@ const BulletinSignature = () => {
     return (
       <Container maxW="container.md" py={20}>
         <VStack spacing={6}>
-          <Spinner size="xl" color="rbe.500" thickness="4px" />
+          <Spinner size="xl" color="blue.500" thickness="4px" />
           <Text color="gray.600">Chargement de votre bulletin...</Text>
         </VStack>
       </Container>
@@ -585,45 +683,58 @@ const BulletinSignature = () => {
 
   // Rendu principal
   return (
-    <Box bg={sectionBg} minH="100vh" py={10}>
-      <Container maxW="container.lg">
+    <Box bg={sectionBg} minH="100vh" py={{ base: 4, md: 10 }}>
+      <Container maxW={{ base: 'container.sm', md: 'container.lg' }} px={{ base: 3, md: 4 }}>
         {/* Header */}
-        <VStack spacing={6} mb={10}>
-          <Heading size="2xl" textAlign="center" color="black">
+        <VStack spacing={4} mb={{ base: 6, md: 10 }}>
+          <Heading size={{ base: 'lg', md: '2xl' }} textAlign="center" color="black">
             📝 Bulletin d'Adhésion
           </Heading>
-          <Text fontSize="lg" color="gray.600" textAlign="center">
+          <Text fontSize={{ base: 'sm', md: 'lg' }} color="gray.600" textAlign="center">
             RETROBUS ESSONNE
           </Text>
+          {isTestMode && (
+            <Badge colorScheme="orange" fontSize="xs" p={2} borderRadius="md">
+              Mode test local: aucune donnée réelle n'est modifiée
+            </Badge>
+          )}
         </VStack>
 
         {/* Stepper */}
-        <Stepper index={activeStep} mb={10} colorScheme="rbe">
-          {steps.map((step, index) => (
-            <Step key={index}>
-              <StepIndicator>
-                <StepStatus
-                  complete={<StepIcon />}
-                  incomplete={<StepNumber />}
-                  active={<StepNumber />}
-                />
-              </StepIndicator>
+        {isMobile ? (
+          <Box mb={6}>
+            <Text fontSize="sm" color="gray.600" textAlign="center" mb={2}>
+              Étape {activeStep + 1}/{steps.length}: {steps[activeStep]?.title}
+            </Text>
+          </Box>
+        ) : (
+          <Stepper index={activeStep} mb={10} colorScheme="blue">
+            {steps.map((step, index) => (
+              <Step key={index}>
+                <StepIndicator>
+                  <StepStatus
+                    complete={<StepIcon />}
+                    incomplete={<StepNumber />}
+                    active={<StepNumber />}
+                  />
+                </StepIndicator>
 
-              <Box flexShrink="0">
-                <StepTitle>{step.title}</StepTitle>
-                <StepDescription>{step.description}</StepDescription>
-              </Box>
+                <Box flexShrink="0">
+                  <StepTitle>{step.title}</StepTitle>
+                  <StepDescription>{step.description}</StepDescription>
+                </Box>
 
-              <StepSeparator />
-            </Step>
-          ))}
-        </Stepper>
+                <StepSeparator />
+              </Step>
+            ))}
+          </Stepper>
+        )}
 
         {/* Barre de progression */}
         <Progress 
           value={(activeStep / (steps.length - 1)) * 100} 
-          colorScheme="rbe" 
-          mb={8} 
+          colorScheme="blue" 
+          mb={{ base: 4, md: 8 }} 
           borderRadius="full"
           height="8px"
         />
@@ -634,7 +745,7 @@ const BulletinSignature = () => {
           _hover={{ transform: 'translateY(-2px)', shadow: 'xl' }}
           transition="all 0.2s"
         >
-          <CardBody p={8}>
+          <CardBody p={{ base: 4, md: 8 }}>
             {renderStepContent()}
           </CardBody>
         </Card>

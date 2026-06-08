@@ -41,11 +41,13 @@ import {
   Divider,
   Spinner,
   Container,
+  Image,
   useColorModeValue,
   useBreakpointValue
 } from '@chakra-ui/react';
 import { FiCheckCircle, FiUser, FiEdit3, FiFileText, FiCheck, FiAlertCircle } from 'react-icons/fi';
 import SignatureCanvas from 'react-signature-canvas';
+import rbeLogo from '../assets/rbe_pn.png';
 
 const DEFAULT_API_BASE_URL = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
 const KNOWN_API_FALLBACKS = [
@@ -134,7 +136,6 @@ const BulletinSignature = () => {
   const cardBg = useColorModeValue('white', 'gray.800');
   const sectionBg = useColorModeValue('gray.50', 'gray.900');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
-  const subtleRedBg = useColorModeValue('red.50', 'rgba(190, 0, 60, 0.15)');
   const isMobile = useBreakpointValue({ base: true, md: false });
 
   // États
@@ -388,16 +389,6 @@ const BulletinSignature = () => {
                 </VStack>
               </CardBody>
             </Card>
-
-            <Alert status="info" variant="left-accent" borderRadius="lg" bg={subtleRedBg}>
-              <AlertIcon />
-              <Box>
-                <AlertTitle>Association RETROBUS ESSONNE</AlertTitle>
-                <AlertDescription>
-                  Préservation et restauration de véhicules historiques de transport en commun
-                </AlertDescription>
-              </Box>
-            </Alert>
 
             <Button bg="#be003c" color="white" _hover={{ bg: '#e40045' }} size="lg" onClick={handleNext} width={{ base: '100%', md: 'auto' }}>
               Commencer →
@@ -696,16 +687,35 @@ const BulletinSignature = () => {
     >
       <Container maxW={{ base: 'container.sm', md: 'container.lg' }} px={{ base: 3, md: 4 }}>
         {/* Header */}
-        <VStack spacing={4} mb={{ base: 6, md: 10 }}>
+        <VStack spacing={4} mb={{ base: 6, md: 10 }} align="center">
           <Badge colorScheme="red" fontSize="sm" px={3} py={1} borderRadius="full">
             Parcours adhesion securise
           </Badge>
-          <Heading size={{ base: 'lg', md: '2xl' }} textAlign="center" color="black">
-            📝 Bulletin d'Adhésion
-          </Heading>
-          <Text fontSize={{ base: 'sm', md: 'lg' }} color="gray.600" textAlign="center">
-            RETROBUS ESSONNE
-          </Text>
+
+          <Box w="100%">
+            <HStack
+              spacing={{ base: 0, md: 8 }}
+              align="center"
+              justify={{ base: 'flex-end', md: 'space-between' }}
+              w="100%"
+            >
+              <Image
+                src={rbeLogo}
+                alt="Logo RBE"
+                h={{ base: 0, md: '92px' }}
+                w="auto"
+                display={{ base: 'none', md: 'block' }}
+                objectFit="contain"
+                flexShrink={0}
+              />
+              <VStack align="end" spacing={1} flex={1}>
+                <Heading size={{ base: 'lg', md: '2xl' }} textAlign="right" color="black" w="100%">
+                  Bulletin d'Adhésion
+                </Heading>
+              </VStack>
+            </HStack>
+          </Box>
+
           {isTestMode && (
             <Badge colorScheme="orange" fontSize="xs" p={2} borderRadius="md">
               Mode test local: aucune donnée réelle n'est modifiée

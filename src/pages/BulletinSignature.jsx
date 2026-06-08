@@ -399,7 +399,7 @@ const BulletinSignature = () => {
       case 1: // Vérification des informations
         const rawPaymentAmount = memberData.paymentAmount ?? '0';
         const parsedPaymentAmount = Number(rawPaymentAmount);
-        const isZeroCotisation = !Number.isFinite(parsedPaymentAmount) || parsedPaymentAmount === 0;
+        const isZeroCotisation = !!memberData.isExempted || !Number.isFinite(parsedPaymentAmount) || parsedPaymentAmount === 0;
         const zeroMotif = (memberData.exemptionReason || '').trim()
           || (memberData.membershipType === 'STAGIAIRE' ? 'Stagiaire (sans cotisation)' : 'Exonération de cotisation');
 

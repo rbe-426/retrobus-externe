@@ -5,7 +5,7 @@
  */
 
 import { useState, useEffect, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import {
   Box,
   VStack,
@@ -15,7 +15,6 @@ import {
   Button,
   Progress,
   Card,
-  CardHeader,
   CardBody,
   Alert,
   AlertIcon,
@@ -128,13 +127,14 @@ const TEST_FLOW_DATA = {
 
 const BulletinSignature = () => {
   const { token } = useParams();
-  const navigate = useNavigate();
   const toast = useToast();
   const signatureRef = useRef(null);
   
   // Thème Trilogy RBE
   const cardBg = useColorModeValue('white', 'gray.800');
   const sectionBg = useColorModeValue('gray.50', 'gray.900');
+  const borderColor = useColorModeValue('gray.200', 'gray.700');
+  const subtleRedBg = useColorModeValue('red.50', 'rgba(190, 0, 60, 0.15)');
   const isMobile = useBreakpointValue({ base: true, md: false });
 
   // États
@@ -352,15 +352,18 @@ const BulletinSignature = () => {
 
             <Card 
               bg={cardBg} 
-              borderColor="blue.500" 
+              borderColor={borderColor}
+              borderTopColor="#be003c"
+              borderTopWidth="4px"
               borderWidth={2}
-              _hover={{ transform: 'translateY(-2px)', shadow: 'lg' }}
+              shadow="md"
+              _hover={{ transform: 'translateY(-2px)', shadow: 'xl' }}
               transition="all 0.2s"
             >
               <CardBody>
                 <VStack spacing={3} align="start">
                   <HStack>
-                    <Icon as={FiCheckCircle} color="blue.500" boxSize={6} />
+                    <Icon as={FiCheckCircle} color="#be003c" boxSize={6} />
                     <Text fontWeight="bold" color="black">Parcours simple en 4 étapes</Text>
                   </HStack>
                   <Text fontSize="sm" color="gray.700" pl={7}>
@@ -368,7 +371,7 @@ const BulletinSignature = () => {
                   </Text>
 
                   <HStack>
-                    <Icon as={FiCheckCircle} color="blue.500" boxSize={6} />
+                    <Icon as={FiCheckCircle} color="#be003c" boxSize={6} />
                     <Text fontWeight="bold" color="black">Sécurisé et confidentiel</Text>
                   </HStack>
                   <Text fontSize="sm" color="gray.700" pl={7}>
@@ -376,7 +379,7 @@ const BulletinSignature = () => {
                   </Text>
 
                   <HStack>
-                    <Icon as={FiCheckCircle} color="blue.500" boxSize={6} />
+                    <Icon as={FiCheckCircle} color="#be003c" boxSize={6} />
                     <Text fontWeight="bold" color="black">Document généré automatiquement</Text>
                   </HStack>
                   <Text fontSize="sm" color="gray.700" pl={7}>
@@ -386,7 +389,7 @@ const BulletinSignature = () => {
               </CardBody>
             </Card>
 
-            <Alert status="info" variant="left-accent" borderRadius="lg">
+            <Alert status="info" variant="left-accent" borderRadius="lg" bg={subtleRedBg}>
               <AlertIcon />
               <Box>
                 <AlertTitle>Association RETROBUS ESSONNE</AlertTitle>
@@ -396,7 +399,7 @@ const BulletinSignature = () => {
               </Box>
             </Alert>
 
-            <Button colorScheme="blue" size="lg" onClick={handleNext} width={{ base: '100%', md: 'auto' }}>
+            <Button bg="#be003c" color="white" _hover={{ bg: '#e40045' }} size="lg" onClick={handleNext} width={{ base: '100%', md: 'auto' }}>
               Commencer →
             </Button>
           </VStack>
@@ -438,7 +441,7 @@ const BulletinSignature = () => {
               </FormControl>
               <FormControl>
                 <FormLabel>Cotisation</FormLabel>
-                <Badge colorScheme="blue" fontSize="md" p={2}>
+                <Badge bg="#be003c" color="white" fontSize="md" p={2}>
                   {memberData.paymentAmount || '0'} €
                 </Badge>
               </FormControl>
@@ -450,10 +453,10 @@ const BulletinSignature = () => {
             </Alert>
 
             <HStack justify="space-between" w="100%" flexDirection={{ base: 'column', sm: 'row' }} spacing={3}>
-              <Button variant="outline" colorScheme="blue" onClick={handleBack} width={{ base: '100%', sm: 'auto' }}>
+              <Button variant="outline" borderColor="#be003c" color="#be003c" _hover={{ bg: 'red.50' }} onClick={handleBack} width={{ base: '100%', sm: 'auto' }}>
                 ← Retour
               </Button>
-              <Button colorScheme="blue" onClick={handleNext} width={{ base: '100%', sm: 'auto' }}>
+              <Button bg="#be003c" color="white" _hover={{ bg: '#e40045' }} onClick={handleNext} width={{ base: '100%', sm: 'auto' }}>
                 Continuer →
               </Button>
             </HStack>
@@ -503,10 +506,10 @@ const BulletinSignature = () => {
             </FormControl>
 
             <HStack justify="space-between" w="100%" flexDirection={{ base: 'column', sm: 'row' }} spacing={3}>
-              <Button variant="outline" colorScheme="blue" onClick={handleBack} width={{ base: '100%', sm: 'auto' }}>
+              <Button variant="outline" borderColor="#be003c" color="#be003c" _hover={{ bg: 'red.50' }} onClick={handleBack} width={{ base: '100%', sm: 'auto' }}>
                 ← Retour
               </Button>
-              <Button colorScheme="blue" onClick={handleNext} width={{ base: '100%', sm: 'auto' }}>
+              <Button bg="#be003c" color="white" _hover={{ bg: '#e40045' }} onClick={handleNext} width={{ base: '100%', sm: 'auto' }}>
                 Continuer →
               </Button>
             </HStack>
@@ -563,7 +566,7 @@ const BulletinSignature = () => {
             </Alert>
 
             <HStack justify="space-between" w="100%" flexDirection={{ base: 'column', sm: 'row' }} spacing={3}>
-              <Button variant="outline" colorScheme="blue" onClick={handleBack} width={{ base: '100%', sm: 'auto' }}>
+              <Button variant="outline" borderColor="#be003c" color="#be003c" _hover={{ bg: 'red.50' }} onClick={handleBack} width={{ base: '100%', sm: 'auto' }}>
                 ← Retour
               </Button>
               <Button 
@@ -615,7 +618,9 @@ const BulletinSignature = () => {
                         as="a" 
                         href={`${apiBaseUrl}${documentUrl}`}
                         download
-                        colorScheme="blue"
+                        bg="#be003c"
+                        color="white"
+                        _hover={{ bg: '#e40045' }}
                         leftIcon={<FiFileText />}
                       >
                         📄 Télécharger mon bulletin signé
@@ -657,7 +662,7 @@ const BulletinSignature = () => {
     return (
       <Container maxW="container.md" py={20}>
         <VStack spacing={6}>
-          <Spinner size="xl" color="blue.500" thickness="4px" />
+          <Spinner size="xl" color="#be003c" thickness="4px" />
           <Text color="gray.600">Chargement de votre bulletin...</Text>
         </VStack>
       </Container>
@@ -683,10 +688,18 @@ const BulletinSignature = () => {
 
   // Rendu principal
   return (
-    <Box bg={sectionBg} minH="100vh" py={{ base: 4, md: 10 }}>
+    <Box
+      bg={sectionBg}
+      backgroundImage="linear-gradient(180deg, rgba(190, 0, 60, 0.04) 0%, rgba(255, 255, 255, 0) 35%)"
+      minH="100vh"
+      py={{ base: 4, md: 10 }}
+    >
       <Container maxW={{ base: 'container.sm', md: 'container.lg' }} px={{ base: 3, md: 4 }}>
         {/* Header */}
         <VStack spacing={4} mb={{ base: 6, md: 10 }}>
+          <Badge colorScheme="red" fontSize="sm" px={3} py={1} borderRadius="full">
+            Parcours adhesion securise
+          </Badge>
           <Heading size={{ base: 'lg', md: '2xl' }} textAlign="center" color="black">
             📝 Bulletin d'Adhésion
           </Heading>
@@ -708,7 +721,7 @@ const BulletinSignature = () => {
             </Text>
           </Box>
         ) : (
-          <Stepper index={activeStep} mb={10} colorScheme="blue">
+          <Stepper index={activeStep} mb={10} colorScheme="red">
             {steps.map((step, index) => (
               <Step key={index}>
                 <StepIndicator>
@@ -733,7 +746,7 @@ const BulletinSignature = () => {
         {/* Barre de progression */}
         <Progress 
           value={(activeStep / (steps.length - 1)) * 100} 
-          colorScheme="blue" 
+          colorScheme="red" 
           mb={{ base: 4, md: 8 }} 
           borderRadius="full"
           height="8px"
@@ -742,6 +755,9 @@ const BulletinSignature = () => {
         {/* Contenu de l'étape */}
         <Card 
           bg={cardBg}
+          borderWidth="1px"
+          borderColor={borderColor}
+          shadow="md"
           _hover={{ transform: 'translateY(-2px)', shadow: 'xl' }}
           transition="all 0.2s"
         >

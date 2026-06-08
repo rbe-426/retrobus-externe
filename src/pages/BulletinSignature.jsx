@@ -397,6 +397,12 @@ const BulletinSignature = () => {
         );
 
       case 1: // Vérification des informations
+        const rawPaymentAmount = memberData.paymentAmount ?? '0';
+        const parsedPaymentAmount = Number(rawPaymentAmount);
+        const isZeroCotisation = !Number.isFinite(parsedPaymentAmount) || parsedPaymentAmount === 0;
+        const zeroMotif = (memberData.exemptionReason || '').trim()
+          || (memberData.membershipType === 'STAGIAIRE' ? 'Stagiaire (sans cotisation)' : 'Exonération de cotisation');
+
         return (
           <VStack spacing={6} align="stretch">
             <Heading size="md" color="black">📋 Vérifiez vos informations</Heading>
@@ -432,9 +438,16 @@ const BulletinSignature = () => {
               </FormControl>
               <FormControl>
                 <FormLabel>Cotisation</FormLabel>
-                <Badge bg="#be003c" color="white" fontSize="md" p={2}>
-                  {memberData.paymentAmount || '0'} €
-                </Badge>
+                <HStack spacing={2} align="center" flexWrap="wrap">
+                  <Badge colorScheme="green" fontSize="md" p={2}>
+                    {isZeroCotisation ? '0 €' : `${rawPaymentAmount} €`}
+                  </Badge>
+                  {isZeroCotisation && (
+                    <Text fontSize="sm" color="gray.600">
+                      Motif: {zeroMotif}
+                    </Text>
+                  )}
+                </HStack>
               </FormControl>
             </SimpleGrid>
 

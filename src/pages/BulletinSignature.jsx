@@ -288,17 +288,25 @@ const BulletinSignature = () => {
           return;
         }
 
-        for (const permit of selected) {
-          const num = String(memberData.drivingLicenseNumbers?.[permit] || '').trim();
-          if (!num) {
-            toast({
-              title: 'Numéro de permis manquant',
-              description: `Veuillez renseigner le numéro du permis ${permit}.`,
-              status: 'warning',
-              duration: 4000
-            });
-            return;
-          }
+        const drivingLicenseNumber = String(memberData.drivingLicenseNumber || '').trim();
+        if (!drivingLicenseNumber) {
+          toast({
+            title: 'Numéro de permis manquant',
+            description: 'Veuillez renseigner votre numéro de permis unique.',
+            status: 'warning',
+            duration: 4000
+          });
+          return;
+        }
+
+        if (!memberData.drivingLicensePhotoFrontDataUrl && !memberData.drivingLicensePhotoBackDataUrl) {
+          toast({
+            title: 'Photo du permis manquante',
+            description: 'Veuillez importer au moins une photo du permis (recto ou verso).',
+            status: 'warning',
+            duration: 4000
+          });
+          return;
         }
       }
     }
@@ -617,7 +625,7 @@ const BulletinSignature = () => {
                     ...memberData,
                     hasDrivingLicenses: e.target.checked,
                     drivingLicenses: e.target.checked ? (memberData.drivingLicenses || []) : [],
-                    drivingLicenseNumbers: e.target.checked ? (memberData.drivingLicenseNumbers || {}) : {}
+                    drivingLicenseNumber: e.target.checked ? (memberData.drivingLicenseNumber || '') : ''
                   })}
                 >
                   Détenteur du/des permis
@@ -635,14 +643,9 @@ const BulletinSignature = () => {
                             const nextLicenses = e.target.checked
                               ? [...new Set([...current, option.value])]
                               : current.filter((v) => v !== option.value);
-                            const nextNumbers = { ...(memberData.drivingLicenseNumbers || {}) };
-                            if (!e.target.checked) {
-                              delete nextNumbers[option.value];
-                            }
                             setMemberData({
                               ...memberData,
-                              drivingLicenses: nextLicenses,
-                              drivingLicenseNumbers: nextNumbers
+                              drivingLicenses: nextLicenses
                             });
                           }}
                         >
@@ -651,26 +654,17 @@ const BulletinSignature = () => {
                       ))}
                     </SimpleGrid>
 
-                    {(memberData.drivingLicenses || []).length > 0 && (
-                      <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
-                        {(memberData.drivingLicenses || []).map((permit) => (
-                          <FormControl key={permit} isRequired>
-                            <FormLabel>Numéro permis {permit}</FormLabel>
-                            <Input
-                              value={memberData.drivingLicenseNumbers?.[permit] || ''}
-                              onChange={(e) => setMemberData({
-                                ...memberData,
-                                drivingLicenseNumbers: {
-                                  ...(memberData.drivingLicenseNumbers || {}),
-                                  [permit]: e.target.value
-                                }
-                              })}
-                              placeholder={`Numéro du permis ${permit}`}
-                            />
-                          </FormControl>
-                        ))}
-                      </SimpleGrid>
-                    )}
+                    <FormControl isRequired>
+                      <FormLabel>Numéro de permis (unique, toutes catégories)</FormLabel>
+                      <Input
+                        value={memberData.drivingLicenseNumber || ''}
+                        onChange={(e) => setMemberData({ ...memberData, drivingLicenseNumber: e.target.value })}
+                        placeholder="Numéro unique de permis"
+                      />
+                      <Text fontSize="xs" color="gray.500" mt={1}>
+                        En France, un seul numéro couvre toutes les catégories de permis.
+                      </Text>
+                    </FormControl>
 
                     <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
                       <FormControl>

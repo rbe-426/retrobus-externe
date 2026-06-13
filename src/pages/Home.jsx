@@ -6,6 +6,7 @@ import {
 import { useState, useEffect } from "react";
 import pageBg from "../assets/logo_arriere_plan.svg";
 import heroImg from "../assets/photos/ma-photo-hero.jpg";
+import { AdSenseInArticle } from "../components/AdSense";
 
 const photos = [
   "/assets/photos/p1.jpg",
@@ -413,6 +414,11 @@ export default function Home() {
             </VStack>
           </Container>
         </Box>
+
+        {/* Annonce publicitaire */}
+        <Container maxW="7xl" py={8}>
+          <AdSenseInArticle />
+        </Container>
 
         {/* NOS ACTIVITÉS - SECTION PRINCIPALE */}
         <Container maxW="7xl" py={16}>

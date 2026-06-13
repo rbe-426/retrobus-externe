@@ -29,6 +29,7 @@ Ce fichier est **obligatoire** pour Google AdSense. Il indique aux annonceurs qu
 ### 🔧 Fichiers modifiés
 
 - `externe/index.html` : Script AdSense ajouté dans le `<head>`
+- `externe/public/ads.txt` : Fichier de déclaration AdSense (obligatoire)
 - `externe/src/components/AdSense.jsx` : Composant React créé
 - `externe/src/components/Footer.jsx` : Bannière avant le footer
 - `externe/src/pages/Home.jsx` : Annonce sur la page d'accueil
@@ -154,6 +155,18 @@ import AdSense, {
    - `adsbygoogle.push() error: No slot size` → Slot ID invalide
    - Annonces vides → Compte non approuvé ou site non vérifié
    - Annonces bloquées → Extension de blocage de pub active
+
+### ⚠️ Fichier ads.txt manquant
+
+Si Google AdSense affiche l'erreur **"Introuvable : aucun fichier ads.txt n'a été trouvé"** :
+
+1. **Vérifiez que le fichier existe** : `externe/public/ads.txt`
+2. **Déployez sur Railway** : `git push origin main`
+3. **Attendez 24-48h** que Google réexplore votre site
+4. **Testez l'accès** : https://association-rbe.fr/ads.txt
+   - Vous devez voir : `google.com, pub-2311147456651142, DIRECT, f08c47fec0942fa0`
+
+**Important** : Ce fichier est obligatoire pour maximiser vos revenus AdSense.
 
 ---
 

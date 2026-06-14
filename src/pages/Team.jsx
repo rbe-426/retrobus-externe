@@ -3,7 +3,8 @@ import {
   Box, Container, Heading, VStack, Text, HStack, Badge, Button
 } from "@chakra-ui/react";
 import { Link as RouterLink } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import * as teamService from "../services/teamService";
 
 // Hooks pour bloquer screenshots et téléchargements
 const useScreenshotProtection = () => {
@@ -45,61 +46,92 @@ const useScreenshotProtection = () => {
   }, []);
 };
 
-const teamMembers = [
+// Données par défaut (fallback)
+const DEFAULT_TEAM_MEMBERS = [
   {
     id: 1,
     name: "Waiyl Belaidi",
     role: "Président de l'association",
+    roleColor: "red",
+    hierarchy: 1,
     joinDate: "Mars 2025",
     memberType: "Membre fondateur",
     catchphrase: "RBE c'est surtout une famille de mordus d'automobile",
     image: "https://via.placeholder.com/250x300?text=Waiyl",
-    expertise: ["Infos techniques", "SAEIV", "Médias"]
+    expertise: [{ label: "Infos techniques", color: "blue" }, { label: "SAEIV", color: "blue" }, { label: "Médias", color: "blue" }]
   },
   {
     id: 2,
     name: "Méthusan Ravichandran",
     role: "Vice-Président",
+    roleColor: "orange",
+    hierarchy: 1,
     joinDate: "Mars 2025",
     memberType: "Membre fondateur",
     catchphrase: "RBE c'est surtout une famille de mordus d'automobile",
     image: "https://via.placeholder.com/250x300?text=Méthusan",
-    expertise: ["Médias", "Formations"]
+    expertise: [{ label: "Médias", color: "purple" }, { label: "Formations", color: "purple" }]
   },
   {
     id: 3,
     name: "Jaffer Camaroudine",
     role: "Membre du Conseil d'Administration",
+    roleColor: "blue",
+    hierarchy: 2,
     joinDate: "Mars 2025",
     memberType: "Membre fondateur",
     catchphrase: "Préserver les véhicules que je voyais rouler quand j'étais enfant, c'est un rêve",
     image: "/assets/team/jaffer-camaroudine.jpg",
-    expertise: ["Conduite", "Formations", "Itinéraires", "Idées"]
+    expertise: [{ label: "Conduite", color: "cyan" }, { label: "Formations", color: "cyan" }, { label: "Itinéraires", color: "cyan" }, { label: "Idées", color: "cyan" }]
   },
   {
     id: 4,
     name: "Jarina Amolotpavanathan",
     role: "Service Juridique",
+    roleColor: "purple",
+    hierarchy: 3,
     joinDate: "2026",
     memberType: "Membre",
     catchphrase: "Encadrer juridiquement nos actions pour protéger l'association et ses projets.",
     image: "https://via.placeholder.com/250x300?text=Jarina",
-    expertise: ["Droit", "Conformité", "Contrats"]
+    expertise: [{ label: "Droit", color: "pink" }, { label: "Conformité", color: "pink" }, { label: "Contrats", color: "pink" }]
   },
   {
     id: 5,
     name: "Nour Bayoudh",
     role: "Responsable de l'Administration",
+    roleColor: "green",
+    hierarchy: 3,
     joinDate: "2026",
     memberType: "Membre",
     catchphrase: "Une bonne organisation est la clé de nos succès.",
     image: "https://via.placeholder.com/250x300?text=Nour",
-    expertise: ["Administration", "Organisation", "Gestion"]
+    expertise: [{ label: "Administration", color: "teal" }, { label: "Organisation", color: "teal" }, { label: "Gestion", color: "teal" }]
   }
 ];
 
 export default function Team() {
   useScreenshotProtection();
+  
+  const [teamMembers, setTeamMembers] = useState(DEFAULT_TEAM_MEMBERS);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadTeamMembers();
+  }, []);
+
+  const loadTeamMembers = async () => {
+    try {
+      setLoading(true);
+      const members = await teamService.getAllTeamMembers(); // Mode public (sans contacts)
+      setTeamMembers(members);
+    } catch (error) {
+      console.error('Erreur chargement équipe:', error);
+      setTeamMembers(DEFAULT_TEAM_MEMBERS); // Fallback sur données par défaut
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -170,9 +202,15 @@ export default function Team() {
                     <Heading as="h3" size="lg" color="var(--rbe-red)">
                       {member.name}
                     </Heading>
-                    <Text fontSize="sm" fontWeight="600" color="gray.600">
+                    <Badge 
+                      fontSize="sm" 
+                      colorScheme={member.roleColor || 'red'}
+                      px={3}
+                      py={1}
+                      borderRadius="md"
+                    >
                       {member.role}
-                    </Text>
+                    </Badge>
                     <Text fontSize="sm" color="gray.500">
                       Depuis {member.joinDate} - {member.memberType}
                     </Text>
@@ -184,14 +222,14 @@ export default function Team() {
 
                   {/* Expertise Tags */}
                   <HStack spacing={2} flexWrap="wrap" pt={2}>
-                    {member.expertise.map((exp, idx) => (
+                    {member.expertise?.map((exp, idx) => (
                       <Badge
                         key={idx}
-                        colorScheme="red"
+                        colorScheme={typeof exp === 'string' ? 'red' : (exp.color || 'red')}
                         variant="outline"
                         fontSize="xs"
                       >
-                        {exp}
+                        {typeof exp === 'string' ? exp : exp.label}
                       </Badge>
                     ))}
                   </HStack>

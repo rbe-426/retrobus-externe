@@ -3,7 +3,7 @@
  * Récupère les données d'équipe en mode public (sans contacts)
  */
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
 /**
  * Récupère tous les membres de l'équipe (mode public)

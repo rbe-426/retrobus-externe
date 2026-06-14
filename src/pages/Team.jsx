@@ -124,7 +124,7 @@ export default function Team() {
     try {
       setLoading(true);
       const members = await teamService.getAllTeamMembers(); // Mode public (sans contacts)
-      setTeamMembers(members);
+      setTeamMembers(Array.isArray(members) ? members : DEFAULT_TEAM_MEMBERS);
     } catch (error) {
       console.error('Erreur chargement équipe:', error);
       setTeamMembers(DEFAULT_TEAM_MEMBERS); // Fallback sur données par défaut

@@ -934,7 +934,7 @@ export default function EventRegistration() {
       <Container maxW="container.md" py={10}>
         <VStack spacing={4}>
           <Text fontSize="lg" color="gray.600">Événement non trouvé.</Text>
-          <Button as={Link} to="/events" leftIcon={<FiArrowLeft />} colorScheme="blue">
+          <Button as={Link} to="/evenements" leftIcon={<FiArrowLeft />} colorScheme="blue">
             Retour aux événements
           </Button>
         </VStack>

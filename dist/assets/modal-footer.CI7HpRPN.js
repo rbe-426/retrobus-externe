@@ -1,0 +1,1 @@
+import{f as c,d as f,B as n,j as m,e as d}from"./index.C8EVaW8I.js";import{e as i}from"./modal-overlay.BP8-kHhY.js";const x=c((s,e)=>{const{className:o,...t}=s,a=f("chakra-modal__footer",o),r=i(),l=n({display:"flex",alignItems:"center",justifyContent:"flex-end",...r.footer});return m.jsx(d.footer,{ref:e,...t,__css:l,className:a})});x.displayName="ModalFooter";export{x as M};

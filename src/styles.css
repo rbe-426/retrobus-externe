@@ -70,7 +70,7 @@ img, video, canvas {
 *, *::before, *::after,
 .chakra-ui-light, .chakra-ui-dark,
 [data-theme], [class*="chakra-"],
-.css-*, div, span, p, h1, h2, h3, h4, h5, h6,
+div, span, p, h1, h2, h3, h4, h5, h6,
 button, input, textarea, select {
   font-family: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif !important;
 }

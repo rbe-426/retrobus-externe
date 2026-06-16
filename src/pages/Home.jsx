@@ -4,25 +4,15 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import pageBg from "../assets/logo_arriere_plan.svg";
-import heroImg from "../assets/photos/ma-photo-hero.jpg";
 import { AdSenseInArticle } from "../components/AdSense";
 import SEO, { jsonLdSchemas } from "../components/SEO";
 
-const photos = [
-  "/assets/photos/p1.jpg",
-  "/assets/photos/p2.jpg",
-  "/assets/photos/p3.jpg",
-  "/assets/photos/p4.jpg",
-  "/assets/photos/p5.jpg",
-  "/assets/photos/p6.jpg",
-  "/assets/photos/p7.jpg",
-  "/assets/photos/p8.jpg",
-];
+const HERO_IMAGE_URL = "/assets/photos/ma-photo-hero.jpg";
 
 const vehicles = [
   {
     id: 1,
-    src: "/assets/photos/p1.jpg",
+    src: "/assets/photos/p1-960.jpg",
     marque: "Mercedes",
     modele: "Citaro",
     surnom: "La Dame Grise, numéro 920",
@@ -32,6 +22,7 @@ const vehicles = [
 
 export default function Home() {
   const [selectedVehicle, setSelectedVehicle] = useState(null);
+  const [showDiscordWidget, setShowDiscordWidget] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   // Force le mode événement UNIQUEMENT en dev local (localhost)
@@ -82,11 +73,10 @@ export default function Home() {
         currency: 'EUR'
       },
       customContent: {
-        const HERO_IMAGE_URL = "/assets/photos/ma-photo-hero.jpg";
+        showCountdown: true,
         showProgramSchedule: false,
         schedule: [],
         highlights: [],
-          const [showDiscordWidget, setShowDiscordWidget] = useState(false);
         partners: [],
         practicalInfo: ''
       },
@@ -105,7 +95,7 @@ export default function Home() {
         description="Association de préservation du patrimoine automobile en Île-de-France. Découvrez notre collection unique de bus et autocars historiques, participez à nos événements et soutenez la sauvegarde du patrimoine routier français."
         keywords="bus anciens, autobus historiques, patrimoine automobile, Essonne, Île-de-France, RétroBus, collection bus, véhicules de collection, transports en commun anciens, musée bus, association automobile, Mercedes Citaro, RATP vintage, restauration véhicules, sorties patrimoine, association 1901"
         url="https://www.association-rbe.fr/"
-        image="/assets/photos/ma-photo-hero.jpg"
+        image={HERO_IMAGE_URL}
         type="website"
         jsonLd={jsonLdSchemas.organization}
       />
@@ -116,7 +106,7 @@ export default function Home() {
           "--page-mark": `url(${pageBg})`,
           "--mark-size": "560px",
           "--mark-opacity": "0.06",
-                    backgroundImage: `url(${HERO_IMAGE_URL})`,
+          "--mark-blend": "normal",
         }}
         data-pos-x="left"
         data-pos-y="bottom"
@@ -126,7 +116,7 @@ export default function Home() {
           as="section"
           className="full-bleed hero"
           style={{
-            backgroundImage: `url(${heroImg})`,
+            backgroundImage: `url(${HERO_IMAGE_URL})`,
             '--hero-pos-y': '0%',
           }}
         >
@@ -176,13 +166,10 @@ export default function Home() {
             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={12} align="start">
               {/* LEFT: NOTRE COLLECTION */}
               <VStack spacing={6} align="stretch" ml={-48} w="calc(100% + 96px)">
-                              htmlWidth={960}
-                              htmlHeight={640}
                 <VStack spacing={2} align="start">
                   <Heading as="h2" size="lg">Notre collection</Heading>
                   <Text color="gray.600" fontSize="sm">
                     Découvrez un condensé de notre collection de véhicules historiques, témoins de l'évolution des transports en commun en Île-de-France. Chaque véhicule a une histoire unique à raconter !
-                              decoding="async"
                   </Text>
                 </VStack>
 
@@ -192,10 +179,13 @@ export default function Home() {
                     <Image
                       src={vehicles[0].src}
                       alt={`${vehicles[0].marque} ${vehicles[0].modele}`}
+                      htmlWidth={960}
+                      htmlHeight={640}
                       w="100%"
                       borderRadius="xl"
                       boxShadow="lg"
                       loading="lazy"
+                      decoding="async"
                     />
                   </Box>
 
@@ -235,53 +225,54 @@ export default function Home() {
                       _hover={{ opacity: 0.9, transform: "translateY(-2px)" }}
                       w="full"
                     >
-                        {!showDiscordWidget ? (
-                          <VStack spacing={3} maxW="400px" ml="auto" w="100%" align="stretch">
-                            <Box
-                              minH="500px"
-                              borderRadius="md"
-                              border="1px solid"
-                              borderColor="gray.200"
-                              bg="gray.50"
-                              display="flex"
-                              alignItems="center"
-                              justifyContent="center"
-                              p={6}
-                            >
-                              <Button colorScheme="red" onClick={() => setShowDiscordWidget(true)}>
-                                Charger le widget Discord
-                              </Button>
-                            </Box>
-                            <Text fontSize="xs" color="gray.500" textAlign="center">
-                              Le widget externe est chargé à la demande pour accélérer l'ouverture de la page.
-                            </Text>
-                          </VStack>
-                        ) : (
-                          <Box 
-                            as="iframe"
-                            src="https://discord.com/widget?id=1078513042599444582&theme=dark"
-                            title="Serveur Discord RétroBus Essonne"
-                            width="400"
-                            height="500"
-                            border="none"
-                            loading="lazy"
-                            maxW="400px"
-                            ml="auto"
-                          />
-                        )}
-                  src="https://discord.com/widget?id=1078513042599444582&theme=dark"
-                  width="100%"
-                  height="500"
-                  border="none"
-                  loading="lazy"
-                  maxW="400px"
-                  ml="auto"
-                  sx={{
-                    "@media (max-width: 768px)": {
-                      height: "auto",
-                    }
-                  }}
-                />
+                      Explorer notre parc complet
+                    </Button>
+                  </VStack>
+                </HStack>
+              </VStack>
+
+              {/* RIGHT: DISCORD WIDGET */}
+              <VStack spacing={4} align="flex-end" justify="flex-start" w="135%">
+                <VStack spacing={2} textAlign="center" align="center" maxW="400px" ml="auto" pr={4}>
+                  <Heading as="h3" size="md" color="var(--rbe-red)">Rejoignez notre Serveur Discord</Heading>
+                  <Text color="gray.600" fontSize="sm">
+                    Partageons avec la communauté : discussions, événements, et découvertes !
+                  </Text>
+                </VStack>
+                {!showDiscordWidget ? (
+                  <VStack spacing={3} maxW="400px" ml="auto" w="100%" align="stretch">
+                    <Box
+                      minH="500px"
+                      borderRadius="md"
+                      border="1px solid"
+                      borderColor="gray.200"
+                      bg="gray.50"
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="center"
+                      p={6}
+                    >
+                      <Button colorScheme="red" onClick={() => setShowDiscordWidget(true)}>
+                        Charger le widget Discord
+                      </Button>
+                    </Box>
+                    <Text fontSize="xs" color="gray.500" textAlign="center">
+                      Le widget externe est chargé à la demande pour accélérer l'ouverture de la page.
+                    </Text>
+                  </VStack>
+                ) : (
+                  <Box 
+                    as="iframe"
+                    src="https://discord.com/widget?id=1078513042599444582&theme=dark"
+                    title="Serveur Discord RétroBus Essonne"
+                    width="400"
+                    height="500"
+                    border="none"
+                    loading="lazy"
+                    maxW="400px"
+                    ml="auto"
+                  />
+                )}
               </VStack>
             </SimpleGrid>
           </Container>

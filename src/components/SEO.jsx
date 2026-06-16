@@ -112,12 +112,6 @@ export default function SEO({
       <meta name="twitter:image" content={fullImageUrl} />
       <meta name="twitter:image:alt" content={title} />
       
-      {/* Mobile */}
-      <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-      <meta name="mobile-web-app-capable" content="yes" />
-      <meta name="apple-mobile-web-app-capable" content="yes" />
-      <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-      
       {/* Thème */}
       <meta name="theme-color" content="#D32F2F" />
       <meta name="msapplication-TileColor" content="#D32F2F" />

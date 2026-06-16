@@ -23,7 +23,6 @@ const vehicles = [
 
 export default function Home() {
   const [selectedVehicle, setSelectedVehicle] = useState(null);
-  const [showDiscordWidget, setShowDiscordWidget] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   // Force le mode événement UNIQUEMENT en dev local (localhost)
@@ -240,40 +239,22 @@ export default function Home() {
                     Partageons avec la communauté : discussions, événements, et découvertes !
                   </Text>
                 </VStack>
-                {!showDiscordWidget ? (
-                  <VStack spacing={3} maxW="400px" ml="auto" w="100%" align="stretch">
-                    <Box
-                      minH="500px"
-                      borderRadius="md"
-                      border="1px solid"
-                      borderColor="gray.200"
-                      bg="gray.50"
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="center"
-                      p={6}
-                    >
-                      <Button colorScheme="red" onClick={() => setShowDiscordWidget(true)}>
-                        Charger le widget Discord
-                      </Button>
-                    </Box>
-                    <Text fontSize="xs" color="gray.500" textAlign="center">
-                      Le widget externe est chargé à la demande pour accélérer l'ouverture de la page.
-                    </Text>
-                  </VStack>
-                ) : (
-                  <Box 
-                    as="iframe"
-                    src="https://discord.com/widget?id=1078513042599444582&theme=dark"
-                    title="Serveur Discord RétroBus Essonne"
-                    width="400"
-                    height="500"
-                    border="none"
-                    loading="lazy"
-                    maxW="400px"
-                    ml="auto"
-                  />
-                )}
+                <Box 
+                  as="iframe"
+                  src="https://discord.com/widget?id=1078513042599444582&theme=dark"
+                  title="Serveur Discord RétroBus Essonne"
+                  width="100%"
+                  height="500"
+                  border="none"
+                  loading="lazy"
+                  maxW="400px"
+                  ml="auto"
+                  sx={{
+                    "@media (max-width: 768px)": {
+                      height: "auto",
+                    }
+                  }}
+                />
               </VStack>
             </SimpleGrid>
           </Container>

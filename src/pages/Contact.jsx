@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Helmet } from "react-helmet-async";
+import SEO, { jsonLdSchemas } from "../components/SEO";
 import { apiUrl } from "../lib/api";
 import { 
   Box, 
@@ -101,10 +101,13 @@ export default function Contact() {
 
   return (
     <>
-      <Helmet>
-        <title>Contact - Association RétroBus Essonne</title>
-        <meta name="description" content="Contactez l'association RétroBus Essonne pour toute question ou partenariat." />
-      </Helmet>
+      <SEO 
+        title="Contactez-nous - RétroBus Essonne"
+        description="Contactez l'association RétroBus Essonne pour toute question, partenariat, demande d'information ou pour nous rejoindre. Notre équipe vous répondra dans les plus brefs délais."
+        keywords="contact, nous joindre, email, formulaire contact, partenariat, information, nous rejoindre, adhésion"
+        url="https://www.association-rbe.fr/contact"
+        jsonLd={jsonLdSchemas.contactPage}
+      />
 
       {/* Container PLEINE LARGEUR - IMAGE PLUS MONTÉE */}
       <Box

@@ -1,5 +1,4 @@
-﻿import { Helmet } from "react-helmet-async";
-import { Link as RouterLink } from "react-router-dom";
+﻿import { Link as RouterLink } from "react-router-dom";
 import {
   Box, Button, Container, Heading, SimpleGrid, Stack, Text, Image, VStack, HStack, Modal, ModalOverlay, ModalContent, ModalCloseButton, ModalBody, useDisclosure
 } from "@chakra-ui/react";
@@ -7,6 +6,7 @@ import { useState, useEffect } from "react";
 import pageBg from "../assets/logo_arriere_plan.svg";
 import heroImg from "../assets/photos/ma-photo-hero.jpg";
 import { AdSenseInArticle } from "../components/AdSense";
+import SEO, { jsonLdSchemas } from "../components/SEO";
 
 const photos = [
   "/assets/photos/p1.jpg",
@@ -99,70 +99,15 @@ export default function Home() {
 
   return (
     <>
-      <Helmet>
-        <title>Association RétroBus Essonne - Patrimoine Transport Francilien | Accueil</title>
-        <meta
-          name="description"
-          content="Association RétroBus Essonne : préservation, restauration et mise en valeur des autobus historiques franciliens. Découvrez notre collection, nos sorties et notre passion pour le patrimoine des transports RATP."
-        />
-        <meta 
-          name="keywords" 
-          content="RétroBus Essonne, patrimoine transport, autobus historique, RATP vintage, Mercedes Citaro, transport francilien, restauration véhicules, sorties patrimoine, association 1901, bus collection"
-        />
-        
-        {/* Open Graph */}
-        <meta property="og:title" content="Association RétroBus Essonne - Patrimoine Transport Francilien" />
-        <meta property="og:description" content="Préservation et restauration des autobus historiques franciliens. Découvrez notre collection et rejoignez nos sorties patrimoine." />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://retrobus-essonne.fr" />
-        <meta property="og:image" content="https://retrobus-essonne.fr/assets/photos/ma-photo-hero.jpg" />
-        
-        {/* Twitter */}
-        <meta name="twitter:title" content="Association RétroBus Essonne - Patrimoine Transport" />
-        <meta name="twitter:description" content="Préservation des autobus historiques franciliens. Collection, restauration et sorties patrimoine." />
-        <meta name="twitter:image" content="https://retrobus-essonne.fr/assets/photos/ma-photo-hero.jpg" />
-        
-        {/* Schema.org pour la page d'accueil */}
-        <script type="application/ld+json">
-          {`
-            {
-              "@context": "https://schema.org",
-              "@type": "WebPage",
-              "name": "Accueil - Association RétroBus Essonne",
-              "description": "Association de préservation du patrimoine des transports en commun franciliens",
-              "url": "https://retrobus-essonne.fr",
-              "mainEntity": {
-                "@type": "Organization",
-                "name": "Association RétroBus Essonne",
-                "foundingDate": "1998",
-                "description": "Préservation, restauration et mise en valeur des autobus historiques franciliens",
-                "hasOfferCatalog": {
-                  "@type": "OfferCatalog",
-                  "name": "Services de l'association",
-                  "itemListElement": [
-                    {
-                      "@type": "Offer",
-                      "itemOffered": {
-                        "@type": "Service",
-                        "name": "Restauration de véhicules historiques",
-                        "description": "Restauration complète d'autobus vintage"
-                      }
-                    },
-                    {
-                      "@type": "Offer",
-                      "itemOffered": {
-                        "@type": "Service",
-                        "name": "Sorties patrimoine",
-                        "description": "Balades et expositions avec nos véhicules historiques"
-                      }
-                    }
-                  ]
-                }
-              }
-            }
-          `}
-        </script>
-      </Helmet>
+      <SEO 
+        title="RétroBus Essonne - Patrimoine Automobile & Bus Historiques en Île-de-France"
+        description="Association de préservation du patrimoine automobile en Île-de-France. Découvrez notre collection unique de bus et autocars historiques, participez à nos événements et soutenez la sauvegarde du patrimoine routier français."
+        keywords="bus anciens, autobus historiques, patrimoine automobile, Essonne, Île-de-France, RétroBus, collection bus, véhicules de collection, transports en commun anciens, musée bus, association automobile, Mercedes Citaro, RATP vintage, restauration véhicules, sorties patrimoine, association 1901"
+        url="https://www.association-rbe.fr/"
+        image="/assets/photos/ma-photo-hero.jpg"
+        type="website"
+        jsonLd={jsonLdSchemas.organization}
+      />
 
       <Box
         className="page-with-mark home-landing"   // ← ajout de la classe home-landing

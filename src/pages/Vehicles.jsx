@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from "react";
-import { Helmet } from "react-helmet-async";
+import SEO, { jsonLdSchemas } from "../components/SEO";
 import {
   Container,
   Heading,
@@ -70,10 +70,14 @@ export default function Vehicles() {
 
   return (
     <>
-      <Helmet>
-        <title>Véhicules — RétroBus Essonne</title>
-        <meta name="description" content="Liste des véhicules de RétroBus Essonne" />
-      </Helmet>
+      <SEO 
+        title="Notre Flotte de Véhicules Historiques - RétroBus Essonne"
+        description="Découvrez notre collection unique de bus et autocars historiques : Mercedes Citaro, véhicules RATP vintage et autres pièces du patrimoine automobile français. Histoire, caractéristiques techniques et photos de chaque véhicule."
+        keywords="flotte véhicules, bus historiques, autocars collection, Mercedes Citaro, RATP vintage, véhicules anciens, patrimoine transport, collection bus, véhicules restaurés"
+        url="https://www.association-rbe.fr/vehicles"
+        image="/assets/920_pres.jpg"
+        jsonLd={jsonLdSchemas.itemList([], "Collection de véhicules historiques RétroBus Essonne")}
+      />
 
       <Container maxW="6xl" py={{ base: 6, md: 10 }}>
         <VStack className="page-header" spacing={4} mb={8} textAlign="center">

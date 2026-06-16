@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from "react";
-import { Helmet } from "react-helmet-async";
+import SEO from "../components/SEO";
 import { 
   Box, Container, Heading, Text, VStack, Button, Badge, HStack, 
   Spinner, Center, Alert, AlertIcon, Icon, Tooltip, SimpleGrid,
@@ -388,10 +388,12 @@ export default function Events() {
 
   return (
     <>
-      <Helmet>
-        <title>Événements - Association RétroBus Essonne</title>
-        <meta name="description" content="Découvrez les prochains événements, sorties et expositions de l'association RétroBus Essonne." />
-      </Helmet>
+      <SEO 
+        title="Événements & Sorties - RétroBus Essonne"
+        description="Découvrez les prochains événements, sorties et expositions de l'association RétroBus Essonne. Journées du Patrimoine, balades en bus historiques, expositions et rencontres avec des passionnés d'automobile ancienne."
+        keywords="événements, sorties, expositions, journées patrimoine, balades bus, rencontres, animations, manifestations automobile, sorties patrimoine"
+        url="https://www.association-rbe.fr/events"
+      />
 
       {/* CSS personnalisé pour harmoniser avec le thème */}
       <style jsx>{`

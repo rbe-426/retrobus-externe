@@ -26,19 +26,50 @@ export default function Vehicles() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const CACHE_KEY = "rbe:public:vehicles";
+  const CACHE_TTL_MS = 10 * 60 * 1000;
+
   useEffect(() => {
     fetchVehicles();
   }, []);
 
   const fetchVehicles = async () => {
+    // Affichage immédiat depuis cache pour limiter le temps de perception
     try {
-      setLoading(true);
+      const cachedRaw = sessionStorage.getItem(CACHE_KEY);
+      if (cachedRaw) {
+        const cached = JSON.parse(cachedRaw);
+        if (cached?.timestamp && Array.isArray(cached?.data)) {
+          const isFresh = Date.now() - cached.timestamp < CACHE_TTL_MS;
+          if (isFresh && cached.data.length > 0) {
+            setVehicles(cached.data);
+            setLoading(false);
+          }
+        }
+      }
+    } catch {
+      // ignore cache errors
+    }
+
+    try {
+      if (vehicles.length === 0) {
+        setLoading(true);
+      }
       const response = await fetch(`${API_BASE}/public/vehicles`);
       if (!response.ok) {
         throw new Error('Impossible de charger les véhicules');
       }
       const data = await response.json();
       setVehicles(data);
+
+      try {
+        sessionStorage.setItem(
+          CACHE_KEY,
+          JSON.stringify({ timestamp: Date.now(), data })
+        );
+      } catch {
+        // ignore cache write errors
+      }
     } catch (err) {
       console.error('Erreur chargement véhicules:', err);
       setError(err.message);

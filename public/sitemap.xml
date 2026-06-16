@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <!-- Page d'accueil -->
   <url>
     <loc>https://www.association-rbe.fr/</loc>
     <lastmod>2026-06-16</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://www.association-rbe.fr/assets/photos/ma-photo-hero.jpg</image:loc>
+      <image:title>Collection RétroBus Essonne - Bus historiques</image:title>
+      <image:caption>Découvrez notre collection unique de bus et autocars historiques</image:caption>
+    </image:image>
   </url>
   
   <!-- À propos -->

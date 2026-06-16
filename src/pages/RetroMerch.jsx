@@ -82,15 +82,12 @@ export default function RetroMerch() {
 
   return (
     <>
-      <Helmet>
-        <title>RétroMerch - RétroBus Essonne</title>
-        <meta name="description" content="La boutique officielle RétroBus Essonne" />
-        <style>{`
-          body {
-            font-family: ${theme.fontFamily};
-          }
-        `}</style>
-      </Helmet>
+      <SEO 
+        title="RétroMerch - Boutique Officielle RétroBus Essonne"
+        description="Boutique officielle de l'association RétroBus Essonne : goodies, vêtements, accessoires et produits dérivés autour du patrimoine automobile. Soutenez notre action en achetant nos produits exclusifs."
+        keywords="boutique, retromerch, goodies, produits dérivés, vêtements, accessoires, merchandising, boutique association, produits RBE, acheter goodies"
+        url="https://www.association-rbe.fr/retromerch"
+      />
 
       {/* Rendu dynamique des blocs */}
       <Box>

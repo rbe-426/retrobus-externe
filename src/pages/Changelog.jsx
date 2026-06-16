@@ -62,10 +62,13 @@ export default function Changelog() {
 
   return (
     <>
-      <Helmet>
-        <title>Changelog - RétroBus Essonne</title>
-        <meta name="description" content="Historique des versions et mises à jour de l'application RétroBus Essonne" />
-      </Helmet>
+      <SEO 
+        title="Changelog - Historique des Versions | RétroBus Essonne"
+        description="Historique complet des versions et mises à jour de l'application RétroBus Essonne : nouvelles fonctionnalités, améliorations et corrections de bugs. Suivez l'évolution de notre plateforme."
+        keywords="changelog, historique, versions, mises à jour, nouveautés, améliorations, corrections, release notes, historique versions"
+        url="https://www.association-rbe.fr/changelog"
+        noIndex={true}
+      />
 
       <Container maxW="container.md" py={10}>
         {/* En-tête */}

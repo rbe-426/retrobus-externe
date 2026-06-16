@@ -13,10 +13,12 @@ export default function RGPD() {
 
   return (
     <>
-      <Helmet>
-        <title>Politique RGPD & Confidentialité - RétroBus Essonne</title>
-        <meta name="description" content="Politique de confidentialité et RGPD de l'association RétroBus Essonne" />
-      </Helmet>
+      <SEO 
+        title="Politique RGPD & Confidentialité | RétroBus Essonne"
+        description="Politique de confidentialité et protection des données personnelles de l'association RétroBus Essonne. Vos droits RGPD, collecte et traitement des données, cookies et sécurité de vos informations."
+        keywords="RGPD, confidentialité, protection données, vie privée, cookies, données personnelles, politique confidentialité, droits utilisateurs"
+        url="https://www.association-rbe.fr/rgpd"
+      />
 
       <Container maxW="800px" py={12} px={4}>
         <VStack align="start" spacing={6}>

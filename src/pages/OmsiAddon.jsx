@@ -1,5 +1,5 @@
 import React from "react";
-import { Helmet } from "react-helmet-async";
+import SEO from "../components/SEO";
 import { Box, Container, VStack, Heading, Text, Button } from "@chakra-ui/react";
 import { FaDiscord } from "react-icons/fa";
 
@@ -40,13 +40,12 @@ const DISCORD_INVITE = "https://discord.gg/RbwNrX4rdu";
 export default function OmsiAddon() {
   return (
     <>
-      <Helmet>
-        <title>AddOn Réseau TICE — RétroBus Essonne</title>
-        <meta
-          name="description"
-          content="L'AddOn Réseau TICE est un futur DLC en cours de construction par RétroBus Essonne pour OMSI 2."
-        />
-      </Helmet>
+      <SEO 
+        title="AddOn Réseau TICE pour OMSI 2 | RétroBus Essonne"
+        description="L'AddOn Réseau TICE est un DLC en cours de développement par RétroBus Essonne pour le simulateur OMSI 2. Découvrez notre projet de reconstitution virtuelle du réseau de transport TICE avec véhicules historiques authentiques."
+        keywords="OMSI 2, addon, DLC, réseau TICE, simulateur bus, simulation transport, mod OMSI, addon bus, réseau virtuel, TICE simulation"
+        url="https://www.association-rbe.fr/omsi-addon"
+      />
 
       {/* HERO (single colonne): image + titre + description + CTA */}
       <Box as="section" className="full-bleed omsi-hero single">

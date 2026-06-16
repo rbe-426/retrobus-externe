@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Helmet } from "react-helmet-async";
+import SEO from "../components/SEO";
 import { Box, Container, Heading, Text, VStack, Link as CLink } from "@chakra-ui/react";
 
 export default function MentionsLegales() {
@@ -12,10 +12,13 @@ export default function MentionsLegales() {
 
   return (
     <>
-      <Helmet>
-        <title>Mentions Légales - RétroBus Essonne</title>
-        <meta name="description" content="Mentions légales et informations de l'association RétroBus Essonne" />
-      </Helmet>
+      <SEO 
+        title="Mentions Légales | RétroBus Essonne"
+        description="Mentions légales de l'association RétroBus Essonne : informations légales, éditeur du site, hébergement et responsabilités. Association loi 1901 dédiée au patrimoine automobile."
+        keywords="mentions légales, informations légales, éditeur, hébergement, responsabilité, association loi 1901, informations juridiques"
+        url="https://www.association-rbe.fr/mentions-legales"
+        noIndex={true}
+      />
 
       <Container maxW="800px" py={12} px={4}>
         <VStack align="start" spacing={6}>

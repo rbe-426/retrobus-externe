@@ -14,12 +14,11 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import vehicleImage1 from "../assets/920_pres.jpg";
 import { API_BASE } from '../lib/api';
 
 // Images par défaut pour les véhicules
 const defaultImages = {
-  "920": [vehicleImage1],
+  "920": ["/assets/photos/p1-960.jpg"],
 };
 
 export default function Vehicles() {
@@ -111,13 +110,17 @@ export default function Vehicles() {
               transition="all 0.2s"
             >
               <Image
-                src={vehicle.thumbnailImage || defaultImages[vehicle.parc]?.[0] || vehicleImage1}
+                src={vehicle.thumbnailImage || defaultImages[vehicle.parc]?.[0] || "/assets/photos/p1-960.jpg"}
                 alt={vehicle.modele}
+                htmlWidth={960}
+                htmlHeight={640}
                 objectFit="cover"
                 w="100%"
                 h="200px"
                 mb={4}
                 borderRadius="md"
+                loading="lazy"
+                decoding="async"
               />
               
               {vehicle.marque && (
@@ -143,10 +146,14 @@ export default function Vehicles() {
                   <Image
                     src={`${API_BASE}/public/plaque/${vehicle.immat.replace(/\s+/g, '-')}`}
                     alt={vehicle.immat}
+                    htmlWidth={260}
+                    htmlHeight={64}
                     maxW="260px"
                     h="auto"
                     borderRadius="4px"
                     boxShadow="sm"
+                    loading="lazy"
+                    decoding="async"
                     fallback={
                       <Text color="gray.600" fontSize="sm">
                         {vehicle.immat}

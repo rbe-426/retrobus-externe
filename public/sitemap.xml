@@ -1,57 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <!-- Page d'accueil -->
   <url>
-    <loc>https://association-rbe.fr/</loc>
-    <lastmod>2025-09-22</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://www.association-rbe.fr/</loc>
+    <lastmod>2026-06-16</lastmod>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
+  
+  <!-- À propos -->
   <url>
-    <loc>https://association-rbe.fr/about</loc>
-    <lastmod>2025-09-22</lastmod>
+    <loc>https://www.association-rbe.fr/about</loc>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
   </url>
+  
+  <!-- Notre flotte de véhicules -->
   <url>
-    <loc>https://association-rbe.fr/vehicles</loc>
-    <lastmod>2025-09-22</lastmod>
+    <loc>https://www.association-rbe.fr/vehicles</loc>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
+  
+  <!-- Événements -->
   <url>
-    <loc>https://association-rbe.fr/vehicles/mercedes-citaro</loc>
-    <lastmod>2025-09-22</lastmod>
+    <loc>https://www.association-rbe.fr/events</loc>
+    <lastmod>2026-06-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <!-- Galerie photos -->
+  <url>
+    <loc>https://www.association-rbe.fr/photos</loc>
+    <lastmod>2026-06-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Contact -->
+  <url>
+    <loc>https://www.association-rbe.fr/contact</loc>
+    <lastmod>2026-06-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- Nous soutenir / Faire un don -->
+  <url>
+    <loc>https://www.association-rbe.fr/donate</loc>
+    <lastmod>2026-06-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <!-- RétroMerch (boutique) -->
+  <url>
+    <loc>https://www.association-rbe.fr/retromerch</loc>
+    <lastmod>2026-06-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <!-- Équipe -->
+  <url>
+    <loc>https://www.association-rbe.fr/team</loc>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+  
+  <!-- Newsletter -->
   <url>
-    <loc>https://association-rbe.fr/events</loc>
-    <lastmod>2025-09-22</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://association-rbe.fr/photos</loc>
-    <lastmod>2025-09-22</lastmod>
+    <loc>https://www.association-rbe.fr/newsletter</loc>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
+  
+  <!-- Changelog -->
   <url>
-    <loc>https://association-rbe.fr/contact</loc>
-    <lastmod>2025-09-22</lastmod>
+    <loc>https://www.association-rbe.fr/changelog</loc>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.3</priority>
   </url>
+  
+  <!-- OMSI Add-on -->
   <url>
-    <loc>https://association-rbe.fr/donate</loc>
-    <lastmod>2025-09-22</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://association-rbe.fr/retromerch</loc>
-    <lastmod>2025-09-22</lastmod>
+    <loc>https://www.association-rbe.fr/omsi-addon</loc>
+    <lastmod>2026-06-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
+  </url>
+  
+  <!-- Mentions légales -->
+  <url>
+    <loc>https://www.association-rbe.fr/mentions-legales</loc>
+    <lastmod>2026-06-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  
+  <!-- RGPD -->
+  <url>
+    <loc>https://www.association-rbe.fr/rgpd</loc>
+    <lastmod>2026-06-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
   </url>
 </urlset>

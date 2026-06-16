@@ -46,6 +46,22 @@ const useScreenshotProtection = () => {
   }, []);
 };
 
+// API Base URL pour les images
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
+/**
+ * Construit l'URL complète d'une image
+ * Si l'image commence par /uploads/, préfixe avec l'API_BASE
+ * Sinon, retourne l'image telle quelle
+ */
+const getImageUrl = (imagePath) => {
+  if (!imagePath) return null;
+  if (imagePath.startsWith('/uploads/')) {
+    return `${API_BASE}${imagePath}`;
+  }
+  return imagePath;
+};
+
 // Données par défaut (fallback)
 const DEFAULT_TEAM_MEMBERS = [
   {
@@ -159,10 +175,10 @@ export default function Team() {
               const isEven = index % 2 === 0;
               const photoBox = (
                 <Box w={{ base: "100%", md: "40%" }} flexShrink={0} onContextMenu={(e) => e.preventDefault()} onDragStart={(e) => e.preventDefault()}>
-                  {member.image && member.image.startsWith('/') ? (
+                  {member.image ? (
                     <Box
                       as="img"
-                      src={member.image}
+                      src={getImageUrl(member.image)}
                       alt={member.name}
                       w="100%"
                       h="250px"

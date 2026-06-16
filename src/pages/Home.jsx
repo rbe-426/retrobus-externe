@@ -4,6 +4,7 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import pageBg from "../assets/logo_arriere_plan.svg";
+import heroImg from "../assets/photos/ma-photo-hero.jpg";
 import { AdSenseInArticle } from "../components/AdSense";
 import SEO, { jsonLdSchemas } from "../components/SEO";
 
@@ -116,7 +117,7 @@ export default function Home() {
           as="section"
           className="full-bleed hero"
           style={{
-            backgroundImage: `url(${HERO_IMAGE_URL})`,
+            backgroundImage: `url(${heroImg})`,
             '--hero-pos-y': '0%',
           }}
         >

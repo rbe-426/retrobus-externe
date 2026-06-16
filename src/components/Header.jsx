@@ -104,12 +104,10 @@ export default function Header() {
             path={LOGO_PATH}
             alt="Logo RBE"
             fallback={logoDefault}
-            width={960}
-            height={335}
             loading="eager"
             fetchPriority="high"
             decoding="async"
-            style={{ height: `${logoHeight}px` }}
+            style={{ height: `${logoHeight}px`, width: 'auto', maxWidth: 'min(80vw, 520px)' }}
           />
           
           {/* Mobile menu trigger on the right inside header */}

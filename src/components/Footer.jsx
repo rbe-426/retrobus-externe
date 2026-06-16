@@ -27,10 +27,14 @@ export default function Footer() {
               <Image 
                 src="/assets/rbe_footer.png" 
                 alt="RétroBus Essonne Logo"
+                htmlWidth={1174}
+                htmlHeight={166}
                 maxH="200px"
                 maxW="300px"
                 mt={-4}
                 mb={3}
+                loading="lazy"
+                decoding="async"
               />
               <Text fontSize="sm" color="whiteAlpha.800" lineHeight={1.6}>
                 RNA : W912016571<br />
@@ -63,7 +67,7 @@ export default function Footer() {
                 → Accueil
               </CLink>
               <CLink 
-                href="/events" 
+                href="/evenements" 
                 color="whiteAlpha.800"
                 _hover={{ color: "var(--rbe-red)", pl: 2, transition: "all 0.2s" }}
                 transition="all 0.2s"
@@ -220,6 +224,8 @@ export default function Footer() {
               <Image
                 src="/supporters/cars-soeur.png"
                 alt="Cars Soeur – soutien"
+                htmlWidth={250}
+                htmlHeight={80}
                 maxH="80px"
                 maxW="250px"
                 loading="lazy"
@@ -241,6 +247,8 @@ export default function Footer() {
               <Image
                 src="/supporters/ville-ce.png"
                 alt="Ville de Corbeil-Essonnes"
+                htmlWidth={250}
+                htmlHeight={80}
                 maxH="80px"
                 maxW="250px"
                 loading="lazy"
@@ -261,6 +269,8 @@ export default function Footer() {
               <Image
                 src="/supporters/bnp-paribas.png"
                 alt="BNP Paribas"
+                htmlWidth={250}
+                htmlHeight={80}
                 maxH="80px"
                 maxW="250px"
                 loading="lazy"

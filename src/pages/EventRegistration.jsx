@@ -2296,6 +2296,8 @@ export default function EventRegistration() {
             allowTransparency="true" 
             scrolling="auto" 
             src={helloAssoUrl}
+            title="Paiement sécurisé HelloAsso"
+            loading="lazy"
             style={{
               width: '100%', 
               height: '750px', 

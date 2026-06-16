@@ -1,5 +1,33 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Box } from '@chakra-ui/react';
+
+let adsScriptPromise = null;
+
+function loadAdSenseScript() {
+  if (typeof window === 'undefined') return Promise.resolve();
+  if (window.adsbygoogle) return Promise.resolve();
+  if (adsScriptPromise) return adsScriptPromise;
+
+  adsScriptPromise = new Promise((resolve, reject) => {
+    const existing = document.querySelector('script[data-rbe-adsense="true"]');
+    if (existing) {
+      existing.addEventListener('load', () => resolve(), { once: true });
+      existing.addEventListener('error', () => reject(new Error('AdSense script load failed')), { once: true });
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2311147456651142';
+    script.crossOrigin = 'anonymous';
+    script.setAttribute('data-rbe-adsense', 'true');
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('AdSense script load failed'));
+    document.head.appendChild(script);
+  });
+
+  return adsScriptPromise;
+}
 
 /**
  * Composant Google AdSense
@@ -20,16 +48,42 @@ export default function AdSense({
   type = 'display',
   style = {}
 }) {
+  const containerRef = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
+
   useEffect(() => {
-    try {
-      // Initialiser AdSense après le montage du composant
-      if (window.adsbygoogle && process.env.NODE_ENV !== 'development') {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-      }
-    } catch (error) {
-      console.error('Erreur AdSense:', error);
-    }
+    if (import.meta.env.DEV) return;
+    if (!containerRef.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '300px 0px' }
+    );
+
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
   }, []);
+
+  useEffect(() => {
+    if (import.meta.env.DEV || !isVisible) return;
+
+    loadAdSenseScript()
+      .then(() => {
+        try {
+          (window.adsbygoogle = window.adsbygoogle || []).push({});
+        } catch (error) {
+          console.error('Erreur AdSense:', error);
+        }
+      })
+      .catch((error) => {
+        console.error('Erreur chargement script AdSense:', error);
+      });
+  }, [isVisible]);
 
   // Ne pas afficher les annonces en développement
   if (import.meta.env.DEV) {
@@ -52,7 +106,7 @@ export default function AdSense({
   }
 
   return (
-    <Box style={style} textAlign="center">
+    <Box ref={containerRef} style={style} textAlign="center" minH="90px">
       <ins
         className="adsbygoogle"
         style={{ display: 'block' }}

@@ -82,10 +82,11 @@ export default function Home() {
         currency: 'EUR'
       },
       customContent: {
-        showCountdown: true,
+        const HERO_IMAGE_URL = "/assets/photos/ma-photo-hero.jpg";
         showProgramSchedule: false,
         schedule: [],
         highlights: [],
+          const [showDiscordWidget, setShowDiscordWidget] = useState(false);
         partners: [],
         practicalInfo: ''
       },
@@ -115,7 +116,7 @@ export default function Home() {
           "--page-mark": `url(${pageBg})`,
           "--mark-size": "560px",
           "--mark-opacity": "0.06",
-          "--mark-blend": "normal",
+                    backgroundImage: `url(${HERO_IMAGE_URL})`,
         }}
         data-pos-x="left"
         data-pos-y="bottom"
@@ -175,10 +176,13 @@ export default function Home() {
             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={12} align="start">
               {/* LEFT: NOTRE COLLECTION */}
               <VStack spacing={6} align="stretch" ml={-48} w="calc(100% + 96px)">
+                              htmlWidth={960}
+                              htmlHeight={640}
                 <VStack spacing={2} align="start">
                   <Heading as="h2" size="lg">Notre collection</Heading>
                   <Text color="gray.600" fontSize="sm">
                     Découvrez un condensé de notre collection de véhicules historiques, témoins de l'évolution des transports en commun en Île-de-France. Chaque véhicule a une histoire unique à raconter !
+                              decoding="async"
                   </Text>
                 </VStack>
 
@@ -231,22 +235,40 @@ export default function Home() {
                       _hover={{ opacity: 0.9, transform: "translateY(-2px)" }}
                       w="full"
                     >
-                      Explorer notre parc complet
-                    </Button>
-                  </VStack>
-                </HStack>
-              </VStack>
-
-              {/* RIGHT: DISCORD WIDGET */}
-              <VStack spacing={4} align="flex-end" justify="flex-start" w="135%">
-                <VStack spacing={2} textAlign="center" align="center" maxW="400px" ml="auto" pr={4}>
-                  <Heading as="h3" size="md" color="var(--rbe-red)">Rejoignez notre Serveur Discord</Heading>
-                  <Text color="gray.600" fontSize="sm">
-                    Partageons avec la communauté : discussions, événements, et découvertes !
-                  </Text>
-                </VStack>
-                <Box 
-                  as="iframe"
+                        {!showDiscordWidget ? (
+                          <VStack spacing={3} maxW="400px" ml="auto" w="100%" align="stretch">
+                            <Box
+                              minH="500px"
+                              borderRadius="md"
+                              border="1px solid"
+                              borderColor="gray.200"
+                              bg="gray.50"
+                              display="flex"
+                              alignItems="center"
+                              justifyContent="center"
+                              p={6}
+                            >
+                              <Button colorScheme="red" onClick={() => setShowDiscordWidget(true)}>
+                                Charger le widget Discord
+                              </Button>
+                            </Box>
+                            <Text fontSize="xs" color="gray.500" textAlign="center">
+                              Le widget externe est chargé à la demande pour accélérer l'ouverture de la page.
+                            </Text>
+                          </VStack>
+                        ) : (
+                          <Box 
+                            as="iframe"
+                            src="https://discord.com/widget?id=1078513042599444582&theme=dark"
+                            title="Serveur Discord RétroBus Essonne"
+                            width="400"
+                            height="500"
+                            border="none"
+                            loading="lazy"
+                            maxW="400px"
+                            ml="auto"
+                          />
+                        )}
                   src="https://discord.com/widget?id=1078513042599444582&theme=dark"
                   width="100%"
                   height="500"

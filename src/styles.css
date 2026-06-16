@@ -2,9 +2,6 @@
    1. Importation de la police & Variables
    ========================================================================== */
 
-/* --- Importation de Montserrat avec les graisses 400, 600, 700 --- */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
-
 :root {
   --header-h: 110px;
   --nav-h: 56px;
@@ -64,7 +61,7 @@ iframe {
 }
 
 /* Médias responsives par défaut */
-img, video, canvas, iframe {
+img, video, canvas {
   max-width: 100%;
   height: auto;
 }

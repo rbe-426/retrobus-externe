@@ -24,7 +24,7 @@ const EnvelopeIcon = ({ size = 28 }) => (
 );
 
 const LOGO_PATH = "/assets/rbe_logo.svg";
-const HEADER_BG = "/assets/fallback/_MG_1006.jpg";
+const HEADER_BG = "/assets/header-1280.jpg";
 
 export default function Header() {
   const { isOpen: isDonateOpen, onOpen: onDonateOpen, onClose: onDonateClose } = useDisclosure();
@@ -90,7 +90,7 @@ export default function Header() {
         <div
           className="header-bg"
           style={{
-            backgroundImage: `url(/assets/header.jpg)`,
+            backgroundImage: `url(${HEADER_BG})`,
             backgroundSize: headerBgSize || 'cover',
             backgroundPosition: `50% 50%`
           }}
@@ -104,6 +104,11 @@ export default function Header() {
             path={LOGO_PATH}
             alt="Logo RBE"
             fallback={logoDefault}
+            width={960}
+            height={335}
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
             style={{ height: `${logoHeight}px` }}
           />
           

@@ -1,7 +1,7 @@
-import { Helmet } from "react-helmet-async";
 import {
   Box, Container, Heading, VStack, Text, HStack, Badge, Button
 } from "@chakra-ui/react";
+import SEO from "../components/SEO";
 import { Link as RouterLink } from "react-router-dom";
 import { useEffect, useState } from "react";
 import * as teamService from "../services/teamService";
@@ -151,10 +151,12 @@ export default function Team() {
 
   return (
     <>
-      <Helmet>
-        <title>L'équipe RétroBus Essonne - Les passionnés derrière l'association</title>
-        <meta name="description" content="Rencontrez l'équipe de RétroBus Essonne : passionnés d'automobile, mécaniciens, carrossiers, historiens et bénévoles." />
-      </Helmet>
+      <SEO 
+        title="Notre Équipe - RétroBus Essonne | Les Passionnés du Patrimoine Automobile"
+        description="Rencontrez l'équipe de RétroBus Essonne : passionnés d'automobile, mécaniciens, carrossiers, historiens et bénévoles dévoués à la préservation du patrimoine des transports. Découvrez les talents qui font vivre notre association."
+        keywords="équipe, membres, bénévoles, passionnés automobile, mécaniciens, carrossiers, historiens, équipe RétroBus, association bénévole, équipe patrimoine"
+        url="https://www.association-rbe.fr/team"
+      />
 
       <Box pt={8} pb={20} bg="white" userSelect="none" sx={{ WebkitUserSelect: 'none' }}>
         <Container maxW="7xl">

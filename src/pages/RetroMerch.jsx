@@ -1,4 +1,4 @@
-﻿import { Helmet } from "react-helmet-async";
+﻿import SEO from "../components/SEO";
 import { useState, useEffect } from "react";
 import { Box, Container, Heading, Text, Image, VStack, SimpleGrid, Button, Spinner, Flex } from "@chakra-ui/react";
 import brandingLogo from "../assets/retromerch_branding.svg";

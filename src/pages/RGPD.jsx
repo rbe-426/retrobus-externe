@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Helmet } from "react-helmet-async";
+import SEO from "../components/SEO";
 import { Box, Container, Heading, Text, VStack, Link as CLink, List, ListItem, ListIcon } from "@chakra-ui/react";
 import { FaCheckCircle } from "react-icons/fa";
 

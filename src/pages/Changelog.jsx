@@ -3,7 +3,7 @@ import {
   Container, Heading, Text, VStack, HStack, Card, CardBody, 
   CardHeader, Spinner, Alert, AlertIcon, Box
 } from "@chakra-ui/react";
-import { Helmet } from "react-helmet-async";
+import SEO from "../components/SEO";
 
 const API_BASE = import.meta.env.VITE_API_URL || 'https://attractive-kindness-rbe-serveurs.up.railway.app';
 

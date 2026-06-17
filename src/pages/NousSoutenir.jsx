@@ -36,6 +36,54 @@ import {
 import { FiHeart, FiUsers, FiTruck, FiCheckCircle, FiExternalLink, FiCreditCard, FiMail, FiDollarSign } from 'react-icons/fi';
 import { apiUrl } from '../lib/api';
 
+const CSRF_STORAGE_KEY = 'EXTERNE_CSRF_TOKEN';
+
+const readStoredCsrfToken = () => {
+  try {
+    return sessionStorage.getItem(CSRF_STORAGE_KEY);
+  } catch {
+    return null;
+  }
+};
+
+const storeCsrfToken = (token) => {
+  try {
+    if (token) {
+      sessionStorage.setItem(CSRF_STORAGE_KEY, token);
+    }
+  } catch {
+    // sessionStorage may be unavailable in restrictive browser contexts.
+  }
+};
+
+const fetchCsrfToken = async (forceRefresh = false) => {
+  if (!forceRefresh) {
+    const cached = readStoredCsrfToken();
+    if (cached) return cached;
+  }
+
+  const response = await fetch(apiUrl('/api/csrf-token'), {
+    method: 'GET',
+    credentials: 'include',
+    headers: {
+      Accept: 'application/json'
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error('Impossible de recuperer le token de securite.');
+  }
+
+  const data = await response.json().catch(() => ({}));
+  const token = data?.csrfToken;
+  if (!token) {
+    throw new Error('Token de securite indisponible.');
+  }
+
+  storeCsrfToken(token);
+  return token;
+};
+
 export default function NousSoutenir() {
   const cardBg = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
@@ -94,11 +142,14 @@ export default function NousSoutenir() {
 
     setAdhesionLoading(true);
     try {
-      const response = await fetch(apiUrl('/api/public/adhesion-request'), {
+      let csrfToken = await fetchCsrfToken(false);
+      let response = await fetch(apiUrl('/api/public/adhesion-request'), {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          Accept: 'application/json'
+          Accept: 'application/json',
+          'X-CSRF-Token': csrfToken
         },
         body: JSON.stringify({
           lastName: adhesionForm.lastName.trim(),
@@ -109,7 +160,30 @@ export default function NousSoutenir() {
         })
       });
 
-      const data = await response.json().catch(() => ({}));
+      let data = await response.json().catch(() => ({}));
+
+      // Retry unique si le token est manquant/invalide cote serveur.
+      if (!response.ok && response.status === 403 && (data?.code === 'CSRF_MISSING' || data?.code === 'CSRF_INVALID')) {
+        csrfToken = await fetchCsrfToken(true);
+        response = await fetch(apiUrl('/api/public/adhesion-request'), {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+            'X-CSRF-Token': csrfToken
+          },
+          body: JSON.stringify({
+            lastName: adhesionForm.lastName.trim(),
+            firstName: adhesionForm.firstName.trim(),
+            phone: adhesionForm.phone.trim(),
+            email: adhesionForm.email.trim(),
+            candidature: adhesionForm.candidature.trim()
+          })
+        });
+        data = await response.json().catch(() => ({}));
+      }
+
       if (!response.ok || !data?.success) {
         throw new Error(data?.error || 'Envoi impossible pour le moment');
       }
@@ -535,7 +609,7 @@ export default function NousSoutenir() {
                     Demande d'adhesion
                   </Button>
                   <Text fontSize="sm" color={useColorModeValue('gray.600', 'gray.400')}>
-                    Votre demande sera visible dans l'espace RH. Vous recevrez une reponse par email.
+                    On etudie chaque candidature avec attention dans la vie associative, puis on vous recontacte rapidement par email.
                   </Text>
                 </VStack>
               </GridItem>

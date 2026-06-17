@@ -5,7 +5,7 @@ import {
 import { useState, useEffect } from "react";
 import pageBg from "../assets/logo_arriere_plan.svg";
 import heroImg from "../assets/photos/ma-photo-hero.jpg";
-import { AdSenseInArticle } from "../components/AdSense";
+import AdSense from "../components/AdSense";
 import SEO, { jsonLdSchemas } from "../components/SEO";
 
 const HERO_IMAGE_URL = "/assets/photos/ma-photo-hero.jpg";
@@ -357,7 +357,11 @@ export default function Home() {
 
         {/* Annonce publicitaire */}
         <Container maxW="7xl" py={8}>
-          <AdSenseInArticle />
+          <AdSense
+            slot="4878166004"
+            format="autorelaxed"
+            responsive={false}
+          />
         </Container>
 
         {/* NOS ACTIVITÉS - SECTION PRINCIPALE */}

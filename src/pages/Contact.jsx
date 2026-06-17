@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import SEO, { jsonLdSchemas } from "../components/SEO";
 import { apiUrl } from "../lib/api";
+import AdSense from "../components/AdSense";
 import { 
   Box, 
   Heading, 
@@ -290,6 +291,15 @@ export default function Contact() {
                     📍 Essonne, France
                   </Text>
                 </VStack>
+              </Box>
+
+              <Box pt={2}>
+                <AdSense
+                  slot="6655411407"
+                  format="auto"
+                  responsive
+                  style={{ margin: 0 }}
+                />
               </Box>
             </VStack>
           </Box>

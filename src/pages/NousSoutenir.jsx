@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import {
   Box,
@@ -28,6 +28,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 import { FiHeart, FiUsers, FiTruck, FiCheckCircle, FiExternalLink, FiCreditCard, FiMail, FiDollarSign } from 'react-icons/fi';
+import AdSense from '../components/AdSense';
 
 export default function NousSoutenir() {
   const cardBg = useColorModeValue('white', 'gray.800');
@@ -36,31 +37,6 @@ export default function NousSoutenir() {
   const { isOpen: isAdhesionModalOpen, onOpen: onAdhesionModalOpen, onClose: onAdhesionModalClose } = useDisclosure();
   const [selectedDonationMethod, setSelectedDonationMethod] = useState('cheque');
   const [showBankDetails, setShowBankDetails] = useState(false);
-
-  useEffect(() => {
-    const scriptId = 'adsbygoogle-rbe-script';
-    const existingScript = document.getElementById(scriptId);
-
-    if (!existingScript) {
-      const script = document.createElement('script');
-      script.id = scriptId;
-      script.async = true;
-      script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2311147456651142';
-      script.crossOrigin = 'anonymous';
-      document.head.appendChild(script);
-    }
-
-    try {
-      if (window.adsbygoogle && Array.isArray(window.adsbygoogle)) {
-        window.adsbygoogle.push({});
-      } else {
-        window.adsbygoogle = window.adsbygoogle || [];
-        window.adsbygoogle.push({});
-      }
-    } catch {
-      // Ignore AdSense push errors to avoid impacting page rendering.
-    }
-  }, []);
 
   const donationMethods = [
     { key: 'cheque', label: 'Par cheque', icon: FiMail },
@@ -105,12 +81,13 @@ export default function NousSoutenir() {
                 bg={cardBg} 
                 borderWidth="1px" 
                 borderColor={borderColor}
+                h="100%"
                 shadow="md"
                 transition="all 0.3s"
                 _hover={{ shadow: 'xl', transform: 'translateY(-4px)' }}
               >
-                <CardBody>
-                  <VStack spacing={4} align="start">
+                <CardBody display="flex">
+                  <VStack spacing={4} align="start" h="100%" w="100%">
                     <HStack>
                       <Icon as={FiHeart} boxSize={8} color="red.500" />
                       <Heading size="md">Don ponctuel</Heading>
@@ -136,6 +113,7 @@ export default function NousSoutenir() {
                       colorScheme="red"
                       size="lg"
                       w="full"
+                      mt="auto"
                       rightIcon={<FiHeart />}
                       onClick={onDonationModalOpen}
                     >
@@ -150,12 +128,13 @@ export default function NousSoutenir() {
                 bg={cardBg} 
                 borderWidth="1px" 
                 borderColor={borderColor}
+                h="100%"
                 shadow="md"
                 transition="all 0.3s"
                 _hover={{ shadow: 'xl', transform: 'translateY(-4px)' }}
               >
-                <CardBody>
-                  <VStack spacing={4} align="start">
+                <CardBody display="flex">
+                  <VStack spacing={4} align="start" h="100%" w="100%">
                     <HStack>
                       <Icon as={FiUsers} boxSize={8} color="blue.500" />
                       <Heading size="md">Adhésion</Heading>
@@ -178,9 +157,10 @@ export default function NousSoutenir() {
                       </ListItem>
                     </List>
                     <Button
-                      colorScheme="red"
+                      colorScheme="blue"
                       size="lg"
                       w="full"
+                      mt="auto"
                       rightIcon={<FiUsers />}
                       onClick={onAdhesionModalOpen}
                     >
@@ -195,12 +175,13 @@ export default function NousSoutenir() {
                 bg={cardBg} 
                 borderWidth="1px" 
                 borderColor={borderColor}
+                h="100%"
                 shadow="md"
                 transition="all 0.3s"
                 _hover={{ shadow: 'xl', transform: 'translateY(-4px)' }}
               >
-                <CardBody>
-                  <VStack spacing={4} align="start">
+                <CardBody display="flex">
+                  <VStack spacing={4} align="start" h="100%" w="100%">
                     <HStack>
                       <Icon as={FiTruck} boxSize={8} color="purple.500" />
                       <Heading size="md">Mécénat entreprise</Heading>
@@ -223,9 +204,10 @@ export default function NousSoutenir() {
                       </ListItem>
                     </List>
                     <Button
-                      colorScheme="red"
+                      colorScheme="purple"
                       size="lg"
                       w="full"
+                      mt="auto"
                       rightIcon={<FiExternalLink />}
                       as="a"
                       href="/contact"
@@ -237,23 +219,14 @@ export default function NousSoutenir() {
               </Card>
             </SimpleGrid>
 
-            <Card bg={cardBg} borderWidth="1px" borderColor={borderColor} shadow="sm">
-              <CardBody>
-                <VStack align="stretch" spacing={3}>
-                  <Heading size="sm" textAlign="center">Annonce partenaire</Heading>
-                  <Box w="100%" overflow="hidden" borderRadius="lg" bg={useColorModeValue('gray.50', 'gray.900')} p={2}>
-                    <ins
-                      className="adsbygoogle"
-                      style={{ display: 'block' }}
-                      data-ad-client="ca-pub-2311147456651142"
-                      data-ad-slot="6655411407"
-                      data-ad-format="auto"
-                      data-full-width-responsive="true"
-                    />
-                  </Box>
-                </VStack>
-              </CardBody>
-            </Card>
+            <Box px={{ base: 0, md: 12 }}>
+              <AdSense
+                slot="6655411407"
+                format="auto"
+                responsive
+                style={{ margin: '6px 0 2px 0' }}
+              />
+            </Box>
 
             {/* Section pourquoi nous soutenir */}
             <Card bg={cardBg} borderWidth="1px" borderColor={borderColor}>

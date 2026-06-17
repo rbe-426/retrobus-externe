@@ -1,16 +1,10 @@
 ﻿import React from "react";
 import { Container, SimpleGrid, Text, Link as CLink, Image, Box, Flex, VStack, HStack } from "@chakra-ui/react";
 import { FaFacebook, FaInstagram, FaTiktok, FaDiscord, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
-import { AdSenseHorizontal } from "./AdSense";
 
 export default function Footer() {
   return (
     <>
-      {/* Bannière publicitaire AdSense avant le footer */}
-      <Container maxW="100%" px={{ base: 4, md: 8 }} py={6} bg="gray.50">
-        <AdSenseHorizontal />
-      </Container>
-      
       <footer className="site-footer" style={{ 
         background: "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)",
         marginTop: "80px",

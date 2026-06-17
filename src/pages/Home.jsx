@@ -5,7 +5,6 @@ import {
 import { useState, useEffect } from "react";
 import pageBg from "../assets/logo_arriere_plan.svg";
 import heroImg from "../assets/photos/ma-photo-hero.jpg";
-import AdSense from "../components/AdSense";
 import SEO, { jsonLdSchemas } from "../components/SEO";
 
 const HERO_IMAGE_URL = "/assets/photos/ma-photo-hero.jpg";
@@ -354,15 +353,6 @@ export default function Home() {
             </VStack>
           </Container>
         </Box>
-
-        {/* Annonce publicitaire */}
-        <Container maxW="7xl" py={8}>
-          <AdSense
-            slot="4878166004"
-            format="autorelaxed"
-            responsive={false}
-          />
-        </Container>
 
         {/* NOS ACTIVITÉS - SECTION PRINCIPALE */}
         <Container maxW="7xl" py={16}>

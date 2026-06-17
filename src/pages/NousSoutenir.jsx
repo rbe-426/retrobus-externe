@@ -23,12 +23,18 @@ import {
   ModalHeader,
   ModalCloseButton,
   ModalBody,
+  FormControl,
+  FormLabel,
+  Input,
+  Textarea,
+  Alert,
+  AlertIcon,
   Grid,
   GridItem,
   useDisclosure,
 } from '@chakra-ui/react';
 import { FiHeart, FiUsers, FiTruck, FiCheckCircle, FiExternalLink, FiCreditCard, FiMail, FiDollarSign } from 'react-icons/fi';
-import AdSense from '../components/AdSense';
+import { apiUrl } from '../lib/api';
 
 export default function NousSoutenir() {
   const cardBg = useColorModeValue('white', 'gray.800');
@@ -37,6 +43,16 @@ export default function NousSoutenir() {
   const { isOpen: isAdhesionModalOpen, onOpen: onAdhesionModalOpen, onClose: onAdhesionModalClose } = useDisclosure();
   const [selectedDonationMethod, setSelectedDonationMethod] = useState('cheque');
   const [showBankDetails, setShowBankDetails] = useState(false);
+  const [adhesionForm, setAdhesionForm] = useState({
+    lastName: '',
+    firstName: '',
+    phone: '',
+    email: '',
+    candidature: ''
+  });
+  const [adhesionLoading, setAdhesionLoading] = useState(false);
+  const [adhesionSuccess, setAdhesionSuccess] = useState(false);
+  const [adhesionError, setAdhesionError] = useState('');
 
   const donationMethods = [
     { key: 'cheque', label: 'Par cheque', icon: FiMail },
@@ -44,6 +60,68 @@ export default function NousSoutenir() {
     { key: 'cb', label: 'Par CB via HelloAsso', icon: FiCreditCard },
     { key: 'virement', label: 'Par virement bancaire', icon: FiExternalLink },
   ];
+
+  const resetAdhesionForm = () => {
+    setAdhesionForm({
+      lastName: '',
+      firstName: '',
+      phone: '',
+      email: '',
+      candidature: ''
+    });
+    setAdhesionSuccess(false);
+    setAdhesionError('');
+    setAdhesionLoading(false);
+  };
+
+  const closeAdhesionModal = () => {
+    resetAdhesionForm();
+    onAdhesionModalClose();
+  };
+
+  const handleAdhesionChange = (field, value) => {
+    setAdhesionForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleAdhesionSubmit = async () => {
+    setAdhesionError('');
+    setAdhesionSuccess(false);
+
+    if (!adhesionForm.lastName.trim() || !adhesionForm.firstName.trim() || !adhesionForm.email.trim() || !adhesionForm.candidature.trim()) {
+      setAdhesionError('Merci de renseigner nom, prenom, email et candidature.');
+      return;
+    }
+
+    setAdhesionLoading(true);
+    try {
+      const response = await fetch(apiUrl('/api/public/adhesion-request'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json'
+        },
+        body: JSON.stringify({
+          lastName: adhesionForm.lastName.trim(),
+          firstName: adhesionForm.firstName.trim(),
+          phone: adhesionForm.phone.trim(),
+          email: adhesionForm.email.trim(),
+          candidature: adhesionForm.candidature.trim()
+        })
+      });
+
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok || !data?.success) {
+        throw new Error(data?.error || 'Envoi impossible pour le moment');
+      }
+
+      setAdhesionSuccess(true);
+      setAdhesionForm((prev) => ({ ...prev, candidature: '' }));
+    } catch (error) {
+      setAdhesionError(error.message || 'Envoi impossible pour le moment');
+    } finally {
+      setAdhesionLoading(false);
+    }
+  };
 
   return (
     <>
@@ -218,15 +296,6 @@ export default function NousSoutenir() {
                 </CardBody>
               </Card>
             </SimpleGrid>
-
-            <Box px={{ base: 0, md: 12 }}>
-              <AdSense
-                slot="6655411407"
-                format="auto"
-                responsive
-                style={{ margin: '6px 0 2px 0' }}
-              />
-            </Box>
 
             {/* Section pourquoi nous soutenir */}
             <Card bg={cardBg} borderWidth="1px" borderColor={borderColor}>
@@ -439,13 +508,13 @@ export default function NousSoutenir() {
         </ModalContent>
       </Modal>
 
-      <Modal isOpen={isAdhesionModalOpen} onClose={onAdhesionModalClose} size="3xl" isCentered>
+      <Modal isOpen={isAdhesionModalOpen} onClose={closeAdhesionModal} size="3xl" isCentered>
         <ModalOverlay bg="blackAlpha.600" backdropFilter="blur(6px)" />
         <ModalContent borderRadius="2xl" overflow="hidden">
           <Box bg="linear-gradient(120deg, #1e3a8a 0%, #2563eb 45%, #38bdf8 100%)" color="white" px={6} py={5}>
             <ModalHeader p={0}>Adhesion</ModalHeader>
             <Text opacity={0.95} mt={1}>
-              Espace informations d'adhesion
+              Candidature d'adhesion en ligne
             </Text>
           </Box>
 
@@ -454,16 +523,21 @@ export default function NousSoutenir() {
           <ModalBody p={{ base: 4, md: 6 }} bg={useColorModeValue('gray.50', 'gray.900')}>
             <Grid templateColumns={{ base: '1fr', md: '280px 1fr' }} gap={4}>
               <GridItem>
-                <Button
-                  w="100%"
-                  justifyContent="flex-start"
-                  leftIcon={<Icon as={FiUsers} />}
-                  variant="solid"
-                  colorScheme="blue"
-                  borderRadius="xl"
-                >
-                  Campagne d'adhesion
-                </Button>
+                <VStack align="stretch" spacing={2}>
+                  <Button
+                    w="100%"
+                    justifyContent="flex-start"
+                    leftIcon={<Icon as={FiUsers} />}
+                    variant="solid"
+                    colorScheme="blue"
+                    borderRadius="xl"
+                  >
+                    Demande d'adhesion
+                  </Button>
+                  <Text fontSize="sm" color={useColorModeValue('gray.600', 'gray.400')}>
+                    Votre demande sera visible dans l'espace RH. Vous recevrez une reponse par email.
+                  </Text>
+                </VStack>
               </GridItem>
 
               <GridItem>
@@ -475,14 +549,83 @@ export default function NousSoutenir() {
                   p={{ base: 4, md: 5 }}
                   minH="250px"
                 >
-                  <VStack align="start" spacing={3}>
-                    <Heading size="sm" color="blue.600">Aucune campagne d'adhesion en cours</Heading>
-                    <Text>
-                      Pour le moment, aucune campagne d'adhesion n'est ouverte.
-                    </Text>
-                    <Text>
-                      Revenez prochainement pour connaitre la prochaine periode d'adhesion.
-                    </Text>
+                  <VStack align="stretch" spacing={4}>
+                    <Heading size="sm" color="blue.600">Candidater en quelques lignes</Heading>
+
+                    {adhesionError && (
+                      <Alert status="error" borderRadius="md">
+                        <AlertIcon />
+                        {adhesionError}
+                      </Alert>
+                    )}
+
+                    {adhesionSuccess && (
+                      <Alert status="success" borderRadius="md">
+                        <AlertIcon />
+                        Votre demande d'adhesion a bien ete envoyee.
+                      </Alert>
+                    )}
+
+                    <Grid templateColumns={{ base: '1fr', md: '1fr 1fr' }} gap={4}>
+                      <FormControl isRequired>
+                        <FormLabel>Nom</FormLabel>
+                        <Input
+                          value={adhesionForm.lastName}
+                          onChange={(e) => handleAdhesionChange('lastName', e.target.value)}
+                          placeholder="Votre nom"
+                        />
+                      </FormControl>
+                      <FormControl isRequired>
+                        <FormLabel>Prenom</FormLabel>
+                        <Input
+                          value={adhesionForm.firstName}
+                          onChange={(e) => handleAdhesionChange('firstName', e.target.value)}
+                          placeholder="Votre prenom"
+                        />
+                      </FormControl>
+                    </Grid>
+
+                    <Grid templateColumns={{ base: '1fr', md: '1fr 1fr' }} gap={4}>
+                      <FormControl>
+                        <FormLabel>Telephone</FormLabel>
+                        <Input
+                          value={adhesionForm.phone}
+                          onChange={(e) => handleAdhesionChange('phone', e.target.value)}
+                          placeholder="06..."
+                        />
+                      </FormControl>
+                      <FormControl isRequired>
+                        <FormLabel>Email</FormLabel>
+                        <Input
+                          type="email"
+                          value={adhesionForm.email}
+                          onChange={(e) => handleAdhesionChange('email', e.target.value)}
+                          placeholder="vous@exemple.fr"
+                        />
+                      </FormControl>
+                    </Grid>
+
+                    <FormControl isRequired>
+                      <FormLabel>Candidature</FormLabel>
+                      <Textarea
+                        value={adhesionForm.candidature}
+                        onChange={(e) => handleAdhesionChange('candidature', e.target.value)}
+                        placeholder="Presentez votre motivation en quelques lignes"
+                        minH="140px"
+                      />
+                    </FormControl>
+
+                    <HStack justify="flex-end">
+                      <Button variant="ghost" onClick={closeAdhesionModal}>Fermer</Button>
+                      <Button
+                        colorScheme="blue"
+                        onClick={handleAdhesionSubmit}
+                        isLoading={adhesionLoading}
+                        loadingText="Envoi..."
+                      >
+                        Envoyer la candidature
+                      </Button>
+                    </HStack>
                   </VStack>
                 </Box>
               </GridItem>

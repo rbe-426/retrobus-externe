@@ -87,32 +87,7 @@ export default function AdSense({
 
   // Ne pas afficher les annonces en développement
   if (import.meta.env.DEV) {
-    const slotLabel = slot === '6655411407'
-      ? 'Bloc Annonce 1 mobile'
-      : slot === '4878166004'
-        ? 'Bloc Annonce autorelaxed'
-        : 'Bloc annonce personnalisé';
-
-    return (
-      <Box
-        bg="gray.50"
-        border="2px dashed"
-        borderColor="gray.400"
-        p={4}
-        textAlign="center"
-        color="gray.700"
-        fontSize="sm"
-        borderRadius="md"
-        style={style}
-      >
-        <Box fontWeight="700" mb={1}>📢 {slotLabel}</Box>
-        <Box fontSize="xs" color="gray.600">client: ca-pub-2311147456651142</Box>
-        <Box fontSize="xs" color="gray.600">slot: {slot}</Box>
-        <Box fontSize="xs" color="gray.600">format: {format}</Box>
-        <Box fontSize="xs" color="gray.600">responsive: {responsive ? 'true' : 'false'}</Box>
-        <Box mt={2} fontSize="xs" color="gray.500">Prévisualisation en développement</Box>
-      </Box>
-    );
+    return null;
   }
 
   return (

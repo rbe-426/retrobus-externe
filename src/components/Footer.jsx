@@ -224,10 +224,10 @@ export default function Footer() {
               <Image
                 src="/supporters/cars-soeur.png"
                 alt="Cars Soeur – soutien"
-                htmlWidth={250}
-                htmlHeight={80}
-                maxH="80px"
-                maxW="250px"
+                h={{ base: "52px", md: "64px" }}
+                w="auto"
+                maxW={{ base: "180px", md: "240px" }}
+                objectFit="contain"
                 loading="lazy"
                 decoding="async"
                 style={{ filter: "drop-shadow(0 0 4px rgba(0,0,0,0.4))" }}
@@ -247,10 +247,10 @@ export default function Footer() {
               <Image
                 src="/supporters/ville-ce.png"
                 alt="Ville de Corbeil-Essonnes"
-                htmlWidth={250}
-                htmlHeight={80}
-                maxH="80px"
-                maxW="250px"
+                h={{ base: "52px", md: "64px" }}
+                w="auto"
+                maxW={{ base: "180px", md: "240px" }}
+                objectFit="contain"
                 loading="lazy"
                 decoding="async"
                 style={{ filter: "drop-shadow(0 0 4px rgba(0,0,0,0.4))" }}
@@ -269,10 +269,10 @@ export default function Footer() {
               <Image
                 src="/supporters/bnp-paribas.png"
                 alt="BNP Paribas"
-                htmlWidth={250}
-                htmlHeight={80}
-                maxH="80px"
-                maxW="250px"
+                h={{ base: "52px", md: "64px" }}
+                w="auto"
+                maxW={{ base: "180px", md: "240px" }}
+                objectFit="contain"
                 loading="lazy"
                 decoding="async"
                 style={{ filter: "drop-shadow(0 0 4px rgba(0,0,0,0.4))" }}

@@ -8,6 +8,7 @@ import "./styles.css"; // CSS personnalisé AVANT Chakra
 import Header from "./components/Header.jsx";
 import EventHeader from "./components/EventHeader.jsx";
 import Footer from "./components/Footer.jsx";
+import TrafficTracker from "./components/TrafficTracker.jsx";
 
 // Pages
 import Home from "./pages/Home.jsx";
@@ -79,6 +80,7 @@ export default function App() {
   return (
     <ChakraProvider theme={theme}>
       <Router>
+        <TrafficTracker />
         <Layout>
           <Routes>
             <Route path="/" element={<HomeComponent />} />

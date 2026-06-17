@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import {
   Box,
@@ -36,6 +36,31 @@ export default function NousSoutenir() {
   const { isOpen: isAdhesionModalOpen, onOpen: onAdhesionModalOpen, onClose: onAdhesionModalClose } = useDisclosure();
   const [selectedDonationMethod, setSelectedDonationMethod] = useState('cheque');
   const [showBankDetails, setShowBankDetails] = useState(false);
+
+  useEffect(() => {
+    const scriptId = 'adsbygoogle-rbe-script';
+    const existingScript = document.getElementById(scriptId);
+
+    if (!existingScript) {
+      const script = document.createElement('script');
+      script.id = scriptId;
+      script.async = true;
+      script.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2311147456651142';
+      script.crossOrigin = 'anonymous';
+      document.head.appendChild(script);
+    }
+
+    try {
+      if (window.adsbygoogle && Array.isArray(window.adsbygoogle)) {
+        window.adsbygoogle.push({});
+      } else {
+        window.adsbygoogle = window.adsbygoogle || [];
+        window.adsbygoogle.push({});
+      }
+    } catch {
+      // Ignore AdSense push errors to avoid impacting page rendering.
+    }
+  }, []);
 
   const donationMethods = [
     { key: 'cheque', label: 'Par cheque', icon: FiMail },
@@ -153,7 +178,7 @@ export default function NousSoutenir() {
                       </ListItem>
                     </List>
                     <Button
-                      colorScheme="blue"
+                      colorScheme="red"
                       size="lg"
                       w="full"
                       rightIcon={<FiUsers />}
@@ -198,7 +223,7 @@ export default function NousSoutenir() {
                       </ListItem>
                     </List>
                     <Button
-                      colorScheme="purple"
+                      colorScheme="red"
                       size="lg"
                       w="full"
                       rightIcon={<FiExternalLink />}
@@ -211,6 +236,24 @@ export default function NousSoutenir() {
                 </CardBody>
               </Card>
             </SimpleGrid>
+
+            <Card bg={cardBg} borderWidth="1px" borderColor={borderColor} shadow="sm">
+              <CardBody>
+                <VStack align="stretch" spacing={3}>
+                  <Heading size="sm" textAlign="center">Annonce partenaire</Heading>
+                  <Box w="100%" overflow="hidden" borderRadius="lg" bg={useColorModeValue('gray.50', 'gray.900')} p={2}>
+                    <ins
+                      className="adsbygoogle"
+                      style={{ display: 'block' }}
+                      data-ad-client="ca-pub-2311147456651142"
+                      data-ad-slot="6655411407"
+                      data-ad-format="auto"
+                      data-full-width-responsive="true"
+                    />
+                  </Box>
+                </VStack>
+              </CardBody>
+            </Card>
 
             {/* Section pourquoi nous soutenir */}
             <Card bg={cardBg} borderWidth="1px" borderColor={borderColor}>

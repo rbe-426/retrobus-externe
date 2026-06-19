@@ -56,10 +56,20 @@ const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8080';
  */
 const getImageUrl = (imagePath) => {
   if (!imagePath) return null;
-  if (imagePath.startsWith('/uploads/')) {
-    return `${API_BASE}${imagePath}`;
+  const cleanPath = String(imagePath).split('#')[0];
+  if (cleanPath.startsWith('/uploads/')) {
+    return `${API_BASE}${cleanPath}`;
   }
-  return imagePath;
+  return cleanPath;
+};
+
+const getImagePosition = (imagePath) => {
+  const raw = String(imagePath || '');
+  const match = raw.match(/#xy=(\d{1,3}),(\d{1,3})$/);
+  if (!match) return '50% 50%';
+  const x = Math.min(100, Math.max(0, Number(match[1]) || 50));
+  const y = Math.min(100, Math.max(0, Number(match[2]) || 50));
+  return `${x}% ${y}%`;
 };
 
 // Données par défaut (fallback)
@@ -185,6 +195,7 @@ export default function Team() {
                       w="100%"
                       h="250px"
                       objectFit="cover"
+                      objectPosition={getImagePosition(member.image)}
                       borderRadius="lg"
                       boxShadow="md"
                       draggable={false}

@@ -3,11 +3,11 @@ import {
 } from "@chakra-ui/react";
 import SEO from "../components/SEO";
 import { Link as RouterLink } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as teamService from "../services/teamService";
 
 // Hooks pour bloquer screenshots et téléchargements
-const useScreenshotProtection = () => {
+const useScreenshotProtection = ({ allowImageDrag = false } = {}) => {
   useEffect(() => {
     // Bloquer les screenshots via Ctrl+Shift+S
     const handleKeyDown = (e) => {
@@ -30,6 +30,7 @@ const useScreenshotProtection = () => {
 
     // Bloquer drag/drop
     const handleDragStart = (e) => {
+      if (allowImageDrag) return;
       e.preventDefault();
       return false;
     };
@@ -43,7 +44,7 @@ const useScreenshotProtection = () => {
       document.removeEventListener('contextmenu', handleContextMenu);
       document.removeEventListener('dragstart', handleDragStart);
     };
-  }, []);
+  }, [allowImageDrag]);
 };
 
 // API Base URL pour les images
@@ -64,12 +65,52 @@ const getImageUrl = (imagePath) => {
 };
 
 const getImagePosition = (imagePath) => {
-  const raw = String(imagePath || '');
-  const match = raw.match(/#xy=(\d{1,3}),(\d{1,3})$/);
-  if (!match) return '50% 50%';
-  const x = Math.min(100, Math.max(0, Number(match[1]) || 50));
-  const y = Math.min(100, Math.max(0, Number(match[2]) || 50));
+  const { x, y } = getImageMeta(imagePath);
   return `${x}% ${y}%`;
+};
+
+const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+const toPercentPair = ({ x, y }) => `${x}% ${y}%`;
+
+const getImageMeta = (imagePath) => {
+  const raw = String(imagePath || '');
+  const [_, hash = ''] = raw.split('#');
+
+  let x = 50;
+  let y = 50;
+  let z = 1;
+
+  if (hash) {
+    const params = new URLSearchParams(hash);
+    const xy = params.get('xy');
+    const zoom = Number(params.get('z'));
+
+    if (xy) {
+      const [rawX, rawY] = xy.split(',');
+      x = clamp(Number(rawX) || 50, 0, 100);
+      y = clamp(Number(rawY) || 50, 0, 100);
+    }
+
+    if (Number.isFinite(zoom) && zoom > 0) {
+      z = clamp(zoom, 1, 1.8);
+    }
+  }
+
+  return { x, y, z };
+};
+
+const buildImageWithMeta = (imagePath, meta) => {
+  const base = String(imagePath || '').split('#')[0];
+  const x = clamp(Math.round((meta?.x ?? 50) * 10) / 10, 0, 100);
+  const y = clamp(Math.round((meta?.y ?? 50) * 10) / 10, 0, 100);
+  const z = clamp(Math.round((meta?.z ?? 1) * 100) / 100, 1, 1.8);
+  return `${base}#xy=${x},${y}&z=${z}`;
+};
+
+const getPositionFromImage = (imagePath) => {
+  const { x, y } = getImageMeta(imagePath);
+  return { x, y };
 };
 
 // Données par défaut (fallback)
@@ -137,10 +178,176 @@ const DEFAULT_TEAM_MEMBERS = [
 ];
 
 export default function Team() {
-  useScreenshotProtection();
+  const isLocalTeamEditor = typeof window !== 'undefined'
+    && window.location.hostname === 'localhost'
+    && window.location.port === '3000';
+
+  useScreenshotProtection({ allowImageDrag: isLocalTeamEditor });
   
   const [teamMembers, setTeamMembers] = useState(DEFAULT_TEAM_MEMBERS);
   const [loading, setLoading] = useState(true);
+  const [localAdjustments, setLocalAdjustments] = useState({});
+  const [dragState, setDragState] = useState(null);
+  const [isSavingServer, setIsSavingServer] = useState(false);
+  const [saveMessage, setSaveMessage] = useState('');
+  const photoRefs = useRef({});
+
+  useEffect(() => {
+    if (!isLocalTeamEditor || typeof window === 'undefined') return;
+    try {
+      const raw = window.localStorage.getItem('rbe:teamPhotoAdjustments');
+      if (!raw) return;
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === 'object') {
+        setLocalAdjustments(parsed);
+      }
+    } catch (error) {
+      console.warn('Impossible de lire les positions locales team:', error);
+    }
+  }, [isLocalTeamEditor]);
+
+  useEffect(() => {
+    if (!isLocalTeamEditor || typeof window === 'undefined') return;
+    try {
+      window.localStorage.setItem('rbe:teamPhotoAdjustments', JSON.stringify(localAdjustments));
+    } catch (error) {
+      console.warn('Impossible de sauvegarder les positions locales team:', error);
+    }
+  }, [isLocalTeamEditor, localAdjustments]);
+
+  useEffect(() => {
+    if (!dragState || !isLocalTeamEditor) return;
+
+    const handleMouseMove = (event) => {
+      const container = photoRefs.current[dragState.memberId];
+      if (!container) return;
+
+      const width = container.clientWidth || 1;
+      const height = container.clientHeight || 1;
+      const dx = event.clientX - dragState.startX;
+      const dy = event.clientY - dragState.startY;
+
+      const nextX = clamp(Math.round((dragState.originX + (dx / width) * 100) * 10) / 10, 0, 100);
+      const nextY = clamp(Math.round((dragState.originY + (dy / height) * 100) * 10) / 10, 0, 100);
+
+      setLocalAdjustments((prev) => ({
+        ...prev,
+        [dragState.memberId]: {
+          ...(prev[dragState.memberId] || {}),
+          x: nextX,
+          y: nextY
+        }
+      }));
+    };
+
+    const handleMouseUp = () => {
+      setDragState(null);
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
+  }, [dragState, isLocalTeamEditor]);
+
+  const getMemberImagePosition = (member) => {
+    if (isLocalTeamEditor && localAdjustments[member.id]) {
+      const current = localAdjustments[member.id];
+      return toPercentPair({ x: current.x ?? 50, y: current.y ?? 50 });
+    }
+    return getImagePosition(member.image);
+  };
+
+  const getMemberImageZoom = (member) => {
+    if (isLocalTeamEditor && localAdjustments[member.id]?.z) {
+      return localAdjustments[member.id].z;
+    }
+    return getImageMeta(member.image).z;
+  };
+
+  const startDrag = (event, member) => {
+    if (!isLocalTeamEditor || !member?.image) return;
+    event.preventDefault();
+    const current = localAdjustments[member.id] || getImageMeta(member.image);
+    setDragState({
+      memberId: member.id,
+      startX: event.clientX,
+      startY: event.clientY,
+      originX: current.x ?? 50,
+      originY: current.y ?? 50
+    });
+  };
+
+  const resetMemberPosition = (memberId) => {
+    setLocalAdjustments((prev) => {
+      const next = { ...prev };
+      delete next[memberId];
+      return next;
+    });
+  };
+
+  const updateMemberZoom = (member, zoomValue) => {
+    if (!isLocalTeamEditor || !member?.image) return;
+    const fallback = getImageMeta(member.image);
+    const current = localAdjustments[member.id] || fallback;
+    const nextZoom = clamp(Math.round(zoomValue * 100) / 100, 1, 1.8);
+    setLocalAdjustments((prev) => ({
+      ...prev,
+      [member.id]: {
+        x: current.x ?? 50,
+        y: current.y ?? 50,
+        z: nextZoom
+      }
+    }));
+  };
+
+  const saveAdjustmentsToServer = async () => {
+    if (!isLocalTeamEditor || isSavingServer) return;
+
+    const memberIds = Object.keys(localAdjustments);
+    if (memberIds.length === 0) {
+      setSaveMessage('Aucun changement local à sauvegarder.');
+      return;
+    }
+
+    setIsSavingServer(true);
+    setSaveMessage('Sauvegarde serveur en cours...');
+
+    try {
+      let savedCount = 0;
+      const updatedMembers = [...teamMembers];
+
+      for (const memberId of memberIds) {
+        const member = updatedMembers.find((m) => String(m.id) === String(memberId));
+        if (!member?.image) continue;
+
+        const baseMeta = getImageMeta(member.image);
+        const localMeta = localAdjustments[memberId] || {};
+        const finalMeta = {
+          x: localMeta.x ?? baseMeta.x,
+          y: localMeta.y ?? baseMeta.y,
+          z: localMeta.z ?? baseMeta.z
+        };
+
+        const nextImage = buildImageWithMeta(member.image, finalMeta);
+        await teamService.updateTeamMemberImage(member.id, nextImage);
+
+        member.image = nextImage;
+        savedCount += 1;
+      }
+
+      setTeamMembers(updatedMembers);
+      setSaveMessage(`Sauvegarde serveur OK (${savedCount} photo${savedCount > 1 ? 's' : ''}).`);
+    } catch (error) {
+      console.error('Erreur sauvegarde serveur team:', error);
+      setSaveMessage(`Erreur sauvegarde serveur: ${error.message || 'inconnue'}`);
+    } finally {
+      setIsSavingServer(false);
+    }
+  };
 
   useEffect(() => {
     loadTeamMembers();
@@ -170,6 +377,46 @@ export default function Team() {
 
       <Box pt={8} pb={20} bg="white" userSelect="none" sx={{ WebkitUserSelect: 'none' }}>
         <Container maxW="7xl">
+          {isLocalTeamEditor && (
+            <Box
+              mb={6}
+              p={3}
+              borderRadius="md"
+              bg="yellow.50"
+              border="1px solid"
+              borderColor="yellow.300"
+            >
+              <VStack align="stretch" spacing={3}>
+                <Text fontSize="sm" color="gray.700">
+                  Mode local actif (localhost:3000): fais glisser une photo pour ajuster le cadrage, puis utilise +/- pour dézoomer/zoomer.
+                </Text>
+                <HStack>
+                  <Button
+                    size="sm"
+                    colorScheme="blue"
+                    onClick={saveAdjustmentsToServer}
+                    isLoading={isSavingServer}
+                  >
+                    Sauvegarder sur le serveur
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => {
+                      setLocalAdjustments({});
+                      setSaveMessage('Ajustements locaux réinitialisés.');
+                    }}
+                  >
+                    Vider ajustements locaux
+                  </Button>
+                </HStack>
+                {saveMessage ? (
+                  <Text fontSize="sm" color="gray.600">{saveMessage}</Text>
+                ) : null}
+              </VStack>
+            </Box>
+          )}
+
           {/* Header */}
           <VStack spacing={6} textAlign="center" mb={16}>
             <Heading as="h1" size="2xl" color="var(--rbe-red)">
@@ -186,26 +433,109 @@ export default function Team() {
             {teamMembers.map((member, index) => {
               const isEven = index % 2 === 0;
               const photoBox = (
-                <Box w={{ base: "100%", md: "40%" }} flexShrink={0} onContextMenu={(e) => e.preventDefault()} onDragStart={(e) => e.preventDefault()}>
+                <Box
+                  w={{ base: "100%", md: "40%" }}
+                  flexShrink={0}
+                  onContextMenu={(e) => e.preventDefault()}
+                  onDragStart={(e) => e.preventDefault()}
+                  ref={(node) => {
+                    if (node) photoRefs.current[member.id] = node;
+                  }}
+                  cursor={isLocalTeamEditor && member.image ? (dragState?.memberId === member.id ? 'grabbing' : 'grab') : 'default'}
+                  position="relative"
+                >
                   {member.image ? (
-                    <Box
-                      as="img"
-                      src={getImageUrl(member.image)}
-                      alt={member.name}
-                      w="100%"
-                      h="250px"
-                      objectFit="cover"
-                      objectPosition={getImagePosition(member.image)}
-                      borderRadius="lg"
-                      boxShadow="md"
-                      draggable={false}
-                      onContextMenu={(e) => e.preventDefault()}
-                      sx={{
-                        WebkitUserDrag: 'none',
-                        userDrag: 'none',
-                        pointerEvents: 'none'
-                      }}
-                    />
+                    <>
+                      <Box
+                        position="relative"
+                        w="100%"
+                        h="250px"
+                        borderRadius="lg"
+                        overflow="hidden"
+                        boxShadow="md"
+                        bg="transparent"
+                      >
+                        <Box
+                          as="img"
+                          src={getImageUrl(member.image)}
+                          alt={member.name}
+                          position="absolute"
+                          inset={0}
+                          w="100%"
+                          h="100%"
+                          objectFit="cover"
+                          objectPosition={getMemberImagePosition(member)}
+                          draggable={false}
+                          onContextMenu={(e) => e.preventDefault()}
+                          sx={{
+                            WebkitUserDrag: 'none',
+                            userDrag: 'none',
+                            pointerEvents: 'none',
+                            transform: `scale(${getMemberImageZoom(member)})`,
+                            transformOrigin: getMemberImagePosition(member),
+                            transition: 'transform 120ms ease-out'
+                          }}
+                        />
+
+                        {isLocalTeamEditor && (
+                          <>
+                            <Box
+                              position="absolute"
+                              top={2}
+                              right={2}
+                              zIndex={3}
+                            >
+                              <Button
+                                size="xs"
+                                colorScheme="blackAlpha"
+                                onClick={() => resetMemberPosition(member.id)}
+                              >
+                                Reset cadrage
+                              </Button>
+                            </Box>
+
+                            <HStack
+                              position="absolute"
+                              left={2}
+                              bottom={2}
+                              zIndex={3}
+                              bg="rgba(0, 0, 0, 0.45)"
+                              borderRadius="md"
+                              px={2}
+                              py={1}
+                              spacing={2}
+                            >
+                              <Button
+                                size="xs"
+                                colorScheme="blackAlpha"
+                                onClick={() => updateMemberZoom(member, getMemberImageZoom(member) - 0.05)}
+                              >
+                                -
+                              </Button>
+                              <Text fontSize="xs" color="white" minW="58px" textAlign="center">
+                                {(getMemberImageZoom(member) * 100).toFixed(0)}%
+                              </Text>
+                              <Button
+                                size="xs"
+                                colorScheme="blackAlpha"
+                                onClick={() => updateMemberZoom(member, getMemberImageZoom(member) + 0.05)}
+                              >
+                                +
+                              </Button>
+                            </HStack>
+
+                            <Box
+                              position="absolute"
+                              inset={0}
+                              borderRadius="lg"
+                              bg="transparent"
+                              onMouseDown={(event) => startDrag(event, member)}
+                              zIndex={2}
+                            />
+                          </>
+                        )}
+                      </Box>
+                    </>
                   ) : (
                     <Box
                       bg="gray.100"

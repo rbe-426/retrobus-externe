@@ -251,8 +251,8 @@ export default function Navbar({ donateIcon, newsletterIcon, onDonateClick, onNe
       )}
 
       <Drawer isOpen={isOpen} onClose={onClose} placement="right">
-        <DrawerOverlay />
-        <DrawerContent>
+        <DrawerOverlay zIndex={2000} />
+        <DrawerContent zIndex={2001}>
           <DrawerCloseButton />
           <DrawerHeader bg="var(--rbe-red)" color="white" display="flex" flexDirection="column" alignItems="flex-start" gap={1}>
             <HStack spacing={2} alignItems="baseline">

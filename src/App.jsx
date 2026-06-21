@@ -37,6 +37,18 @@ import { useEventMode } from "./utils/eventModeConfig.js";
 
 const isDev = import.meta.env.DEV; // true en dev, false en prod
 
+function ScrollToTop() {
+  const location = useLocation();
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+  }, [location.pathname, location.search]);
+
+  return null;
+}
+
 // Layout avec Header/Footer conditionnels
 function Layout({ children }) {
   const location = useLocation();
@@ -81,6 +93,7 @@ export default function App() {
   return (
     <ChakraProvider theme={theme}>
       <Router>
+        <ScrollToTop />
         <TrafficTracker />
         <Layout>
           <Routes>

@@ -25,9 +25,10 @@ export default function Contact() {
   const [showError, setShowError] = useState(false);
 
   useEffect(() => {
+    const previousOverflowX = document.body.style.overflowX;
     document.body.style.overflowX = "hidden";
     return () => {
-      document.body.style.overflowX = "auto";
+      document.body.style.overflowX = previousOverflowX;
     };
   }, []);
 
@@ -112,10 +113,10 @@ export default function Contact() {
       {/* Container PLEINE LARGEUR - IMAGE PLUS MONTÉE */}
       <Box
         position="relative"
-        width="100vw"
+        width="calc(100% + (2 * var(--mobile-gutter)))"
         height="calc(100vh - var(--header-h) - var(--nav-h) + 100px)"
         marginTop="-100px"
-        marginLeft="calc(-50vw + 50%)"
+        marginLeft="calc(-1 * var(--mobile-gutter))"
         backgroundImage="url('/assets/photos/p4.jpg')"
         backgroundSize="cover"
         backgroundPosition="center 60%"

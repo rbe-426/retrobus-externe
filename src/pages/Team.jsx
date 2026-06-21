@@ -660,13 +660,13 @@ export default function Team() {
               </Text>
               <Button
                 as={RouterLink}
-                to="/contact"
+                to="/nous-soutenir"
                 size="lg"
                 bg="var(--rbe-red)"
                 color="white"
                 _hover={{ opacity: 0.9, transform: "translateY(-2px)" }}
               >
-                Nous contacter
+                Nous Rejoindre
               </Button>
             </VStack>
           </Box>

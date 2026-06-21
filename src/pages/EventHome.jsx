@@ -104,12 +104,9 @@ export default function EventHome() {
       >
         {/* HERO SECTION - PLEINE LARGEUR */}
         <Box 
-          w="100vw"
+          w="calc(100% + (2 * var(--mobile-gutter)))"
           position="relative"
-          left="50%"
-          right="50%"
-          ml="-50vw"
-          mr="-50vw"
+          ml="calc(-1 * var(--mobile-gutter))"
           bg="#d30c4c"
           py={{ base: 0, lg: 10 }}
           pb={{ base: 15, lg: 30 }}

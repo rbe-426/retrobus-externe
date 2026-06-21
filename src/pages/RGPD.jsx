@@ -5,9 +5,10 @@ import { FaCheckCircle } from "react-icons/fa";
 
 export default function RGPD() {
   useEffect(() => {
+    const previousOverflowX = document.body.style.overflowX;
     document.body.style.overflowX = "hidden";
     return () => {
-      document.body.style.overflowX = "auto";
+      document.body.style.overflowX = previousOverflowX;
     };
   }, []);
 

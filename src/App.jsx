@@ -30,6 +30,7 @@ import Team from "./pages/Team.jsx";
 import MentionsLegales from "./pages/MentionsLegales.jsx";
 import RGPD from "./pages/RGPD.jsx";
 import BulletinSignature from "./pages/BulletinSignature.jsx";
+import MobileRedirect from "./pages/MobileRedirect.jsx";
 
 // Event Mode
 import { useEventMode } from "./utils/eventModeConfig.js";
@@ -106,6 +107,7 @@ export default function App() {
             <Route path="/rgpd" element={<RGPD />} />
             <Route path="/statuts.pdf" element={<MentionsLegales />} />
             <Route path="/rgpd.pdf" element={<RGPD />} />
+            <Route path="/mobile/v/:parc" element={<MobileRedirect />} />
             {/* Route standalone sans Header/Footer */}
             <Route path="/bulletin/sign/:token" element={<BulletinSignature />} />
             <Route path="*" element={<Navigate to="/" replace />} />

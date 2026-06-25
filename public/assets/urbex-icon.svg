@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">URBEX</title>
+  <desc id="desc">Icône planète avec anneau</desc>
+  <g fill="none" stroke="#e4004f" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="258" cy="256" r="103" />
+    <path d="M154 238C78 270 31 304 37 319c9 23 135 9 282-31s246-92 237-115c-6-16-68-15-154 0" />
+  </g>
+</svg>

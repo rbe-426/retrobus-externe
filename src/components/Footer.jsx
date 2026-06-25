@@ -318,6 +318,19 @@ export default function Footer() {
           >
             &copy; {new Date().getFullYear()} <strong>RétroBus Essonne</strong> • Tous droits réservés
           </Text>
+
+          <CLink
+            href="/urbex"
+            aria-label="URBEX"
+            title="Accéder à URBEX"
+            display="inline-flex"
+            alignItems="center"
+            justifyContent="center"
+            _hover={{ transform: "translateY(-2px) scale(1.08)", opacity: 0.85 }}
+            transition="all 0.2s"
+          >
+            <Image src="/assets/urbex-icon.svg" alt="URBEX" boxSize="28px" />
+          </CLink>
           
           <Text 
             fontSize="xs" 

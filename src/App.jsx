@@ -31,6 +31,7 @@ import MentionsLegales from "./pages/MentionsLegales.jsx";
 import RGPD from "./pages/RGPD.jsx";
 import BulletinSignature from "./pages/BulletinSignature.jsx";
 import MobileRedirect from "./pages/MobileRedirect.jsx";
+import OmsiAddon from "./pages/OmsiAddon.jsx";
 
 // Event Mode
 import { useEventMode } from "./utils/eventModeConfig.js";
@@ -116,6 +117,8 @@ export default function App() {
             <Route path="/changelog" element={<Changelog />} />
             <Route path="/team" element={<Team />} />
             <Route path="/newsletter" element={<Newsletter />} />
+            <Route path="/urbex" element={<OmsiAddon />} />
+            <Route path="/omsi-addon" element={<Navigate to="/urbex" replace />} />
             <Route path="/mentions-legales" element={<MentionsLegales />} />
             <Route path="/rgpd" element={<RGPD />} />
             <Route path="/statuts.pdf" element={<MentionsLegales />} />

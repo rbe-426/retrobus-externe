@@ -320,9 +320,11 @@ export default function Footer() {
           </Text>
 
           <CLink
-            href="/urbex"
-            aria-label="URBEX"
-            title="Accéder à URBEX"
+            href="https://www.retrobus-interne.fr/login"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Pointage URBEX"
+            title="Accéder au pointage"
             display="inline-flex"
             alignItems="center"
             justifyContent="center"

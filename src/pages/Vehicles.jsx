@@ -22,6 +22,8 @@ const defaultImages = {
   "920": ["/assets/photos/p1-960.jpg"],
 };
 
+const ENABLE_ANNIVERSARY_920 = false;
+
 export default function Vehicles() {
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -158,7 +160,7 @@ export default function Vehicles() {
                 />
                 
                 {/* Badge 25 ans pour le 920 */}
-                {vehicle.parc === "920" && (
+                {ENABLE_ANNIVERSARY_920 && vehicle.parc === "920" && (
                   <Badge
                     position="absolute"
                     top={2}

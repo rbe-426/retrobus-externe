@@ -27,6 +27,8 @@ const ANNIVERSARY_920_LAYOUT = Object.freeze({
   desktopWidth: "calc(100% + 480px)",
 });
 
+const ENABLE_ANNIVERSARY_920 = false;
+
 const ANNIVERSARY_920_COPY = Object.freeze({
   period: "Juillet 2001 - juillet 2026",
   title: "Le 920 fête ses 25 ans",
@@ -395,9 +397,76 @@ export default function Home() {
             {/* Version Desktop - Design original avec débordements */}
             <Hide below="lg">
               <SimpleGrid columns={{ base: 1, md: 2 }} spacing={12} align="start">
-                <Box ml={-48} w={ANNIVERSARY_920_LAYOUT.desktopWidth}>
-                  <Anniversary920Card />
-                </Box>
+                {ENABLE_ANNIVERSARY_920 ? (
+                  <Box ml={-48} w={ANNIVERSARY_920_LAYOUT.desktopWidth}>
+                    <Anniversary920Card />
+                  </Box>
+                ) : (
+                  <VStack spacing={6} align="stretch" ml={-48} w="calc(100% + 96px)">
+                    <VStack spacing={2} align="start">
+                      <Heading as="h2" size="lg">Notre collection</Heading>
+                      <Text color="gray.600" fontSize="sm">
+                        Découvrez un condensé de notre collection de véhicules historiques, témoins de l'évolution des transports en commun en Île-de-France. Chaque véhicule a une histoire unique à raconter !
+                      </Text>
+                    </VStack>
+
+                    <HStack spacing={8} align="flex-start">
+                      <Box w="100%" flexShrink={0}>
+                        <Image
+                          src={vehicles[0].src}
+                          alt={`${vehicles[0].marque} ${vehicles[0].modele}`}
+                          htmlWidth={960}
+                          htmlHeight={640}
+                          w="100%"
+                          borderRadius="xl"
+                          boxShadow="lg"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </Box>
+
+                      <VStack spacing={5} align="stretch" flex={1}>
+                        <VStack spacing={2} align="start">
+                          <Heading as="h3" size="xl" color="var(--rbe-red)">
+                            {vehicles[0].marque} {vehicles[0].modele}
+                          </Heading>
+                          <Text fontSize="lg" color="gray.600" fontWeight="500">
+                            {vehicles[0].surnom}
+                          </Text>
+                        </VStack>
+
+                        <Text fontSize="lg" color="gray.700" lineHeight="tall">
+                          {vehicles[0].description}
+                        </Text>
+
+                        <Box 
+                          p={4} 
+                          border="2px solid" 
+                          borderColor="var(--rbe-red)"
+                          borderRadius="lg"
+                          bg="white"
+                        >
+                          <Text fontSize="base" color="var(--rbe-red)" fontWeight="bold" mb={2}>✨ POINT FORT</Text>
+                          <Text fontSize="base" color="gray.800" fontWeight="500">
+                            {vehicles[0].particularite}
+                          </Text>
+                        </Box>
+
+                        <Button 
+                          as={RouterLink}
+                          to="/parc" 
+                          size="lg" 
+                          bg="var(--rbe-red)" 
+                          color="white"
+                          _hover={{ opacity: 0.9, transform: "translateY(-2px)" }}
+                          w="full"
+                        >
+                          Explorer notre parc complet
+                        </Button>
+                      </VStack>
+                    </HStack>
+                  </VStack>
+                )}
 
                 {/* RIGHT: DISCORD WIDGET */}
                 <VStack spacing={4} align="flex-end" justify="flex-start" w="135%">
@@ -425,7 +494,71 @@ export default function Home() {
             {/* Version Mobile/Tablette - Sans débordements */}
             <Show below="lg">
               <VStack spacing={12} align="stretch">
-                <Anniversary920Card compact />
+                {ENABLE_ANNIVERSARY_920 ? (
+                  <Anniversary920Card compact />
+                ) : (
+                  <VStack spacing={6} align="stretch">
+                    <VStack spacing={2} align="start">
+                      <Heading as="h2" fontSize={{ base: "xl", md: "2xl" }}>Notre collection</Heading>
+                      <Text color="gray.600" fontSize={{ base: "sm", md: "md" }}>
+                        Découvrez un condensé de notre collection de véhicules historiques, témoins de l'évolution des transports en commun en Île-de-France.
+                      </Text>
+                    </VStack>
+
+                    <VStack spacing={5} align="stretch">
+                      <Image
+                        src={vehicles[0].src}
+                        alt={`${vehicles[0].marque} ${vehicles[0].modele}`}
+                        htmlWidth={960}
+                        htmlHeight={640}
+                        w="100%"
+                        borderRadius="xl"
+                        boxShadow="xl"
+                        loading="lazy"
+                        decoding="async"
+                      />
+
+                      <VStack spacing={3} align="stretch">
+                        <Heading as="h3" fontSize={{ base: "lg", md: "xl" }} color="var(--rbe-red)">
+                          {vehicles[0].marque} {vehicles[0].modele}
+                        </Heading>
+                        <Text fontSize={{ base: "sm", md: "md" }} color="gray.600" fontWeight="500">
+                          {vehicles[0].surnom}
+                        </Text>
+                        <Text fontSize={{ base: "sm", md: "md" }} color="gray.700" lineHeight="tall">
+                          {vehicles[0].description}
+                        </Text>
+
+                        <Box 
+                          p={3}
+                          border="2px solid" 
+                          borderColor="var(--rbe-red)"
+                          borderRadius="lg"
+                          bg="red.50"
+                        >
+                          <Text fontSize="xs" color="var(--rbe-red)" fontWeight="bold" mb={1}>
+                            ✨ POINT FORT
+                          </Text>
+                          <Text fontSize="sm" color="gray.800" fontWeight="500">
+                            {vehicles[0].particularite}
+                          </Text>
+                        </Box>
+
+                        <Button 
+                          as={RouterLink}
+                          to="/parc" 
+                          size="md"
+                          bg="var(--rbe-red)" 
+                          color="white"
+                          _hover={{ opacity: 0.9 }}
+                          width="full"
+                        >
+                          Explorer notre parc complet
+                        </Button>
+                      </VStack>
+                    </VStack>
+                  </VStack>
+                )}
 
                 {/* DISCORD WIDGET */}
                 <VStack spacing={4} align="stretch">

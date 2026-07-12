@@ -8,6 +8,7 @@ import {
   Image,
   SimpleGrid,
   Button,
+  Badge,
   Spinner,
   Alert,
   AlertIcon,
@@ -139,20 +140,42 @@ export default function Vehicles() {
               shadow="sm"
               _hover={{ shadow: "md" }}
               transition="all 0.2s"
+              position="relative"
             >
-              <Image
-                src={vehicle.thumbnailImage || defaultImages[vehicle.parc]?.[0] || "/assets/photos/p1-960.jpg"}
-                alt={vehicle.modele}
-                htmlWidth={960}
-                htmlHeight={640}
-                objectFit="cover"
-                w="100%"
-                h="200px"
-                mb={4}
-                borderRadius="md"
-                loading="lazy"
-                decoding="async"
-              />
+              <Box position="relative">
+                <Image
+                  src={vehicle.thumbnailImage || defaultImages[vehicle.parc]?.[0] || "/assets/photos/p1-960.jpg"}
+                  alt={vehicle.modele}
+                  htmlWidth={960}
+                  htmlHeight={640}
+                  objectFit="cover"
+                  w="100%"
+                  h="200px"
+                  mb={4}
+                  borderRadius="md"
+                  loading="lazy"
+                  decoding="async"
+                />
+                
+                {/* Badge 25 ans pour le 920 */}
+                {vehicle.parc === "920" && (
+                  <Badge
+                    position="absolute"
+                    top={2}
+                    right={2}
+                    bg="gold"
+                    color="black"
+                    fontSize="sm"
+                    px={3}
+                    py={1}
+                    borderRadius="full"
+                    fontWeight="bold"
+                    boxShadow="lg"
+                  >
+                    🎉 25 ANS
+                  </Badge>
+                )}
+              </Box>
               
               {vehicle.marque && (
                 <Text fontSize="xs" color="gray.500" mb={1} fontWeight="500">

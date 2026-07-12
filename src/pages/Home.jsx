@@ -1,6 +1,7 @@
 ﻿import { Link as RouterLink } from "react-router-dom";
 import {
-  Box, Button, Container, Heading, SimpleGrid, Stack, Text, Image, VStack, HStack, Modal, ModalOverlay, ModalContent, ModalCloseButton, ModalBody, useDisclosure
+  Box, Button, Container, Heading, SimpleGrid, Stack, Text, Image, VStack, HStack, 
+  Modal, ModalOverlay, ModalContent, ModalCloseButton, ModalBody, useDisclosure, Show, Hide
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import pageBg from "../assets/logo_arriere_plan.svg";
@@ -110,71 +111,230 @@ export default function Home() {
         data-pos-x="left"
         data-pos-y="bottom"
       >
-        {/* HERO: full-width with optional dev image picker (visible in dev) */}
-        <Box
-          as="section"
-          className="full-bleed hero"
-          style={{
-            backgroundImage: `url(${heroImg})`,
-            '--hero-pos-y': '0%',
-          }}
-        >
-          <div className="hero-content">
-            <div className="hero-box">
-              <Heading as="h1" size="2xl" lineHeight="1.05">
-                Préserver & partager le patrimoine automobile en Essonne
-              </Heading>
-              <Text mt={4} fontSize="lg" color="whiteAlpha.800">
-                L'association RétroBus Essonne est une association régie par la Loi 1901 qui préserve et partage le patrimoine automobile en Essonne.
-              </Text>
-              <Stack 
-                direction="column"
-                spacing={4} 
-                mt={6} 
-                alignItems="flex-end"
-              >
-                <Button
-                  as={RouterLink}
-                  to="/parc"
-                  size="lg"
-                  bg="var(--rbe-red)"
-                  color="white"
-                  _hover={{ opacity: 0.9 }}
+        {/* HERO SECTION - Desktop original + adaptation mobile */}
+        
+        {/* Version Desktop - Design original */}
+        <Hide below="md">
+          <Box
+            as="section"
+            className="full-bleed hero"
+            style={{
+              backgroundImage: `url(${heroImg})`,
+              '--hero-pos-y': '0%',
+            }}
+          >
+            <div className="hero-content">
+              <div className="hero-box">
+                <Heading as="h1" size="2xl" lineHeight="1.05">
+                  Préserver & partager le patrimoine automobile en Essonne
+                </Heading>
+                <Text mt={4} fontSize="lg" color="whiteAlpha.800">
+                  L'association RétroBus Essonne est une association régie par la Loi 1901 qui préserve et partage le patrimoine automobile en Essonne.
+                </Text>
+                <Stack 
+                  direction="column"
+                  spacing={4} 
+                  mt={6} 
+                  alignItems="flex-end"
                 >
-                  Découvrir notre collection
-                </Button>
+                  <Button
+                    as={RouterLink}
+                    to="/parc"
+                    size="lg"
+                    bg="var(--rbe-red)"
+                    color="white"
+                    _hover={{ opacity: 0.9 }}
+                  >
+                    Découvrir notre collection
+                  </Button>
 
-                <Button
-                  as={RouterLink}
-                  to="/contact"
-                  size="lg"
-                  variant="outline"
-                  color="white"
-                  _hover={{ bg: "whiteAlpha.200" }}
-                >
-                  Nous contacter
-                </Button>
-              </Stack>
+                  <Button
+                    as={RouterLink}
+                    to="/contact"
+                    size="lg"
+                    variant="outline"
+                    color="white"
+                    _hover={{ bg: "whiteAlpha.200" }}
+                  >
+                    Nous contacter
+                  </Button>
+                </Stack>
+              </div>
             </div>
-          </div>
-        </Box>
+          </Box>
+        </Hide>
 
-        {/* DISCORD + COLLECTION SECTION */}
+        {/* Version Mobile - Adaptée */}
+        <Show below="md">
+          <Box
+            as="section"
+            position="relative"
+            width="100vw"
+            left="50%"
+            ml="-50vw"
+            minH="60vh"
+            backgroundImage={`url(${heroImg})`}
+            backgroundPosition="center"
+            backgroundSize="cover"
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            _before={{
+              content: '""',
+              position: "absolute",
+              inset: 0,
+              background: "linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%)",
+              zIndex: 0,
+            }}
+          >
+            <Container position="relative" zIndex={1} px={4}>
+              <VStack align="center" spacing={4} textAlign="center">
+                <Heading as="h1" fontSize="2xl" lineHeight="1.1" color="white" textShadow="0 2px 20px rgba(0,0,0,0.5)">
+                  Préserver & partager le patrimoine automobile en Essonne
+                </Heading>
+                <Text fontSize="md" color="whiteAlpha.900" textShadow="0 1px 10px rgba(0,0,0,0.5)">
+                  L'association RétroBus Essonne est une association régie par la Loi 1901 qui préserve et partage le patrimoine automobile en Essonne.
+                </Text>
+                <Stack direction="column" spacing={3} width="full" mt={4}>
+                  <Button
+                    as={RouterLink}
+                    to="/parc"
+                    size="md"
+                    bg="var(--rbe-red)"
+                    color="white"
+                    width="full"
+                    _hover={{ opacity: 0.9 }}
+                  >
+                    Découvrir notre collection
+                  </Button>
+                  <Button
+                    as={RouterLink}
+                    to="/contact"
+                    size="md"
+                    variant="outline"
+                    color="white"
+                    borderColor="white"
+                    width="full"
+                    _hover={{ bg: "whiteAlpha.300" }}
+                  >
+                    Nous contacter
+                  </Button>
+                </Stack>
+              </VStack>
+            </Container>
+          </Box>
+        </Show>
+
+        {/* COLLECTION & DISCORD SECTION */}
         <Box bg="white" py={16}>
           <Container maxW="7xl">
-            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={12} align="start">
-              {/* LEFT: NOTRE COLLECTION */}
-              <VStack spacing={6} align="stretch" ml={-48} w="calc(100% + 96px)">
-                <VStack spacing={2} align="start">
-                  <Heading as="h2" size="lg">Notre collection</Heading>
-                  <Text color="gray.600" fontSize="sm">
-                    Découvrez un condensé de notre collection de véhicules historiques, témoins de l'évolution des transports en commun en Île-de-France. Chaque véhicule a une histoire unique à raconter !
-                  </Text>
+            
+            {/* Version Desktop - Design original avec débordements */}
+            <Hide below="lg">
+              <SimpleGrid columns={{ base: 1, md: 2 }} spacing={12} align="start">
+                {/* LEFT: NOTRE COLLECTION */}
+                <VStack spacing={6} align="stretch" ml={-48} w="calc(100% + 96px)">
+                  <VStack spacing={2} align="start">
+                    <Heading as="h2" size="lg">Notre collection</Heading>
+                    <Text color="gray.600" fontSize="sm">
+                      Découvrez un condensé de notre collection de véhicules historiques, témoins de l'évolution des transports en commun en Île-de-France. Chaque véhicule a une histoire unique à raconter !
+                    </Text>
+                  </VStack>
+
+                  {/* FEATURED VEHICLE - Horizontal Layout */}
+                  <HStack spacing={8} align="flex-start">
+                    <Box w="100%" flexShrink={0}>
+                      <Image
+                        src={vehicles[0].src}
+                        alt={`${vehicles[0].marque} ${vehicles[0].modele}`}
+                        htmlWidth={960}
+                        htmlHeight={640}
+                        w="100%"
+                        borderRadius="xl"
+                        boxShadow="lg"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </Box>
+
+                    <VStack spacing={5} align="stretch" flex={1}>
+                      <VStack spacing={2} align="start">
+                        <Heading as="h3" size="xl" color="var(--rbe-red)">
+                          {vehicles[0].marque} {vehicles[0].modele}
+                        </Heading>
+                        <Text fontSize="lg" color="gray.600" fontWeight="500">
+                          {vehicles[0].surnom}
+                        </Text>
+                      </VStack>
+
+                      <Text fontSize="lg" color="gray.700" lineHeight="tall">
+                        {vehicles[0].description}
+                      </Text>
+
+                      <Box 
+                        p={4} 
+                        border="2px solid" 
+                        borderColor="var(--rbe-red)"
+                        borderRadius="lg"
+                        bg="white"
+                      >
+                        <Text fontSize="base" color="var(--rbe-red)" fontWeight="bold" mb={2}>✨ POINT FORT</Text>
+                        <Text fontSize="base" color="gray.800" fontWeight="500">
+                          {vehicles[0].particularite}
+                        </Text>
+                      </Box>
+
+                      <Button 
+                        as={RouterLink}
+                        to="/parc" 
+                        size="lg" 
+                        bg="var(--rbe-red)" 
+                        color="white"
+                        _hover={{ opacity: 0.9, transform: "translateY(-2px)" }}
+                        w="full"
+                      >
+                        Explorer notre parc complet
+                      </Button>
+                    </VStack>
+                  </HStack>
                 </VStack>
 
-                {/* FEATURED VEHICLE - Horizontal Layout */}
-                <HStack spacing={8} align="flex-start">
-                  <Box w="100%" flexShrink={0}>
+                {/* RIGHT: DISCORD WIDGET */}
+                <VStack spacing={4} align="flex-end" justify="flex-start" w="135%">
+                  <VStack spacing={2} textAlign="center" align="center" maxW="400px" ml="auto" pr={4}>
+                    <Heading as="h3" size="md" color="var(--rbe-red)">Rejoignez notre Serveur Discord</Heading>
+                    <Text color="gray.600" fontSize="sm">
+                      Partageons avec la communauté : discussions, événements, et découvertes !
+                    </Text>
+                  </VStack>
+                  <Box 
+                    as="iframe"
+                    src="https://discord.com/widget?id=1078513042599444582&theme=dark"
+                    title="Serveur Discord RétroBus Essonne"
+                    width="100%"
+                    height="500"
+                    border="none"
+                    loading="lazy"
+                    maxW="400px"
+                    ml="auto"
+                  />
+                </VStack>
+              </SimpleGrid>
+            </Hide>
+
+            {/* Version Mobile/Tablette - Sans débordements */}
+            <Show below="lg">
+              <VStack spacing={12} align="stretch">
+                {/* NOTRE COLLECTION */}
+                <VStack spacing={6} align="stretch">
+                  <VStack spacing={2} align="start">
+                    <Heading as="h2" fontSize={{ base: "xl", md: "2xl" }}>Notre collection</Heading>
+                    <Text color="gray.600" fontSize={{ base: "sm", md: "md" }}>
+                      Découvrez un condensé de notre collection de véhicules historiques, témoins de l'évolution des transports en commun en Île-de-France.
+                    </Text>
+                  </VStack>
+
+                  <VStack spacing={5} align="stretch">
                     <Image
                       src={vehicles[0].src}
                       alt={`${vehicles[0].marque} ${vehicles[0].modele}`}
@@ -182,84 +342,80 @@ export default function Home() {
                       htmlHeight={640}
                       w="100%"
                       borderRadius="xl"
-                      boxShadow="lg"
+                      boxShadow="xl"
                       loading="lazy"
                       decoding="async"
                     />
-                  </Box>
 
-                  <VStack spacing={5} align="stretch" flex={1}>
-                    <VStack spacing={2} align="start">
-                      <Heading as="h3" size="xl" color="var(--rbe-red)">
+                    <VStack spacing={3} align="stretch">
+                      <Heading as="h3" fontSize={{ base: "lg", md: "xl" }} color="var(--rbe-red)">
                         {vehicles[0].marque} {vehicles[0].modele}
                       </Heading>
-                      <Text fontSize="lg" color="gray.600" fontWeight="500">
+                      <Text fontSize={{ base: "sm", md: "md" }} color="gray.600" fontWeight="500">
                         {vehicles[0].surnom}
                       </Text>
-                    </VStack>
-
-                    <Text fontSize="lg" color="gray.700" lineHeight="tall">
-                      {vehicles[0].description}
-                    </Text>
-
-                    <Box 
-                      p={4} 
-                      border="2px solid" 
-                      borderColor="var(--rbe-red)"
-                      borderRadius="lg"
-                      bg="white"
-                    >
-                      <Text fontSize="base" color="var(--rbe-red)" fontWeight="bold" mb={2}>✨ POINT FORT</Text>
-                      <Text fontSize="base" color="gray.800" fontWeight="500">
-                        {vehicles[0].particularite}
+                      <Text fontSize={{ base: "sm", md: "md" }} color="gray.700" lineHeight="tall">
+                        {vehicles[0].description}
                       </Text>
-                    </Box>
 
-                    <Button 
-                      as={RouterLink}
-                      to="/parc" 
-                      size="lg" 
-                      bg="var(--rbe-red)" 
-                      color="white"
-                      _hover={{ opacity: 0.9, transform: "translateY(-2px)" }}
-                      w="full"
-                    >
-                      Explorer notre parc complet
-                    </Button>
+                      <Box 
+                        p={3}
+                        border="2px solid" 
+                        borderColor="var(--rbe-red)"
+                        borderRadius="lg"
+                        bg="red.50"
+                      >
+                        <Text fontSize="xs" color="var(--rbe-red)" fontWeight="bold" mb={1}>
+                          ✨ POINT FORT
+                        </Text>
+                        <Text fontSize="sm" color="gray.800" fontWeight="500">
+                          {vehicles[0].particularite}
+                        </Text>
+                      </Box>
+
+                      <Button 
+                        as={RouterLink}
+                        to="/parc" 
+                        size="md"
+                        bg="var(--rbe-red)" 
+                        color="white"
+                        _hover={{ opacity: 0.9 }}
+                        width="full"
+                      >
+                        Explorer notre parc complet
+                      </Button>
+                    </VStack>
                   </VStack>
-                </HStack>
-              </VStack>
-
-              {/* RIGHT: DISCORD WIDGET */}
-              <VStack spacing={4} align="flex-end" justify="flex-start" w="135%">
-                <VStack spacing={2} textAlign="center" align="center" maxW="400px" ml="auto" pr={4}>
-                  <Heading as="h3" size="md" color="var(--rbe-red)">Rejoignez notre Serveur Discord</Heading>
-                  <Text color="gray.600" fontSize="sm">
-                    Partageons avec la communauté : discussions, événements, et découvertes !
-                  </Text>
                 </VStack>
-                <Box 
-                  as="iframe"
-                  src="https://discord.com/widget?id=1078513042599444582&theme=dark"
-                  title="Serveur Discord RétroBus Essonne"
-                  width="100%"
-                  height="500"
-                  border="none"
-                  loading="lazy"
-                  maxW="400px"
-                  ml="auto"
-                  sx={{
-                    "@media (max-width: 768px)": {
-                      height: "auto",
-                    }
-                  }}
-                />
+
+                {/* DISCORD WIDGET */}
+                <VStack spacing={4} align="stretch">
+                  <VStack spacing={2} align="start">
+                    <Heading as="h3" fontSize={{ base: "lg", md: "xl" }} color="var(--rbe-red)">
+                      Rejoignez notre Serveur Discord
+                    </Heading>
+                    <Text color="gray.600" fontSize={{ base: "sm", md: "md" }}>
+                      Partageons avec la communauté : discussions, événements, et découvertes !
+                    </Text>
+                  </VStack>
+                  <Box 
+                    as="iframe"
+                    src="https://discord.com/widget?id=1078513042599444582&theme=dark"
+                    title="Serveur Discord RétroBus Essonne"
+                    width="100%"
+                    height="400"
+                    border="none"
+                    borderRadius="lg"
+                    loading="lazy"
+                  />
+                </VStack>
               </VStack>
-            </SimpleGrid>
+            </Show>
+
           </Container>
         </Box>
 
-        {/* QUI SOMMES-NOUS */}
+        {/* QUI SOMMES-NOUS - Desktop original */}
         <Box bg="gray.50" py={16}>
           <Container maxW="7xl">
             <Heading as="h2" size="xl" mb={12} textAlign="center">À propos de nous</Heading>

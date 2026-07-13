@@ -1,13 +1,18 @@
 ﻿import React from "react";
 import { Container, SimpleGrid, Text, Link as CLink, Image, Box, Flex, VStack, HStack } from "@chakra-ui/react";
+import { useLocation } from "react-router-dom";
 import { FaFacebook, FaInstagram, FaTiktok, FaDiscord, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
+import { ENABLE_TEMPORARY_ANNIVERSARY_920 } from "../lib/featureFlags";
 
 export default function Footer() {
+  const location = useLocation();
+  const isTemporaryAnniversary920Page = ENABLE_TEMPORARY_ANNIVERSARY_920 && location.pathname === "/vehicles/920";
+
   return (
     <>
       <footer className="site-footer" style={{ 
         background: "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)",
-        marginTop: "80px",
+        marginTop: isTemporaryAnniversary920Page ? 0 : "80px",
         borderTop: "3px solid var(--rbe-red)"
       }}>
       <Container maxW="100%" px={{ base: 4, md: 8 }} py={6}>

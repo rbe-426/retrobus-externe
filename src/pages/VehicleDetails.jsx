@@ -24,11 +24,274 @@ import {
 } from "@chakra-ui/react";
 import { FiChevronLeft, FiChevronRight, FiArrowLeft } from "react-icons/fi";
 import EventBanner from "../components/EventBanner";
+import { ENABLE_TEMPORARY_ANNIVERSARY_920 } from "../lib/featureFlags";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://attractive-kindness-rbe-serveurs.up.railway.app';
+const ENABLE_TEMPORARY_920_ANNIVERSARY_PAGE = ENABLE_TEMPORARY_ANNIVERSARY_920;
 
 // Fallback global pour les fonds de véhicules
 const DEFAULT_VEHICLE_BG = '/assets/fallback/_MG_1006.jpg';
+
+const ANNIVERSARY_920_STORY_SECTIONS = Object.freeze([
+  {
+    image: '/assets/photos/920-premiere-livree.jpg',
+    alt: 'Mercedes Citaro 920 sous sa première livrée Cars Bridet',
+    caption: 'Le Citaro sous sa première livrée',
+    credit: "© Dam's Labourier - 10 septembre 2005 via tc-infos.fr",
+    title: 'De Cars Bridet à Transdev Bièvre Bus Mobilités',
+    text: "Avant de devenir La Dame Grise de RétroBus Essonne, le 920 circule sous sa première livrée chez Cars Bridet, devenu ensuite Transdev Bièvre Bus Mobilités. Basé au même dépôt de Wissous, il reste attaché au même territoire de juillet 2001 à 2014.",
+    facts: [
+      'Exploitant : Cars Bridet, puis Transdev Bièvre Bus Mobilités',
+      'Dépôt : Wissous, même site d’exploitation',
+      'Période : juillet 2001 - 2014',
+    ],
+  },
+  {
+    image: '/assets/photos/920-strav-limeil.jpg',
+    fallbackImage: '/assets/photos/back920.jpg',
+    alt: 'Mercedes Citaro 920 sous livrée Transdev STRAV à Limeil-Brévannes',
+    caption: 'Nouvelle livrée, nouveau territoire',
+    credit: "© Dam's Labourier - 10 janvier 2015 via tc-infos.fr",
+    title: 'L’étape Transdev STRAV',
+    text: "À partir de septembre 2014, le 920 quitte son premier territoire pour rejoindre Transdev STRAV à Limeil-Brévannes. Avec sa nouvelle livrée, il poursuit sa carrière sur un autre réseau jusqu'en août 2020.",
+    facts: [
+      'Exploitant : Transdev STRAV',
+      'Dépôt : Limeil-Brévannes',
+      'Période : septembre 2014 - août 2020',
+    ],
+  },
+  {
+    image: '/assets/photos/920-cars-soeur.jpg',
+    fallbackImage: '/assets/photos/p1-960.jpg',
+    alt: 'Mercedes Citaro 920 sous livrée Cars Sœur à Saint-Germain-lès-Corbeil',
+    caption: 'Une nouvelle étape chez Cars Sœur',
+    credit: '© Claude-Henry Ntari-Soutarson - 07 avril 2021 via tc-infos.fr',
+    title: 'L’arrivée chez Cars Sœur',
+    text: "En avril 2021, le 920 rejoint Cars Sœur, groupe Nedroma, à Saint-Germain-lès-Corbeil. Cette étape marque sa dernière période d’exploitation régulière avant sa préservation, jusqu’en mai 2025.",
+    facts: [
+      'Exploitant : Cars Sœur, groupe Nedroma',
+      'Dépôt : Saint-Germain-lès-Corbeil',
+      'Période : avril 2021 - mai 2025',
+    ],
+  },
+  {
+    image: '/assets/photos/_DSC0103.jpg',
+    fallbackImage: '/assets/photos/p1-960.jpg',
+    alt: 'Mercedes Citaro 920 préservé par RétroBus Essonne',
+    caption: 'Terminus, et bonne retraite',
+    credit: '© Waiyl BELAIDI - Janvier 2026 - Photo personnelle pour RBE',
+    title: 'Une nouvelle vie en préservation',
+    text: "Depuis mai 2025, le 920 a quitté l’exploitation commerciale pour rejoindre l’association RétroBus Essonne. Sa route continue autrement : préserver, restaurer et transmettre l’histoire d’un Citaro devenu témoin du patrimoine roulant francilien.",
+    facts: [
+      'Association : RétroBus Essonne',
+      'Statut : véhicule préservé',
+      'Période : depuis mai 2025',
+    ],
+  },
+]);
+
+const ANNIVERSARY_920_TECHNICAL_SPECS = Object.freeze([
+  { label: 'Constructeur', value: 'Mercedes-Benz' },
+  { label: 'Modèle', value: 'Citaro C1' },
+  { label: 'Numéro de parc', value: '920' },
+  { label: 'Mise en circulation', value: 'Juillet 2001' },
+  { label: 'Immatriculation actuelle', value: 'FG-920-RE' },
+  { label: 'Ancienne immatriculation', value: '923 CZH 91' },
+  { label: 'Type', value: 'Autobus urbain standard' },
+  { label: 'Longueur', value: '12 mètres' },
+  { label: 'Motorisation', value: 'Diesel' },
+  { label: 'État', value: 'Préservé par RétroBus Essonne' },
+]);
+
+function Anniversary920VehiclePage() {
+  return (
+    <Box
+      position="relative"
+      width="100vw"
+      minHeight="calc(100vh - var(--header-h) - var(--nav-h))"
+      mt={{ base: "calc(-1 * (var(--mobile-header-h) - 20px))", md: "calc(-1 * (var(--header-h) + var(--nav-h) - 32px))" }}
+      marginLeft="calc(-50vw + 50%)"
+      marginRight="calc(-50vw + 50%)"
+      bg="radial-gradient(circle at 18% 12%, rgba(159,6,58,0.72) 0%, transparent 32%), linear-gradient(135deg, #5b0326 0%, #7d0530 48%, #0f172a 100%)"
+      overflow="hidden"
+    >
+      <Box position="absolute" inset={0} bg="blackAlpha.200" />
+      <Container maxW="6xl" position="relative" zIndex={1} py={{ base: 8, md: 14 }}>
+        <Button as={Link} to="/parc" leftIcon={<FiArrowLeft />} mb={8} colorScheme="whiteAlpha" variant="solid">
+          Retour aux véhicules
+        </Button>
+
+        <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 8, lg: 12 }} alignItems="center">
+          <VStack align="start" spacing={5} color="white">
+            <Badge bg="whiteAlpha.200" color="white" px={3} py={1} borderRadius="full" fontWeight="800">
+              Fiche temporaire anniversaire
+            </Badge>
+            <Heading as="h1" fontSize={{ base: "4xl", md: "6xl", lg: "7xl" }} lineHeight="0.95" textShadow="0 2px 0 #5b0326, 0 0 28px rgba(15,23,42,0.65)">
+              920 : 25 ans de voyages
+            </Heading>
+            <Text fontSize={{ base: "lg", md: "2xl" }} fontWeight="700" opacity={0.95}>
+              Juillet 2001 - juillet 2026
+            </Text>
+            <Text fontSize={{ base: "md", md: "lg" }} lineHeight="1.7" maxW="620px" opacity={0.95}>
+              La Dame Grise célèbre un quart de siècle de service, de souvenirs et de préservation au sein de RétroBus Essonne.
+            </Text>
+          </VStack>
+
+          <Box>
+            <ChakraImage
+              src="/assets/photos/p1-960.jpg"
+              alt="Mercedes Citaro 920"
+              borderRadius="xl"
+              boxShadow="0 24px 80px rgba(15,23,42,0.45)"
+              border="3px solid rgba(255,255,255,0.72)"
+              w="100%"
+              objectFit="cover"
+            />
+          </Box>
+        </SimpleGrid>
+
+        <VStack spacing={5} color="white" textAlign="center" maxW="860px" mx="auto" mt={{ base: 12, md: 16 }}>
+          <Heading as="h2" fontSize={{ base: "2xl", md: "4xl" }} lineHeight="1.05">
+            Un quart de siècle sur la route
+          </Heading>
+          <Text fontSize={{ base: "md", md: "xl" }} lineHeight="1.8" opacity={0.94}>
+            Depuis 2001, le 920 accompagne les histoires de voyageurs, de conducteurs et de passionnés. Préservé par RétroBus Essonne, ce Mercedes Citaro est aujourd'hui un témoin vivant d'une époque où les lignes régulières, les livrées et les sons du quotidien composaient déjà notre patrimoine commun.
+          </Text>
+        </VStack>
+
+        <Box position="relative" mt={{ base: 12, md: 20 }} pb={{ base: 4, md: 8 }}>
+          <Box
+            as="svg"
+            aria-hidden="true"
+            display={{ base: "none", md: "block" }}
+            position="absolute"
+            inset="-40px 4% 0 4%"
+            width="92%"
+            height="100%"
+            viewBox="0 0 1000 760"
+            preserveAspectRatio="none"
+            pointerEvents="none"
+            zIndex={0}
+            opacity={0.72}
+          >
+            <defs>
+              <linearGradient id="anniversary920Route" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="rgba(255,255,255,0.65)" />
+                <stop offset="45%" stopColor="rgba(248,191,208,0.55)" />
+                <stop offset="100%" stopColor="rgba(15,23,42,0.45)" />
+              </linearGradient>
+            </defs>
+            <path
+              d="M180 105 C420 5 585 205 430 280 C270 356 362 510 586 438 C810 365 872 525 704 650"
+              fill="none"
+              stroke="url(#anniversary920Route)"
+              strokeWidth="24"
+              strokeLinecap="round"
+            />
+            <path
+              d="M202 105 C438 28 552 208 444 264 C326 326 390 464 574 410 C752 358 828 490 704 630"
+              fill="none"
+              stroke="rgba(255,255,255,0.35)"
+              strokeWidth="5"
+              strokeLinecap="round"
+              strokeDasharray="18 26"
+            />
+            <path
+              d="M486 275 C560 214 660 294 608 356 C552 424 444 340 506 286"
+              fill="none"
+              stroke="rgba(255,255,255,0.32)"
+              strokeWidth="10"
+              strokeLinecap="round"
+            />
+          </Box>
+
+          <VStack spacing={{ base: 14, md: 28 }} position="relative" zIndex={1}>
+            {ANNIVERSARY_920_STORY_SECTIONS.map((section, index) => {
+              const imageOrder = { base: 1, md: index % 2 === 0 ? 1 : 2 };
+              const copyOrder = { base: 2, md: index % 2 === 0 ? 2 : 1 };
+
+              return (
+                <SimpleGrid key={section.title} columns={{ base: 1, md: 2 }} spacing={{ base: 5, md: 10 }} alignItems="center" w="100%" mt={index > 0 ? { base: 2, md: 8 } : 0}>
+                  <Box order={imageOrder} borderRadius="2xl" overflow="hidden" boxShadow="0 22px 70px rgba(15,23,42,0.4)" border="2px solid rgba(255,255,255,0.55)" bg="rgba(15,23,42,0.28)">
+                    <ChakraImage
+                      src={section.image}
+                      alt={section.alt}
+                      w="100%"
+                      h={{ base: "230px", md: "340px" }}
+                      objectFit="cover"
+                      onError={(event) => {
+                        if (section.fallbackImage && event.currentTarget.src !== section.fallbackImage) {
+                          event.currentTarget.src = section.fallbackImage;
+                        }
+                      }}
+                    />
+                    {(section.caption || section.credit) && (
+                      <Box px={{ base: 4, md: 5 }} py={3} color="white">
+                        {section.caption && (
+                          <Text fontSize="sm" fontWeight="800">
+                            {section.caption}
+                          </Text>
+                        )}
+                        {section.credit && (
+                          <Text fontSize="xs" color="whiteAlpha.750" mt={1}>
+                            {section.credit}
+                          </Text>
+                        )}
+                      </Box>
+                    )}
+                  </Box>
+                  <VStack order={copyOrder} align="start" spacing={4} color="white" bg="rgba(15,23,42,0.34)" border="1px solid rgba(255,255,255,0.22)" borderRadius="2xl" p={{ base: 5, md: 7 }} boxShadow="0 18px 55px rgba(15,23,42,0.25)" backdropFilter="blur(8px)">
+                    <Heading as="h3" fontSize={{ base: "2xl", md: "3xl" }} lineHeight="1.05">
+                      {section.title}
+                    </Heading>
+                    <Text fontSize={{ base: "md", md: "lg" }} lineHeight="1.75" opacity={0.94}>
+                      {section.text}
+                    </Text>
+                    {section.facts && (
+                      <VStack align="start" spacing={2} pt={1} w="100%">
+                        {section.facts.map((fact) => (
+                          <Box key={fact} bg="whiteAlpha.200" border="1px solid rgba(255,255,255,0.18)" borderRadius="lg" px={3} py={2} w="100%">
+                            <Text fontSize={{ base: "sm", md: "md" }} fontWeight="700" lineHeight="1.45">
+                              {fact}
+                            </Text>
+                          </Box>
+                        ))}
+                      </VStack>
+                    )}
+                  </VStack>
+                </SimpleGrid>
+              );
+            })}
+          </VStack>
+        </Box>
+
+        <Box mt={{ base: 14, md: 24 }} color="white">
+          <VStack spacing={4} textAlign="center" mb={{ base: 6, md: 8 }}>
+            <Badge bg="whiteAlpha.200" color="white" px={3} py={1} borderRadius="full" fontWeight="800">
+              Fiche technique
+            </Badge>
+            <Heading as="h2" fontSize={{ base: "2xl", md: "4xl" }} lineHeight="1.05">
+              Caractéristiques techniques
+            </Heading>
+          </VStack>
+
+          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 3, md: 4 }} bg="rgba(15,23,42,0.34)" border="1px solid rgba(255,255,255,0.22)" borderRadius="2xl" p={{ base: 5, md: 7 }} boxShadow="0 18px 55px rgba(15,23,42,0.25)" backdropFilter="blur(8px)">
+            {ANNIVERSARY_920_TECHNICAL_SPECS.map((spec) => (
+              <Flex key={spec.label} justify="space-between" gap={4} align="center" bg="whiteAlpha.200" border="1px solid rgba(255,255,255,0.16)" borderRadius="lg" px={{ base: 3, md: 4 }} py={3}>
+                <Text fontSize={{ base: "sm", md: "md" }} fontWeight="700" color="whiteAlpha.800">
+                  {spec.label}
+                </Text>
+                <Text fontSize={{ base: "sm", md: "md" }} fontWeight="900" textAlign="right">
+                  {spec.value}
+                </Text>
+              </Flex>
+            ))}
+          </SimpleGrid>
+        </Box>
+      </Container>
+    </Box>
+  );
+}
 
 // Résolution robuste (assets locaux vs uploads API)
 function resolve(src) {
@@ -80,6 +343,14 @@ export default function VehicleDetails() {
   useEffect(() => {
     let abort = false;
     setLoading(true);
+
+    if (ENABLE_TEMPORARY_920_ANNIVERSARY_PAGE && id === '920') {
+      setVehicle({ modele: '920', gallery: ['/assets/photos/p1-960.jpg'] });
+      setEvents([]);
+      setError(null);
+      setLoading(false);
+      return () => { abort = true; };
+    }
 
     const fetchVehicle = fetch(`${API_BASE_URL}/public/vehicles/${id}`, { cache: 'no-store' })
       .then(r => { if (!r.ok) throw new Error('Vehicle not found'); return r.json(); });
@@ -191,6 +462,10 @@ export default function VehicleDetails() {
         </Box>
       </Box>
     );
+  }
+
+  if (ENABLE_TEMPORARY_920_ANNIVERSARY_PAGE && id === '920') {
+    return <Anniversary920VehiclePage />;
   }
 
   // From here, vehicle is defined

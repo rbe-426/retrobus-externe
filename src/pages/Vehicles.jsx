@@ -16,13 +16,14 @@ import {
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { API_BASE } from '../lib/api';
+import { ENABLE_TEMPORARY_ANNIVERSARY_920 } from "../lib/featureFlags";
 
 // Images par défaut pour les véhicules
 const defaultImages = {
   "920": ["/assets/photos/p1-960.jpg"],
 };
 
-const ENABLE_ANNIVERSARY_920 = false;
+const ENABLE_ANNIVERSARY_920 = ENABLE_TEMPORARY_ANNIVERSARY_920;
 
 export default function Vehicles() {
   const [vehicles, setVehicles] = useState([]);
@@ -130,17 +131,21 @@ export default function Vehicles() {
         )}
 
         <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
-          {vehicles.map((vehicle) => (
+          {vehicles.map((vehicle) => {
+            const isAnniversary920 = ENABLE_ANNIVERSARY_920 && vehicle.parc === "920";
+
+            return (
             <Box
               key={vehicle.parc}
               border="1px solid"
-              borderColor="gray.200"
+              borderColor={isAnniversary920 ? "rgba(255,255,255,0.24)" : "gray.200"}
               borderRadius="md"
               overflow="hidden"
               p={4}
-              bg="white"
-              shadow="sm"
-              _hover={{ shadow: "md" }}
+              bg={isAnniversary920 ? "linear-gradient(135deg, #7d0530 0%, #9f063a 54%, #5b0326 100%)" : "white"}
+              color={isAnniversary920 ? "white" : "inherit"}
+              shadow={isAnniversary920 ? "xl" : "sm"}
+              _hover={{ shadow: isAnniversary920 ? "2xl" : "md", transform: isAnniversary920 ? "translateY(-2px)" : "none" }}
               transition="all 0.2s"
               position="relative"
             >
@@ -180,7 +185,7 @@ export default function Vehicles() {
               </Box>
               
               {vehicle.marque && (
-                <Text fontSize="xs" color="gray.500" mb={1} fontWeight="500">
+                <Text fontSize="xs" color={isAnniversary920 ? "whiteAlpha.800" : "gray.500"} mb={1} fontWeight="500">
                   {vehicle.marque}
                   {vehicle.type && ` • ${vehicle.type}`}
                 </Text>
@@ -190,7 +195,7 @@ export default function Vehicles() {
                 {vehicle.modele}
               </Heading>
               
-              <Text color="gray.600" fontSize="sm" mb={1}>
+              <Text color={isAnniversary920 ? "whiteAlpha.900" : "gray.600"} fontSize="sm" mb={1}>
                 <strong>Parc:</strong> {vehicle.parc}
               </Text>
               
@@ -211,30 +216,30 @@ export default function Vehicles() {
                     loading="lazy"
                     decoding="async"
                     fallback={
-                      <Text color="gray.600" fontSize="sm">
+                      <Text color={isAnniversary920 ? "whiteAlpha.900" : "gray.600"} fontSize="sm">
                         {vehicle.immat}
                       </Text>
                     }
                   />
                 </Box>
               ) : (
-                <Text color="gray.600" fontSize="sm" mb={1}>
+                <Text color={isAnniversary920 ? "whiteAlpha.900" : "gray.600"} fontSize="sm" mb={1}>
                   <strong>Immatriculation:</strong> Non renseignée
                 </Text>
               )}
               
-              <Text color="gray.600" fontSize="sm" mb={1}>
+              <Text color={isAnniversary920 ? "whiteAlpha.900" : "gray.600"} fontSize="sm" mb={1}>
                 <strong>État:</strong> {vehicle.etat}
               </Text>
               
               {vehicle.miseEnCirculation && (
-                <Text color="gray.600" fontSize="sm" mb={4}>
+                <Text color={isAnniversary920 ? "whiteAlpha.900" : "gray.600"} fontSize="sm" mb={4}>
                   <strong>Mise en circulation:</strong> {new Date(vehicle.miseEnCirculation).getFullYear()}
                 </Text>
               )}
 
               <Link to={`/vehicles/${vehicle.parc}`}>
-                <Button colorScheme="teal" size="sm">
+                <Button colorScheme={isAnniversary920 ? "whiteAlpha" : "teal"} bg={isAnniversary920 ? "white" : undefined} color={isAnniversary920 ? "#7d0530" : undefined} size="sm">
                   Voir les détails
                 </Button>
               </Link>
@@ -245,7 +250,8 @@ export default function Vehicles() {
                 </Text>
               )}
             </Box>
-          ))}
+            );
+          })}
         </SimpleGrid>
 
         {vehicles.length === 0 && !loading && (

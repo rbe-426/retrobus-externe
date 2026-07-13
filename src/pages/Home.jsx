@@ -7,8 +7,28 @@ import { useState, useEffect } from "react";
 import pageBg from "../assets/logo_arriere_plan.svg";
 import heroImg from "../assets/photos/ma-photo-hero.jpg";
 import SEO, { jsonLdSchemas } from "../components/SEO";
+import { ENABLE_TEMPORARY_ANNIVERSARY_920 } from "../lib/featureFlags";
 
 const HERO_IMAGE_URL = "/assets/photos/ma-photo-hero.jpg";
+const ANNIVERSARY_HERO_BUS_IMAGE = "/assets/bus-25-ans.png";
+const ANNIVERSARY_CARD_LOGO_IMAGE = "/assets/RBE%20CLASSIQUE%20FULL%20BLANC.png";
+
+// Bloc temporaire pour l'anniversaire des 25 ans : ajuster ici la disposition du titre hero.
+const ANNIVERSARY_HERO_LAYOUT = Object.freeze({
+  desktop: {
+    titleFontSize: { md: "7xl", lg: "8xl" },
+    titleShiftX: "-28px",
+    imageHeight: { md: "1.1em", lg: "1.2em" },
+    imageGap: 4,
+    imageVerticalAlign: "middle",
+  },
+  mobile: {
+    titleFontSize: { base: "4xl", sm: "5xl" },
+    imageHeight: { base: "1.05em", sm: "1.15em" },
+    imageGap: 2,
+    imageVerticalAlign: "middle",
+  },
+});
 
 const vehicles = [
   {
@@ -27,7 +47,7 @@ const ANNIVERSARY_920_LAYOUT = Object.freeze({
   desktopWidth: "calc(100% + 480px)",
 });
 
-const ENABLE_ANNIVERSARY_920 = false;
+const ENABLE_ANNIVERSARY_920 = ENABLE_TEMPORARY_ANNIVERSARY_920;
 
 const ANNIVERSARY_920_COPY = Object.freeze({
   period: "Juillet 2001 - juillet 2026",
@@ -53,6 +73,19 @@ function Anniversary920Card({ compact = false }) {
       alignItems="stretch"
       w="100%"
     >
+      <Image
+        src={ANNIVERSARY_CARD_LOGO_IMAGE}
+        alt="RétroBus Essonne"
+        position="absolute"
+        top={{ base: 4, md: compact ? 5 : 6 }}
+        right={{ base: 4, md: compact ? 5 : 6 }}
+        h={{ base: "34px", md: compact ? "40px" : "52px" }}
+        w="auto"
+        maxW={{ base: "130px", md: compact ? "150px" : "190px" }}
+        objectFit="contain"
+        zIndex={2}
+        pointerEvents="none"
+      />
       <VStack align="stretch" spacing={{ base: 4, md: compact ? 5 : 7 }} position="relative" zIndex={1} flex={1}>
         <Badge
           alignSelf="flex-start"
@@ -77,11 +110,11 @@ function Anniversary920Card({ compact = false }) {
             <HStack align="baseline" spacing={2} flexWrap="wrap">
               <Text
                 as="span"
-                fontSize={{ base: "4xl", sm: "5xl", md: compact ? "5xl" : "7xl" }}
+                fontSize={{ base: "3xl", sm: "5xl", md: compact ? "5xl" : "7xl" }}
                 lineHeight="0.9"
                 fontWeight="900"
                 letterSpacing="0"
-                textShadow="0 0 14px rgba(255,255,255,0.55)"
+                textShadow="0 2px 0 #5b0326, 0 0 10px rgba(211,12,76,0.72), 0 0 24px rgba(193,7,68,0.62), 0 0 42px rgba(159,6,58,0.58), 0 0 68px rgba(15,23,42,0.68)"
               >
                 25 ANS
               </Text>
@@ -106,28 +139,36 @@ function Anniversary920Card({ compact = false }) {
               />
               <Badge
                 position="absolute"
-                top={2}
-                right={2}
+                top={{ base: 2, md: 3 }}
+                right={{ base: 2, md: compact ? 3 : 1 }}
                 bg="yellow.300"
                 color="black"
                 borderRadius="full"
-                px={4}
-                py={2}
-                fontSize={{ base: "xs", md: "sm" }}
+                px={{ base: 2.5, md: compact ? 3 : 3.5 }}
+                py={{ base: 1, md: compact ? 1 : 1.5 }}
+                fontSize={{ base: "2xs", md: compact ? "xs" : "sm" }}
                 fontWeight="900"
                 boxShadow="lg"
-                transform="rotate(12deg)"
+                transform="rotate(8deg)"
+                transformOrigin="center"
+                lineHeight="1"
               >
-                🎉 25 ANS
+                🎉 25 ans
               </Badge>
             </Box>
           </VStack>
 
-          <VStack align="start" spacing={{ base: 2, md: compact ? 2 : 4 }} justify="center" h="100%">
+          <VStack
+            align="start"
+            spacing={{ base: 2, md: compact ? 2 : 4 }}
+            justify={{ base: "start", md: compact ? "start" : "center" }}
+            h="100%"
+            pt={0}
+          >
             <Text fontSize={{ base: "md", md: compact ? "lg" : "xl" }} fontWeight="600">
               {ANNIVERSARY_920_COPY.period}
             </Text>
-            <Heading as="h2" fontSize={{ base: "2xl", md: compact ? "3xl" : "5xl" }} lineHeight="1" color="white">
+            <Heading as="h2" fontSize={{ base: "2xl", md: compact ? "3xl" : "4xl" }} lineHeight="1" color="white">
               {ANNIVERSARY_920_COPY.title}
             </Heading>
             <Text fontSize={{ base: "sm", md: compact ? "md" : "lg" }} fontWeight="700">
@@ -290,40 +331,37 @@ export default function Home() {
           >
             <div className="hero-content">
               <div className="hero-box">
-                <Heading as="h1" size="2xl" lineHeight="1.05">
-                  Préserver & partager le patrimoine automobile en Essonne
-                </Heading>
-                <Text mt={4} fontSize="lg" color="whiteAlpha.800">
-                  L'association RétroBus Essonne est une association régie par la Loi 1901 qui préserve et partage le patrimoine automobile en Essonne.
-                </Text>
-                <Stack 
-                  direction="column"
-                  spacing={4} 
-                  mt={6} 
-                  alignItems="flex-end"
-                >
-                  <Button
-                    as={RouterLink}
-                    to="/parc"
-                    size="lg"
-                    bg="var(--rbe-red)"
-                    color="white"
-                    _hover={{ opacity: 0.9 }}
-                  >
-                    Découvrir notre collection
-                  </Button>
-
-                  <Button
-                    as={RouterLink}
-                    to="/contact"
-                    size="lg"
-                    variant="outline"
-                    color="white"
-                    _hover={{ bg: "whiteAlpha.200" }}
-                  >
-                    Nous contacter
-                  </Button>
-                </Stack>
+                {ENABLE_ANNIVERSARY_920 ? (
+                  <Heading as="h1" fontSize={ANNIVERSARY_HERO_LAYOUT.desktop.titleFontSize} lineHeight="0.9" textAlign="right" whiteSpace="nowrap" transform={`translateX(${ANNIVERSARY_HERO_LAYOUT.desktop.titleShiftX})`} textShadow="0 0 16px rgba(255,255,255,0.9), 0 0 36px rgba(255,216,77,0.85), 0 0 72px rgba(255,76,120,0.7)">
+                    25 ANS
+                    <Image
+                      src={ANNIVERSARY_HERO_BUS_IMAGE}
+                      alt="Bus RétroBus Essonne"
+                      display="inline-block"
+                      h={ANNIVERSARY_HERO_LAYOUT.desktop.imageHeight}
+                      w="auto"
+                      ml={ANNIVERSARY_HERO_LAYOUT.desktop.imageGap}
+                      verticalAlign={ANNIVERSARY_HERO_LAYOUT.desktop.imageVerticalAlign}
+                    />
+                  </Heading>
+                ) : (
+                  <>
+                    <Heading as="h1" size="2xl" lineHeight="1.05">
+                      Préserver & partager le patrimoine automobile en Essonne
+                    </Heading>
+                    <Text mt={4} fontSize="lg" color="whiteAlpha.800">
+                      L'association RétroBus Essonne est une association régie par la Loi 1901 qui préserve et partage le patrimoine automobile en Essonne.
+                    </Text>
+                    <Stack direction="column" spacing={4} mt={6} alignItems="flex-end">
+                      <Button as={RouterLink} to="/parc" size="lg" bg="var(--rbe-red)" color="white" _hover={{ opacity: 0.9 }}>
+                        Découvrir notre collection
+                      </Button>
+                      <Button as={RouterLink} to="/contact" size="lg" variant="outline" color="white" _hover={{ bg: "whiteAlpha.200" }}>
+                        Nous contacter
+                      </Button>
+                    </Stack>
+                  </>
+                )}
               </div>
             </div>
           </Box>
@@ -354,37 +392,37 @@ export default function Home() {
           >
             <Container position="relative" zIndex={1} px={4}>
               <VStack align="center" spacing={4} textAlign="center">
-                <Heading as="h1" fontSize="2xl" lineHeight="1.1" color="white" textShadow="0 2px 20px rgba(0,0,0,0.5)">
-                  Préserver & partager le patrimoine automobile en Essonne
-                </Heading>
-                <Text fontSize="md" color="whiteAlpha.900" textShadow="0 1px 10px rgba(0,0,0,0.5)">
-                  L'association RétroBus Essonne est une association régie par la Loi 1901 qui préserve et partage le patrimoine automobile en Essonne.
-                </Text>
-                <Stack direction="column" spacing={3} width="full" mt={4}>
-                  <Button
-                    as={RouterLink}
-                    to="/parc"
-                    size="md"
-                    bg="var(--rbe-red)"
-                    color="white"
-                    width="full"
-                    _hover={{ opacity: 0.9 }}
-                  >
-                    Découvrir notre collection
-                  </Button>
-                  <Button
-                    as={RouterLink}
-                    to="/contact"
-                    size="md"
-                    variant="outline"
-                    color="white"
-                    borderColor="white"
-                    width="full"
-                    _hover={{ bg: "whiteAlpha.300" }}
-                  >
-                    Nous contacter
-                  </Button>
-                </Stack>
+                {ENABLE_ANNIVERSARY_920 ? (
+                  <Heading as="h1" fontSize={ANNIVERSARY_HERO_LAYOUT.mobile.titleFontSize} lineHeight="0.9" color="white" whiteSpace="nowrap" textShadow="0 0 14px rgba(255,255,255,0.9), 0 0 28px rgba(255,216,77,0.85), 0 0 52px rgba(255,76,120,0.7)">
+                    25 ANS
+                    <Image
+                      src={ANNIVERSARY_HERO_BUS_IMAGE}
+                      alt="Bus RétroBus Essonne"
+                      display="inline-block"
+                      h={ANNIVERSARY_HERO_LAYOUT.mobile.imageHeight}
+                      w="auto"
+                      ml={ANNIVERSARY_HERO_LAYOUT.mobile.imageGap}
+                      verticalAlign={ANNIVERSARY_HERO_LAYOUT.mobile.imageVerticalAlign}
+                    />
+                  </Heading>
+                ) : (
+                  <>
+                    <Heading as="h1" fontSize="2xl" lineHeight="1.1" color="white" textShadow="0 2px 20px rgba(0,0,0,0.5)">
+                      Préserver & partager le patrimoine automobile en Essonne
+                    </Heading>
+                    <Text fontSize="md" color="whiteAlpha.900" textShadow="0 1px 10px rgba(0,0,0,0.5)">
+                      L'association RétroBus Essonne est une association régie par la Loi 1901 qui préserve et partage le patrimoine automobile en Essonne.
+                    </Text>
+                    <Stack direction="column" spacing={3} width="full" mt={4}>
+                      <Button as={RouterLink} to="/parc" size="md" bg="var(--rbe-red)" color="white" width="full" _hover={{ opacity: 0.9 }}>
+                        Découvrir notre collection
+                      </Button>
+                      <Button as={RouterLink} to="/contact" size="md" variant="outline" color="white" borderColor="white" width="full" _hover={{ bg: "whiteAlpha.300" }}>
+                        Nous contacter
+                      </Button>
+                    </Stack>
+                  </>
+                )}
               </VStack>
             </Container>
           </Box>

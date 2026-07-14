@@ -109,30 +109,30 @@ function Anniversary920VehiclePage() {
       position="relative"
       width="100vw"
       minHeight="calc(100vh - var(--header-h) - var(--nav-h))"
-      mt={{ base: "calc(-1 * (var(--mobile-header-h) - 20px))", md: "calc(-1 * (var(--header-h) + var(--nav-h) - 32px))" }}
+      mt={{ base: "calc(-1 * var(--mobile-header-h))", md: "calc(-1 * (var(--header-h) + var(--nav-h) - 32px))" }}
       marginLeft="calc(-50vw + 50%)"
       marginRight="calc(-50vw + 50%)"
       bg="radial-gradient(circle at 18% 12%, rgba(159,6,58,0.72) 0%, transparent 32%), linear-gradient(135deg, #5b0326 0%, #7d0530 48%, #0f172a 100%)"
       overflow="hidden"
     >
       <Box position="absolute" inset={0} bg="blackAlpha.200" />
-      <Container maxW="6xl" position="relative" zIndex={1} py={{ base: 8, md: 14 }}>
-        <Button as={Link} to="/parc" leftIcon={<FiArrowLeft />} mb={8} colorScheme="whiteAlpha" variant="solid">
+      <Container maxW="6xl" position="relative" zIndex={1} px={{ base: 4, md: 6 }} py={{ base: 5, md: 14 }}>
+        <Button as={Link} to="/parc" leftIcon={<FiArrowLeft />} mb={{ base: 5, md: 8 }} size={{ base: "sm", md: "md" }} colorScheme="whiteAlpha" variant="solid">
           Retour aux véhicules
         </Button>
 
-        <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 8, lg: 12 }} alignItems="center">
-          <VStack align="start" spacing={5} color="white">
-            <Badge bg="whiteAlpha.200" color="white" px={3} py={1} borderRadius="full" fontWeight="800">
+        <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={{ base: 6, lg: 12 }} alignItems="center">
+          <VStack align="start" spacing={{ base: 3, md: 5 }} color="white">
+            <Badge bg="whiteAlpha.200" color="white" px={3} py={1} borderRadius="full" fontSize={{ base: "xs", md: "sm" }} fontWeight="800">
               Fiche temporaire anniversaire
             </Badge>
-            <Heading as="h1" fontSize={{ base: "4xl", md: "6xl", lg: "7xl" }} lineHeight="0.95" textShadow="0 2px 0 #5b0326, 0 0 28px rgba(15,23,42,0.65)">
+            <Heading as="h1" fontSize={{ base: "3xl", sm: "4xl", md: "6xl", lg: "7xl" }} lineHeight={{ base: "1", md: "0.95" }} textShadow="0 2px 0 #5b0326, 0 0 28px rgba(15,23,42,0.65)">
               920 : 25 ans de voyages
             </Heading>
-            <Text fontSize={{ base: "lg", md: "2xl" }} fontWeight="700" opacity={0.95}>
+            <Text fontSize={{ base: "md", md: "2xl" }} fontWeight="700" opacity={0.95}>
               Juillet 2001 - juillet 2026
             </Text>
-            <Text fontSize={{ base: "md", md: "lg" }} lineHeight="1.7" maxW="620px" opacity={0.95}>
+            <Text fontSize={{ base: "sm", md: "lg" }} lineHeight={{ base: "1.65", md: "1.7" }} maxW="620px" opacity={0.95}>
               La Dame Grise célèbre un quart de siècle de service, de souvenirs et de préservation au sein de RétroBus Essonne.
             </Text>
           </VStack>
@@ -145,21 +145,22 @@ function Anniversary920VehiclePage() {
               boxShadow="0 24px 80px rgba(15,23,42,0.45)"
               border="3px solid rgba(255,255,255,0.72)"
               w="100%"
+              h={{ base: "220px", sm: "280px", md: "auto" }}
               objectFit="cover"
             />
           </Box>
         </SimpleGrid>
 
-        <VStack spacing={5} color="white" textAlign="center" maxW="860px" mx="auto" mt={{ base: 12, md: 16 }}>
-          <Heading as="h2" fontSize={{ base: "2xl", md: "4xl" }} lineHeight="1.05">
+        <VStack spacing={{ base: 3, md: 5 }} color="white" textAlign="center" maxW="860px" mx="auto" mt={{ base: 9, md: 16 }}>
+          <Heading as="h2" fontSize={{ base: "xl", sm: "2xl", md: "4xl" }} lineHeight="1.05">
             Un quart de siècle sur la route
           </Heading>
-          <Text fontSize={{ base: "md", md: "xl" }} lineHeight="1.8" opacity={0.94}>
+          <Text fontSize={{ base: "sm", md: "xl" }} lineHeight={{ base: "1.7", md: "1.8" }} opacity={0.94}>
             Depuis 2001, le 920 accompagne les histoires de voyageurs, de conducteurs et de passionnés. Préservé par RétroBus Essonne, ce Mercedes Citaro est aujourd'hui un témoin vivant d'une époque où les lignes régulières, les livrées et les sons du quotidien composaient déjà notre patrimoine commun.
           </Text>
         </VStack>
 
-        <Box position="relative" mt={{ base: 12, md: 20 }} pb={{ base: 4, md: 8 }}>
+        <Box position="relative" mt={{ base: 9, md: 20 }} pb={{ base: 2, md: 8 }}>
           <Box
             as="svg"
             aria-hidden="true"
@@ -205,19 +206,19 @@ function Anniversary920VehiclePage() {
             />
           </Box>
 
-          <VStack spacing={{ base: 14, md: 28 }} position="relative" zIndex={1}>
+          <VStack spacing={{ base: 9, md: 28 }} position="relative" zIndex={1}>
             {ANNIVERSARY_920_STORY_SECTIONS.map((section, index) => {
               const imageOrder = { base: 1, md: index % 2 === 0 ? 1 : 2 };
               const copyOrder = { base: 2, md: index % 2 === 0 ? 2 : 1 };
 
               return (
-                <SimpleGrid key={section.title} columns={{ base: 1, md: 2 }} spacing={{ base: 5, md: 10 }} alignItems="center" w="100%" mt={index > 0 ? { base: 2, md: 8 } : 0}>
-                  <Box order={imageOrder} borderRadius="2xl" overflow="hidden" boxShadow="0 22px 70px rgba(15,23,42,0.4)" border="2px solid rgba(255,255,255,0.55)" bg="rgba(15,23,42,0.28)">
+                <SimpleGrid key={section.title} columns={{ base: 1, md: 2 }} spacing={{ base: 4, md: 10 }} alignItems="center" w="100%" mt={index > 0 ? { base: 0, md: 8 } : 0}>
+                  <Box order={imageOrder} borderRadius={{ base: "xl", md: "2xl" }} overflow="hidden" boxShadow="0 22px 70px rgba(15,23,42,0.4)" border="2px solid rgba(255,255,255,0.55)" bg="rgba(15,23,42,0.28)">
                     <ChakraImage
                       src={section.image}
                       alt={section.alt}
                       w="100%"
-                      h={{ base: "230px", md: "340px" }}
+                      h={{ base: "210px", sm: "260px", md: "340px" }}
                       objectFit="cover"
                       onError={(event) => {
                         if (section.fallbackImage && event.currentTarget.src !== section.fallbackImage) {
@@ -226,32 +227,32 @@ function Anniversary920VehiclePage() {
                       }}
                     />
                     {(section.caption || section.credit) && (
-                      <Box px={{ base: 4, md: 5 }} py={3} color="white">
+                      <Box px={{ base: 3, md: 5 }} py={{ base: 2.5, md: 3 }} color="white">
                         {section.caption && (
-                          <Text fontSize="sm" fontWeight="800">
+                          <Text fontSize={{ base: "xs", md: "sm" }} fontWeight="800">
                             {section.caption}
                           </Text>
                         )}
                         {section.credit && (
-                          <Text fontSize="xs" color="whiteAlpha.750" mt={1}>
+                          <Text fontSize={{ base: "2xs", md: "xs" }} color="whiteAlpha.750" mt={1} lineHeight="1.35">
                             {section.credit}
                           </Text>
                         )}
                       </Box>
                     )}
                   </Box>
-                  <VStack order={copyOrder} align="start" spacing={4} color="white" bg="rgba(15,23,42,0.34)" border="1px solid rgba(255,255,255,0.22)" borderRadius="2xl" p={{ base: 5, md: 7 }} boxShadow="0 18px 55px rgba(15,23,42,0.25)" backdropFilter="blur(8px)">
-                    <Heading as="h3" fontSize={{ base: "2xl", md: "3xl" }} lineHeight="1.05">
+                  <VStack order={copyOrder} align="start" spacing={{ base: 3, md: 4 }} color="white" bg="rgba(15,23,42,0.34)" border="1px solid rgba(255,255,255,0.22)" borderRadius={{ base: "xl", md: "2xl" }} p={{ base: 4, md: 7 }} boxShadow="0 18px 55px rgba(15,23,42,0.25)" backdropFilter="blur(8px)">
+                    <Heading as="h3" fontSize={{ base: "xl", md: "3xl" }} lineHeight="1.08">
                       {section.title}
                     </Heading>
-                    <Text fontSize={{ base: "md", md: "lg" }} lineHeight="1.75" opacity={0.94}>
+                    <Text fontSize={{ base: "sm", md: "lg" }} lineHeight={{ base: "1.65", md: "1.75" }} opacity={0.94}>
                       {section.text}
                     </Text>
                     {section.facts && (
                       <VStack align="start" spacing={2} pt={1} w="100%">
                         {section.facts.map((fact) => (
-                          <Box key={fact} bg="whiteAlpha.200" border="1px solid rgba(255,255,255,0.18)" borderRadius="lg" px={3} py={2} w="100%">
-                            <Text fontSize={{ base: "sm", md: "md" }} fontWeight="700" lineHeight="1.45">
+                          <Box key={fact} bg="whiteAlpha.200" border="1px solid rgba(255,255,255,0.18)" borderRadius="lg" px={{ base: 2.5, md: 3 }} py={{ base: 2, md: 2 }} w="100%">
+                            <Text fontSize={{ base: "xs", md: "md" }} fontWeight="700" lineHeight="1.45">
                               {fact}
                             </Text>
                           </Box>
@@ -265,23 +266,23 @@ function Anniversary920VehiclePage() {
           </VStack>
         </Box>
 
-        <Box mt={{ base: 14, md: 24 }} color="white">
-          <VStack spacing={4} textAlign="center" mb={{ base: 6, md: 8 }}>
+        <Box mt={{ base: 10, md: 24 }} color="white">
+          <VStack spacing={{ base: 3, md: 4 }} textAlign="center" mb={{ base: 5, md: 8 }}>
             <Badge bg="whiteAlpha.200" color="white" px={3} py={1} borderRadius="full" fontWeight="800">
               Fiche technique
             </Badge>
-            <Heading as="h2" fontSize={{ base: "2xl", md: "4xl" }} lineHeight="1.05">
+            <Heading as="h2" fontSize={{ base: "xl", sm: "2xl", md: "4xl" }} lineHeight="1.05">
               Caractéristiques techniques
             </Heading>
           </VStack>
 
-          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 3, md: 4 }} bg="rgba(15,23,42,0.34)" border="1px solid rgba(255,255,255,0.22)" borderRadius="2xl" p={{ base: 5, md: 7 }} boxShadow="0 18px 55px rgba(15,23,42,0.25)" backdropFilter="blur(8px)">
+          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={{ base: 2.5, md: 4 }} bg="rgba(15,23,42,0.34)" border="1px solid rgba(255,255,255,0.22)" borderRadius={{ base: "xl", md: "2xl" }} p={{ base: 4, md: 7 }} boxShadow="0 18px 55px rgba(15,23,42,0.25)" backdropFilter="blur(8px)">
             {ANNIVERSARY_920_TECHNICAL_SPECS.map((spec) => (
-              <Flex key={spec.label} justify="space-between" gap={4} align="center" bg="whiteAlpha.200" border="1px solid rgba(255,255,255,0.16)" borderRadius="lg" px={{ base: 3, md: 4 }} py={3}>
-                <Text fontSize={{ base: "sm", md: "md" }} fontWeight="700" color="whiteAlpha.800">
+              <Flex key={spec.label} direction={{ base: "column", sm: "row" }} justify="space-between" gap={{ base: 1, sm: 4 }} align={{ base: "start", sm: "center" }} bg="whiteAlpha.200" border="1px solid rgba(255,255,255,0.16)" borderRadius="lg" px={{ base: 3, md: 4 }} py={{ base: 2.5, md: 3 }}>
+                <Text fontSize={{ base: "xs", md: "md" }} fontWeight="700" color="whiteAlpha.800">
                   {spec.label}
                 </Text>
-                <Text fontSize={{ base: "sm", md: "md" }} fontWeight="900" textAlign="right">
+                <Text fontSize={{ base: "sm", md: "md" }} fontWeight="900" textAlign={{ base: "left", sm: "right" }}>
                   {spec.value}
                 </Text>
               </Flex>

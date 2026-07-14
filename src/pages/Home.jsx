@@ -110,16 +110,14 @@ function Anniversary920Card({ compact = false }) {
             <HStack align="baseline" spacing={2} flexWrap="wrap">
               <Text
                 as="span"
-                fontSize={{ base: "3xl", sm: "5xl", md: compact ? "5xl" : "7xl" }}
-                lineHeight="0.9"
+                fontSize={{ base: "xl", sm: "3xl", md: compact ? "3xl" : "5xl" }}
+                lineHeight="1"
                 fontWeight="900"
                 letterSpacing="0"
+                whiteSpace={{ base: "normal", sm: "nowrap" }}
                 textShadow="0 2px 0 #5b0326, 0 0 10px rgba(211,12,76,0.72), 0 0 24px rgba(193,7,68,0.62), 0 0 42px rgba(159,6,58,0.58), 0 0 68px rgba(15,23,42,0.68)"
               >
-                25 ANS
-              </Text>
-              <Text as="span" fontSize={{ base: "xs", md: "sm" }} fontWeight="900">
-                DU CITARO 920
+                Citaro 920 : 25 ANS !! 🎊
               </Text>
             </HStack>
 

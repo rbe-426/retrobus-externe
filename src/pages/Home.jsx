@@ -52,7 +52,7 @@ const ENABLE_ANNIVERSARY_920 = ENABLE_TEMPORARY_ANNIVERSARY_920;
 const ANNIVERSARY_920_COPY = Object.freeze({
   period: "Juillet 2001 - juillet 2026",
   title: "Le 920 fête ses 25 ans",
-  subtitle: '"La Dame Grise" - Mercedes Citaro',
+  subtitle: '"La Dame Grise" - Mercedes-Benz Citaro €2',
   description: "Un quart de siècle pour ce Citaro devenu véhicule référence de RétroBus Essonne, aujourd'hui préservé comme témoin du patrimoine roulant francilien.",
   primaryAction: "Voir la fiche du 920",
   secondaryAction: "Galerie photos",
@@ -61,8 +61,8 @@ const ANNIVERSARY_920_COPY = Object.freeze({
 function Anniversary920Card({ compact = false }) {
   return (
     <Box
-      bg="linear-gradient(135deg, #df2857 0%, #d7194e 100%)"
-      color="white"
+      bg="#feebc8"
+      color="black"
       borderRadius="xl"
       p={{ base: 4, md: compact ? 5 : 8 }}
       boxShadow="lg"
@@ -89,8 +89,8 @@ function Anniversary920Card({ compact = false }) {
       <VStack align="stretch" spacing={{ base: 4, md: compact ? 5 : 7 }} position="relative" zIndex={1} flex={1}>
         <Badge
           alignSelf="flex-start"
-          bg="yellow.100"
-          color="#8a3a00"
+          bg="var(--rbe-red)"
+          color="white"
           borderRadius="full"
           px={3}
           py={1}
@@ -115,7 +115,7 @@ function Anniversary920Card({ compact = false }) {
                 fontWeight="900"
                 letterSpacing="0"
                 whiteSpace={{ base: "normal", sm: "nowrap" }}
-                textShadow="0 2px 0 #5b0326, 0 0 10px rgba(211,12,76,0.72), 0 0 24px rgba(193,7,68,0.62), 0 0 42px rgba(159,6,58,0.58), 0 0 68px rgba(15,23,42,0.68)"
+                textShadow="0 1px 0 rgba(255,255,255,0.7), 0 0 14px rgba(227,0,69,0.42), 0 0 30px rgba(227,0,69,0.28)"
               >
                 Citaro 920 : 25 ANS !! 🎊
               </Text>
@@ -139,8 +139,8 @@ function Anniversary920Card({ compact = false }) {
                 position="absolute"
                 top={{ base: 2, md: 3 }}
                 right={{ base: 2, md: compact ? 3 : 1 }}
-                bg="yellow.300"
-                color="black"
+                bg="var(--rbe-red)"
+                color="white"
                 borderRadius="full"
                 px={{ base: 2.5, md: compact ? 3 : 3.5 }}
                 py={{ base: 1, md: compact ? 1 : 1.5 }}
@@ -166,7 +166,7 @@ function Anniversary920Card({ compact = false }) {
             <Text fontSize={{ base: "md", md: compact ? "lg" : "xl" }} fontWeight="600">
               {ANNIVERSARY_920_COPY.period}
             </Text>
-            <Heading as="h2" fontSize={{ base: "2xl", md: compact ? "3xl" : "4xl" }} lineHeight="1" color="white">
+            <Heading as="h2" fontSize={{ base: "2xl", md: compact ? "3xl" : "4xl" }} lineHeight="1" color="black">
               {ANNIVERSARY_920_COPY.title}
             </Heading>
             <Text fontSize={{ base: "sm", md: compact ? "md" : "lg" }} fontWeight="700">
@@ -195,10 +195,10 @@ function Anniversary920Card({ compact = false }) {
                 to="/photos"
                 size={compact ? "sm" : "md"}
                 variant="outline"
-                borderColor="whiteAlpha.700"
-                color="white"
+                borderColor="blackAlpha.500"
+                color="black"
                 fontWeight="800"
-                _hover={{ bg: "whiteAlpha.200" }}
+                _hover={{ bg: "blackAlpha.100" }}
                 minW={{ base: "auto", sm: compact ? "auto" : "140px" }}
                 w={{ base: "full", sm: "auto" }}
               >

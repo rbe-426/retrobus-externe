@@ -101,6 +101,7 @@ export default function App() {
             <Route path="/" element={<HomeComponent />} />
             <Route path="/parc" element={<Vehicles />} />
             <Route path="/vehicles/:id" element={<VehicleDetails />} />
+            <Route path="/vehicules/:id" element={<VehicleDetails />} />
             <Route path="/vehicles" element={<Navigate to="/parc" replace />} />
             <Route path="/evenements" element={<Events />} />
             <Route path="/evenement/:eventId/inscription" element={<EventRegistration />} />

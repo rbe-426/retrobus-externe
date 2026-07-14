@@ -6,7 +6,7 @@ import { ENABLE_TEMPORARY_ANNIVERSARY_920 } from "../lib/featureFlags";
 
 export default function Footer() {
   const location = useLocation();
-  const isTemporaryAnniversary920Page = ENABLE_TEMPORARY_ANNIVERSARY_920 && location.pathname === "/vehicles/920";
+  const isTemporaryAnniversary920Page = ENABLE_TEMPORARY_ANNIVERSARY_920 && ["/vehicles/920", "/vehicules/920"].includes(location.pathname);
 
   return (
     <>

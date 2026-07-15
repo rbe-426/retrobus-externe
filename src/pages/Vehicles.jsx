@@ -29,23 +29,23 @@ function createLicensePlateImage(value) {
   const safeValue = String(value || '').replace(/[<>&"']/g, '');
   const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" width="520" height="110" viewBox="0 0 520 110" role="img" aria-label="Immatriculation ${safeValue}">
-      <rect x="2" y="2" width="516" height="106" rx="10" fill="#ffffff" stroke="#111111" stroke-width="4"/>
-      <rect x="2" y="2" width="58" height="106" rx="8" fill="#003399"/>
-      <path d="M60 2h1v106h-1z" fill="#111111" opacity="0.35"/>
-      <g fill="#ffcc00" transform="translate(31 28)">
-        <circle r="2.4" transform="rotate(0) translate(0 -15)"/><circle r="2.4" transform="rotate(30) translate(0 -15)"/>
-        <circle r="2.4" transform="rotate(60) translate(0 -15)"/><circle r="2.4" transform="rotate(90) translate(0 -15)"/>
-        <circle r="2.4" transform="rotate(120) translate(0 -15)"/><circle r="2.4" transform="rotate(150) translate(0 -15)"/>
-        <circle r="2.4" transform="rotate(180) translate(0 -15)"/><circle r="2.4" transform="rotate(210) translate(0 -15)"/>
-        <circle r="2.4" transform="rotate(240) translate(0 -15)"/><circle r="2.4" transform="rotate(270) translate(0 -15)"/>
-        <circle r="2.4" transform="rotate(300) translate(0 -15)"/><circle r="2.4" transform="rotate(330) translate(0 -15)"/>
+      <rect x="2" y="2" width="516" height="106" rx="8" fill="#ffffff" stroke="#151515" stroke-width="3"/>
+      <rect x="2" y="2" width="50" height="106" rx="5" fill="#003399"/>
+      <path d="M48 2h1v106h-1z" fill="#000000" opacity="0.25"/>
+      <g fill="#ffcc00" transform="translate(25 29)">
+        <circle r="2.15" transform="rotate(0) translate(0 -14)"/><circle r="2.15" transform="rotate(30) translate(0 -14)"/>
+        <circle r="2.15" transform="rotate(60) translate(0 -14)"/><circle r="2.15" transform="rotate(90) translate(0 -14)"/>
+        <circle r="2.15" transform="rotate(120) translate(0 -14)"/><circle r="2.15" transform="rotate(150) translate(0 -14)"/>
+        <circle r="2.15" transform="rotate(180) translate(0 -14)"/><circle r="2.15" transform="rotate(210) translate(0 -14)"/>
+        <circle r="2.15" transform="rotate(240) translate(0 -14)"/><circle r="2.15" transform="rotate(270) translate(0 -14)"/>
+        <circle r="2.15" transform="rotate(300) translate(0 -14)"/><circle r="2.15" transform="rotate(330) translate(0 -14)"/>
       </g>
-      <text x="31" y="88" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="800" fill="#ffffff">F</text>
-      <rect x="460" y="2" width="58" height="106" rx="8" fill="#003399"/>
-      <path d="M459 2h1v106h-1z" fill="#111111" opacity="0.35"/>
-      <text x="489" y="44" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="800" fill="#ffffff">FR</text>
-      <text x="489" y="78" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="800" fill="#ffffff">91</text>
-      <text x="260" y="75" text-anchor="middle" font-family="Arial Black, Arial, Helvetica, sans-serif" font-size="54" font-weight="900" letter-spacing="3" fill="#111111">${safeValue}</text>
+      <text x="25" y="88" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="700" fill="#ffffff">F</text>
+      <rect x="472" y="2" width="46" height="106" rx="6" fill="#003399"/>
+      <path d="M471 2h1v106h-1z" fill="#000000" opacity="0.25"/>
+      <text x="495" y="44" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="16" font-weight="700" fill="#ffffff">FR</text>
+      <text x="495" y="78" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#ffffff">91</text>
+      <text x="260" y="76" text-anchor="middle" font-family="'Montserrat', sans-serif" font-size="60" font-weight="700" letter-spacing="0.2" textLength="380" lengthAdjust="spacingAndGlyphs" fill="#111111">${safeValue}</text>
     </svg>
   `;
 
@@ -59,10 +59,10 @@ function LicensePlatePreview({ value }) {
       alt={`Plaque d'immatriculation ${value}`}
       htmlWidth={520}
       htmlHeight={110}
-      maxW={{ base: "180px", sm: "210px" }}
+      maxW={{ base: "155px", sm: "180px" }}
       h="auto"
       borderRadius="5px"
-      boxShadow="sm"
+      boxShadow="xs"
       loading="lazy"
       decoding="async"
     />
@@ -240,29 +240,29 @@ export default function Vehicles() {
               </Heading>
               
               <Text color={isAnniversary920 ? "whiteAlpha.900" : "gray.600"} fontSize="sm" mb={1}>
-                <strong>Parc:</strong> {vehicle.parc}
+                <strong>Parc :</strong> {vehicle.parc}
               </Text>
               
               {vehicle.immat ? (
                 <Box mb={3}>
-                  <Text fontSize="xs" color={isAnniversary920 ? "whiteAlpha.800" : "gray.500"} mb={1} fontWeight="600">
-                    Immatriculation
+                  <Text color={isAnniversary920 ? "whiteAlpha.900" : "gray.600"} fontSize="sm" mb={1} fontWeight="bold">
+                    Immatriculation :
                   </Text>
                   <LicensePlatePreview value={vehicle.immat} />
                 </Box>
               ) : (
                 <Text color={isAnniversary920 ? "whiteAlpha.900" : "gray.600"} fontSize="sm" mb={1}>
-                  <strong>Immatriculation:</strong> Non renseignée
+                  <strong>Immatriculation :</strong> Non renseignée
                 </Text>
               )}
               
               <Text color={isAnniversary920 ? "whiteAlpha.900" : "gray.600"} fontSize="sm" mb={1}>
-                <strong>État:</strong> {vehicle.etat}
+                <strong>État :</strong> {vehicle.etat}
               </Text>
               
               {vehicle.miseEnCirculation && (
                 <Text color={isAnniversary920 ? "whiteAlpha.900" : "gray.600"} fontSize="sm" mb={4}>
-                  <strong>Mise en circulation:</strong> {new Date(vehicle.miseEnCirculation).getFullYear()}
+                  <strong>Mise en circulation :</strong> {new Date(vehicle.miseEnCirculation).getFullYear()}
                 </Text>
               )}
 

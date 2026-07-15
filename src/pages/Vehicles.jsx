@@ -25,6 +25,50 @@ const defaultImages = {
 
 const ENABLE_ANNIVERSARY_920 = ENABLE_TEMPORARY_ANNIVERSARY_920;
 
+function createLicensePlateImage(value) {
+  const safeValue = String(value || '').replace(/[<>&"']/g, '');
+  const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="520" height="110" viewBox="0 0 520 110" role="img" aria-label="Immatriculation ${safeValue}">
+      <rect x="2" y="2" width="516" height="106" rx="10" fill="#ffffff" stroke="#111111" stroke-width="4"/>
+      <rect x="2" y="2" width="58" height="106" rx="8" fill="#003399"/>
+      <path d="M60 2h1v106h-1z" fill="#111111" opacity="0.35"/>
+      <g fill="#ffcc00" transform="translate(31 28)">
+        <circle r="2.4" transform="rotate(0) translate(0 -15)"/><circle r="2.4" transform="rotate(30) translate(0 -15)"/>
+        <circle r="2.4" transform="rotate(60) translate(0 -15)"/><circle r="2.4" transform="rotate(90) translate(0 -15)"/>
+        <circle r="2.4" transform="rotate(120) translate(0 -15)"/><circle r="2.4" transform="rotate(150) translate(0 -15)"/>
+        <circle r="2.4" transform="rotate(180) translate(0 -15)"/><circle r="2.4" transform="rotate(210) translate(0 -15)"/>
+        <circle r="2.4" transform="rotate(240) translate(0 -15)"/><circle r="2.4" transform="rotate(270) translate(0 -15)"/>
+        <circle r="2.4" transform="rotate(300) translate(0 -15)"/><circle r="2.4" transform="rotate(330) translate(0 -15)"/>
+      </g>
+      <text x="31" y="88" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="800" fill="#ffffff">F</text>
+      <rect x="460" y="2" width="58" height="106" rx="8" fill="#003399"/>
+      <path d="M459 2h1v106h-1z" fill="#111111" opacity="0.35"/>
+      <text x="489" y="44" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="800" fill="#ffffff">FR</text>
+      <text x="489" y="78" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="800" fill="#ffffff">91</text>
+      <text x="260" y="75" text-anchor="middle" font-family="Arial Black, Arial, Helvetica, sans-serif" font-size="54" font-weight="900" letter-spacing="3" fill="#111111">${safeValue}</text>
+    </svg>
+  `;
+
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
+}
+
+function LicensePlatePreview({ value }) {
+  return (
+    <Image
+      src={createLicensePlateImage(value)}
+      alt={`Plaque d'immatriculation ${value}`}
+      htmlWidth={520}
+      htmlHeight={110}
+      maxW={{ base: "180px", sm: "210px" }}
+      h="auto"
+      borderRadius="5px"
+      boxShadow="sm"
+      loading="lazy"
+      decoding="async"
+    />
+  );
+}
+
 export default function Vehicles() {
   const [vehicles, setVehicles] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -201,26 +245,10 @@ export default function Vehicles() {
               
               {vehicle.immat ? (
                 <Box mb={3}>
-                  <Text fontSize="xs" color="gray.500" mb={1} fontWeight="600">
+                  <Text fontSize="xs" color={isAnniversary920 ? "whiteAlpha.800" : "gray.500"} mb={1} fontWeight="600">
                     Immatriculation
                   </Text>
-                  <Image
-                    src={`${API_BASE}/public/plaque/${vehicle.immat.replace(/\s+/g, '-')}`}
-                    alt={vehicle.immat}
-                    htmlWidth={260}
-                    htmlHeight={64}
-                    maxW="260px"
-                    h="auto"
-                    borderRadius="4px"
-                    boxShadow="sm"
-                    loading="lazy"
-                    decoding="async"
-                    fallback={
-                      <Text color={isAnniversary920 ? "whiteAlpha.900" : "gray.600"} fontSize="sm">
-                        {vehicle.immat}
-                      </Text>
-                    }
-                  />
+                  <LicensePlatePreview value={vehicle.immat} />
                 </Box>
               ) : (
                 <Text color={isAnniversary920 ? "whiteAlpha.900" : "gray.600"} fontSize="sm" mb={1}>

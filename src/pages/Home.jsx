@@ -8,10 +8,11 @@ import pageBg from "../assets/logo_arriere_plan.svg";
 import heroImg from "../assets/photos/ma-photo-hero.jpg";
 import SEO, { jsonLdSchemas } from "../components/SEO";
 import { ENABLE_TEMPORARY_ANNIVERSARY_920 } from "../lib/featureFlags";
+import { RBE_LOGOS } from "../lib/rbeLogos";
 
 const HERO_IMAGE_URL = "/assets/photos/ma-photo-hero.jpg";
 const ANNIVERSARY_HERO_BUS_IMAGE = "/assets/bus-25-ans.png";
-const ANNIVERSARY_CARD_LOGO_IMAGE = "/assets/RBE%20CLASSIQUE%20FULL%20BLANC.png";
+const ANNIVERSARY_CARD_LOGO_IMAGE = RBE_LOGOS.anniversaryCard;
 
 // Bloc temporaire pour l'anniversaire des 25 ans : ajuster ici la disposition du titre hero.
 const ANNIVERSARY_HERO_LAYOUT = Object.freeze({
@@ -75,6 +76,7 @@ function Anniversary920Card({ compact = false }) {
     >
       <Image
         src={ANNIVERSARY_CARD_LOGO_IMAGE}
+        fallbackSrc={RBE_LOGOS.legacy.standard}
         alt="RétroBus Essonne"
         position="absolute"
         top={{ base: 4, md: compact ? 5 : 6 }}
@@ -427,7 +429,7 @@ export default function Home() {
         </Show>
 
         {/* COLLECTION & DISCORD SECTION */}
-        <Box bg="white" py={16}>
+        <Box bg="var(--site-bg)" py={16}>
           <Container maxW="7xl">
             
             {/* Version Desktop - Design original avec débordements */}

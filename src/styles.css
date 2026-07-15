@@ -13,6 +13,7 @@
   --rbe-red: #be003c;
   --rbe-accent: #e40045;
   --white: #fff;
+  --site-bg: #f7fafc;
   --text-dark: #222;
   
   /* Variables mobiles */
@@ -36,7 +37,7 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background: var(--white);
+  background: var(--site-bg);
   color: var(--text-dark);
   overflow-x: hidden;
   /* --- Police principale définie ici avec !important --- */
@@ -175,6 +176,7 @@ a:hover {
    ========================================================================== */
 
 .site-main {
+  background: var(--site-bg);
   padding-top: calc(var(--mobile-header-h) - 20px);
   width: 100%;
   margin: 0;
@@ -573,9 +575,9 @@ a:hover {
   
   .site-main {
     padding-top: calc(var(--header-h) + var(--nav-h) - 32px);
-    width: min(var(--layout-max), calc(100% - (var(--gutter) * 2)));
-    margin-left: auto;
-    margin-right: auto;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
     padding-left: 0;
     padding-right: 0;
   }

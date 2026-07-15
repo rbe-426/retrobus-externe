@@ -375,7 +375,7 @@ export default function Team() {
         url="https://www.association-rbe.fr/team"
       />
 
-      <Box pt={8} pb={20} bg="white" userSelect="none" sx={{ WebkitUserSelect: 'none' }}>
+      <Box pt={8} pb={20} bg="var(--site-bg)" userSelect="none" sx={{ WebkitUserSelect: 'none' }}>
         <Container maxW="7xl">
           {isLocalTeamEditor && (
             <Box

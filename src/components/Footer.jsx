@@ -12,7 +12,7 @@ export default function Footer() {
     <>
       <footer className="site-footer" style={{ 
         background: "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)",
-        marginTop: isTemporaryAnniversary920Page ? 0 : "80px",
+        marginTop: 0,
         borderTop: "3px solid var(--rbe-red)"
       }}>
       <Container maxW="100%" px={{ base: 4, md: 8 }} py={6}>

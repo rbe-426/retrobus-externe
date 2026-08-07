@@ -1,0 +1,59 @@
+# Robots.txt pour RétroBus Essonne
+# https://www.association-rbe.fr
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://www.association-rbe.fr/sitemap.xml
+
+# Optimisations pour les moteurs de recherche
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Slurp
+Allow: /
+
+# Bloquer l'accès aux fichiers sensibles et techniques
+Disallow: /src/
+Disallow: /node_modules/
+Disallow: /*.json$
+Disallow: /package.json
+Disallow: /vite.config.*
+Disallow: /.env*
+Disallow: /dist/
+Disallow: /build/
+
+# Bloquer les pages internes/administratives
+Disallow: /login
+Disallow: /bulletin-signature
+
+# Pages prioritaires pour le crawl
+Allow: /
+Allow: /about
+Allow: /vehicles
+Allow: /events
+Allow: /photos
+Allow: /contact
+Allow: /donate
+Allow: /team
+Allow: /retromerch
+Allow: /newsletter
+
+# Bloquer les mauvais bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /

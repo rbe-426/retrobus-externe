@@ -1,0 +1,570 @@
+﻿:root{
+  --white:#fff; --text-dark:#222;
+
+  --header-h:120px;     /* hauteur du header */
+  --bg-pos-y:86%;       /* 45%, 55% pour monter/descendre */
+  --blur-width:33%;     /* largeur visuelle de la zone “dépolie” */
+  --blur-strength:14px; /* intensité du flou pour le fallback */
+
+  --rbe-red: #be003c; /* Rouge pourpre */
+
+  /* Header + nav vertical alignment (paste into externe/src/styles.css) */
+  /* small offset to fine-tune vertical overlap between header and nav */
+  --nav-overlap: 0px; /* default: 0 = exactly under header; try -8px to overlap 8px */
+}
+
+/* Optionnel : si tu veux embarquer la police dans le site,
+   place les fichiers dans `public/fonts/` (ou `externe/public/fonts/`)
+   et décommente / adapte les URLs ci-dessous. */
+@font-face {
+  font-family: "Nimbus Sans T OT";
+  /* Utiliser local() pour profiter d'une installation système si présente */
+  src: local("Nimbus Sans T OT"), local("NimbusSansT-OT");
+  /* Décommente et adapte les chemins si tu fournis des fichiers webfonts :
+     url("/fonts/NimbusSansT-regular.woff2") format("woff2"),
+     url("/fonts/NimbusSansT-regular.woff") format("woff");
+     -- si tu fournis des fichiers, replace le ';' ci-dessus après les url() et
+        supprime le point-virgule après local(...) */
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap; /* évite blocage du rendu */
+}
+
+/* OPTIONAL: load Montserrat from Google Fonts (uncomment to enable)
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
+*/
+
+/* Reset */
+*{margin:0;padding:0;box-sizing:border-box}
+
+/* Use Montserrat as the primary site font, with existing fallbacks */
+html,body{
+  height:100%;
+  background:var(--white);
+  color:var(--text-dark);
+  font-family: "Montserrat", "Nimbus Sans T OT", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* ===== Header ===== */
+.site-header{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-h);
+  display: flex;
+  align-items: center; /* ensure logo vertically centered */
+  border-bottom: none; /* on laisse la bordure sous le nav si besoin */
+  overflow: visible;
+  z-index: 1000;
+  background: transparent; /* preserve current background (image/backdrop) */
+}
+
+/* Image nette (base) */
+.header-bg{
+  position:absolute; inset:0;
+  background-repeat:no-repeat;
+  background-size:cover;
+  background-position-x:center;
+  background-position-y:var(--bg-pos-y);
+  z-index:0;
+}
+
+/* ========= Méthode A : vrai verre dépoli (si supporté) ========= */
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))){
+  .frosted{
+    position:absolute; top:0; left:0; bottom:0;
+    width:var(--blur-width);
+    background:linear-gradient(
+      to right,
+      rgb(255, 255, 255) 0%,
+      rgba(255,255,255,.14) 60%,
+      rgba(255,255,255,0) 100%
+    );
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index:2; pointer-events:none;
+  }
+  /* On cache complètement le fallback */
+  .header-bg-blur, .blur-gradient { display:none; }
+}
+
+/* ========= Méthode B (fallback) : flou clippé + léger dégradé ======== */
+/* Calque flou limité à gauche, SANS transparence sur le reste */
+.header-bg-blur{
+  position:absolute; top:-20px; bottom:-20px; left:-20px;
+  width:calc(var(--blur-width) + 40px);     /* extra pour éviter halo */
+  background-repeat:no-repeat;
+  background-size:cover;
+  background-position-x:center;
+  background-position-y:var(--bg-pos-y);
+  filter:blur(var(--blur-strength));
+  clip-path:polygon(0 0,100% 0,100% 100%,0 100%); /* zone strictement à gauche */
+  z-index:1; pointer-events:none;
+}
+
+/* Dégradé de fondu propre (pas un mélange vilain) */
+.blur-gradient{
+  position:absolute; top:0; bottom:0; left:0;
+  width:calc(var(--blur-width) + 8%);       /* un peu plus large que le flou */
+  background:linear-gradient(
+    to right,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,0) 75%,
+    rgba(255,255,255,.06) 100%
+  );
+  z-index:2; pointer-events:none;
+}
+
+/* Contenu (logo) */
+.header-inner{
+  width: 100%;               /* pleine largeur du header */
+  display: flex;
+  align-items: left;       /* vertical center */
+  justify-content: flex-start; /* FORCE logo à gauche */
+  height: 100%;
+  padding: 0 1.5rem;         /* padding horizontal d'origine */
+  box-sizing: border-box;
+  z-index: 3;
+}
+
+.header-logo {
+  height: 125px;             /* hauteur d'origine — ajuste si besoin */
+  width: auto;
+  object-fit: contain;
+  margin: -200px;                 /* pas de marge qui décale vers la droite */
+}
+
+/* Corps */
+.page-body{
+  padding-top:calc(var(--header-h) + 10px);
+  min-height:100vh; position:relative;
+}
+
+/* Watermark (optionnel) */
+.page-body::after{
+  content:""; position:fixed; bottom:20px; left:20px;
+  width:180px; height:180px;
+  background:url("/rbe_logo_short.svg") no-repeat center/contain;
+  opacity:.06; pointer-events:none;
+}
+
+/* Helpers pour mots-clés (optionnels) */
+/* Activer un contexte d'empilement pour que ::before reste visible */
+.page-with-mark {
+  position: relative;
+  isolation: isolate; /* important pour que z-index s'applique au bloc */
+}
+
+/* Watermark configurable (un seul bloc, pas de doublon) */
+.page-with-mark::before {
+  content: "";
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: var(--mark-size, 600px);
+  height: var(--mark-size, 600px);
+  background-image: var(--page-mark);
+  background-repeat: no-repeat;
+  background-size: contain;
+
+  opacity: var(--mark-opacity, 0.10);
+  pointer-events: none;
+
+  /* Reste DANS la page (au-dessus du fond), sans passer sous le body */
+  z-index: 0;
+
+  /* Choisis un des deux comportements via variables : */
+  /* 1) Par défaut: contraste auto (blanc -> noir sur fond clair) */
+  mix-blend-mode: var(--mark-blend, difference);
+  filter: var(--mark-filter, none);
+}
+
+/* (Facultatif) Helpers de placement par data-attrs */
+.page-with-mark[data-pos-x="left"]::before { left: 0; transform: translateX(0); }
+.page-with-mark[data-pos-x="center"]::before { left: 50%; transform: translateX(-50%); }
+.page-with-mark[data-pos-x="right"]::before { left: auto; right: 0; transform: translateX(0); }
+
+.page-with-mark[data-pos-y="top"]::before { top: 0; bottom: auto; }
+.page-with-mark[data-pos-y="center"]::before { top: 50%; bottom: auto; transform: translate(var(--_tx, -50%), -50%); }
+.page-with-mark[data-pos-y="bottom"]::before { bottom: 0; top: auto; }
+
+/* Barre de menus sous le header */
+.site-nav{
+  position: fixed;
+  top: calc(var(--header-h)); /* s'aligne exactement au bas du header */
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-bottom: 1px solid rgba(0,0,0,.08);
+  z-index: 900;
+}
+
+.site-nav__inner{
+  max-width: min(var(--layout-max), calc(100% - (var(--gutter) * 2)));
+  margin: 0 auto;
+  padding: 8px 0;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.nav-btn{
+  display:inline-block;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-weight: 600;
+  color:#222; text-decoration:none;
+  border:1px solid rgba(0,0,0,.08);
+  background:#fff;
+}
+.nav-btn:hover{ background:#f6f7f8; }
+.nav-btn.active{ background: var(--rbe-red); color: #fff; }
+main{ padding-top: calc(var(--header-h) + 56px); }
+
+/* ====== Layout global ====== */
+/* Centre toutes les pages, garde un padding confortable */
+.site-main{
+  /* largeur max cohérente pour un site associatif */
+  max-width: 1200px;
+  margin-inline: auto;
+  padding: 24px 20px;
+}
+
+/* Sections plus aérées par défaut */
+.site-main section{ margin-block: 28px; }
+
+/* Utilitaire pour une section plein écran (si besoin : hero, bandeau) */
+.full-bleed {
+  position: relative;
+  /* force full viewport width and cancel parent centering/padding */
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  width: 100vw;
+  box-sizing: border-box;
+}
+
+/* ====== Titres cohérents ====== */
+h1, .h1{ font-weight:700; letter-spacing:.2px; line-height:1.15; }
+h2, .h2{ font-weight:700; letter-spacing:.2px; line-height:1.2; }
+h3, .h3{ font-weight:600; line-height:1.25; }
+
+/* Espacements par défaut */
+h1{ font-size: clamp(28px, 3.2vw, 40px); margin: 6px 0 14px; }
+h2{ font-size: clamp(22px, 2.4vw, 28px); margin: 4px 0 12px; }
+h3{ font-size: clamp(18px, 2vw, 22px);  margin: 2px 0 10px; }
+
+/* Paragraphes plus lisibles */
+p{ font-size: 16.5px; line-height:1.6; color:#222; }
+
+/* ====== Identité RBE : accent #e40045 (sobre) ====== */
+:root{ --rbe-accent:#e40045; }
+a{ color: var(--rbe-accent); text-decoration: none; }
+a:hover{ text-decoration: underline; }
+
+/* Boutons “marque” génériques (si tu en as hors Chakra) */
+.btn-brand{
+  background: var(--rbe-red);
+  color: #fff;
+  border: 1px solid transparent;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+}
+.btn-brand:hover{ filter: brightness(0.9); }
+
+/* Cartes sobres */
+.card{
+  border:1px solid #e7e7e7; border-radius:16px; background:#fff;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+}
+
+/* === Grille centrée pour TOUT le contenu, hors header === */
+:root{
+  --layout-max: 1200px;             /* largeur max du contenu */
+  --gutter: clamp(28px, 6vw, 64px); /* marge L/R responsive un peu plus large */
+}
+
+/* 1) Le conteneur principal de tes pages (ton <main>) */
+.site-main{
+  width: min(var(--layout-max), calc(100% - (var(--gutter) * 2)));
+  margin-left: auto;
+  margin-right: auto;
+  padding: 24px 0;   /* haut/bas seulement, le gutter gère déjà les côtés */
+  box-sizing: border-box;
+}
+
+/* 2) Si tu utilises des <Container> Chakra à l’intérieur des pages */
+.chakra-container{
+  width: min(var(--layout-max), calc(100% - (var(--gutter) * 2))) !important;
+  max-width: none !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  box-sizing: border-box;
+}
+
+/* 3) Utilitaire pour borner une colonne de texte (héros, intro, etc.) */
+.content-limit{
+  max-width: 640px;            /* ~60–65ch ; lisible, pas collé au bord */
+  margin-left: 0;              /* reste aligné côté gauche de la grille */
+}
+
+/* 4) Espace doux entre sections */
+.site-main section{ margin-block: 28px; }
+
+.page-body {
+  padding-top: calc(var(--header-h) + 10px);
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* centre horizontalement */
+  justify-content: flex-start; /* ou 'center' pour centrer aussi verticalement */
+}
+
+/* Style pour la bannière de fin de page */
+.site-footer {
+  background-color: var(--rbe-red);
+  color: #fff; /* Texte en blanc */
+  font-family: "Montserrat", sans-serif; /* Police Montserrat */
+  font-size: 16px; /* Agrandir la police */
+  padding: 20px 0; /* Espacement vertical */
+  display: flex;
+  justify-content: space-between; /* Espacement entre contenu et icônes */
+  align-items: center;
+}
+
+.site-footer a {
+  color: #fff; /* Liens en blanc */
+  text-decoration: underline; /* Optionnel pour les liens */
+}
+
+.site-footer a:hover {
+  color: #f0f0f0; /* Légère variation au survol */
+}
+
+.site-footer .social-icons {
+  display: flex;
+  flex-direction: column; /* Icônes en verticale */
+  gap: 10px; /* Espacement entre les icônes */
+  align-items: flex-end; /* Aligner à droite */
+}
+
+.site-footer .social-icons a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  background-color: #fff; /* Carré blanc */
+  border-radius: 5px; /* Coins légèrement arrondis */
+  color: #d30c4c; /* Couleur pourpre pour les icônes */
+  font-size: 20px; /* Taille des icônes */
+  text-decoration: none;
+}
+
+.site-footer .social-icons a:hover {
+  background-color: #f0f0f0; /* Légère variation au survol */
+}
+
+/* ------- Full-bleed reliable block (replace previous .full-bleed / .hero.full-bleed) ------- */
+
+/* prevent a horizontal page scrollbar from causing layout shifts during dev;
+   keep this rule only if you don't need horizontal scrolling elsewhere */
+html, body {
+  overflow-x: hidden;
+}
+
+/* robust full-bleed that compensates container centering/padding */
+.full-bleed {
+  position: relative;
+  width: 100vw;
+  box-sizing: border-box;
+  /* Align to viewport left no matter parent width/padding */
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  left: 0;
+}
+
+/* Hero specifics */
+.hero.full-bleed {
+  position: relative; /* keep stacking context for overlay */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: right center; /* glued to the right */
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  z-index: 10; /* sit above watermark/pseudo elements */
+  overflow: hidden; /* avoid inner content pushing width */
+}
+
+/* overlay gradient focused on the right for contrast */
+.hero.full-bleed::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg,
+    rgba(0,0,0,0.06) 0%,
+    rgba(0,0,0,0.12) 28%,
+    rgba(0,0,0,0.38) 60%,
+    rgba(0,0,0,0.72) 100%);
+  z-index: 0;
+}
+
+/* content above overlay */
+.hero .hero-content { position: relative; z-index: 2; width: 100%; }
+
+/* mobile tweak: center image on small screens */
+@media (max-width: 768px) {
+  .hero.full-bleed { background-position: center top; min-height: 360px; }
+  .hero .hero-content { justify-content: center; padding: 28px; }
+  .hero .hero-box { max-width: 100%; text-align: center; }
+}
+
+/* debug — retirez après test */
+.hero { outline: none; }
+.page-with-mark { outline: none; }
+/* ===== Header & nav : alignement propre avec la grille principale ===== */
+
+/* Réutilise la même logique de largeur/gutter que .site-main */
+.header-inner {
+  /* même largeur max que .site-main */
+  max-width: min(var(--layout-max), calc(100% - (var(--gutter) * 2)));
+  margin: 0 auto;
+  /* padding horizontal identique à la gorge pour alignement pixel-perfect */
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+
+  display: flex;
+  align-items: center;
+  height: 100%;
+  z-index: 3;
+}
+
+/* Barre de navigation sous le header : utiliser même conteneur centré */
+.site-nav__inner {
+  width: min(var(--layout-max), calc(100% - (var(--gutter) * 2)));
+  margin: 0 auto;
+  padding: 8px 0; /* vertical padding uniquement, horizontale gérée par width + margin */
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Ajuste le hero-content pour coller exactement à la même gorge */
+.hero .hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  /* utiliser le même padding horizontal que le header et le container */
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.hero.full-bleed { overflow: hidden; }/* Si besoin, empêche le dépassement horizontal (évite débordements) */.hero.hidden { display: none !important; }/* Classe utilitaire pour masquer le hero sans toucher au JSX */}  background-repeat: no-repeat;  background-size: cover;  background-position: right var(--hero-pos-y); /* droit + position verticale configurable */.hero.full-bleed {/* Hero : utilise la variable pour régler la position verticale du fond */}  --hero-pos-y: center; /* valeur par défaut : center, peut être '20%' / '80%' etc. */:root {/* Introduit une variable CSS pour piloter la position verticale du background *//* ------------------- Hero : contrôle & masquage ------------------- */}  flex-wrap: wrap;  justify-content: center;  gap: 8px;  display: flex;  padding: 8px 0;  margin: 0 auto;  max-width: min(var(--layout-max), calc(100% - (var(--gutter) * 2)));.site-nav__inner{/* s'assure que le container interne du nav reste centré */}  z-index: 900;  border-bottom: 1px solid rgba(0,0,0,.08);  background: #fff;  right: 0;  left: 0;  top: calc(var(--header-h)); /* s'aligne exactement au bas du header */  position: fixed;.site-nav{/* place la barre de navigation exactement sous le header */}  border-bottom: none; /* on laisse la bordure sous le nav si besoin */.site-header{/* retire la bordure du header pour éviter un trait blanc visible *//* ------------------- Header / nav : supprimer l'espace ------------------- */
+/* ------------------- Header / nav : supprimer l'espace ------------------- */
+
+/* retire la bordure du header pour éviter un trait blanc visible */
+.site-header{
+  border-bottom: none; /* on laisse la bordure sous le nav si besoin */
+}
+
+/* place la barre de navigation exactement sous le header */
+.site-nav{
+  position: fixed;
+  top: calc(var(--header-h)); /* s'aligne exactement au bas du header */
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-bottom: 1px solid rgba(0,0,0,.08);
+  z-index: 900;
+}
+
+/* s'assure que le container interne du nav reste centré */
+.site-nav__inner{
+  max-width: min(var(--layout-max), calc(100% - (var(--gutter) * 2)));
+  margin: 0 auto;
+  padding: 8px 0;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* ------------------- Hero : contrôle & masquage ------------------- */
+
+/* Introduit une variable CSS pour piloter la position verticale du background */
+:root {
+  --hero-pos-y: center; /* valeur par défaut : center, peut être '20%' / '80%' etc. */
+}
+
+/* Hero : utilise la variable pour régler la position verticale du fond */
+.hero.full-bleed {
+  background-position: right var(--hero-pos-y); /* droit + position verticale configurable */
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+/* Classe utilitaire pour masquer le hero sans toucher au JSX */
+.hero.hidden { display: none !important; }
+
+/* Si besoin, empêche le dépassement horizontal (évite débordements) */
+.hero.full-bleed { overflow: hidden; }

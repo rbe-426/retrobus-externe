@@ -1,0 +1,19 @@
+# RétroBus Essonne - llms.txt
+
+Ce fichier indique aux agents IA les ressources publiques prioritaires du site.
+
+## Pages publiques principales
+- https://www.association-rbe.fr/
+- https://www.association-rbe.fr/parc
+- https://www.association-rbe.fr/evenements
+- https://www.association-rbe.fr/contact
+- https://www.association-rbe.fr/photos
+- https://www.association-rbe.fr/nous-soutenir
+
+## Pages légales
+- https://www.association-rbe.fr/mentions-legales
+- https://www.association-rbe.fr/rgpd
+
+## Ressources SEO
+- https://www.association-rbe.fr/sitemap.xml
+- https://www.association-rbe.fr/robots.txt

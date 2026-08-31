@@ -180,7 +180,7 @@ export default function Events() {
     }
     
     // 2. Évènement Privé spécial → Bouton inactif "Évènement Privé"
-    if (info.eventType === 'private_outing' || (!info.requiresRegistration && !info.allowPublicRegistration && info.eventType !== 'public_open_access')) {
+    if (info.eventType === 'private_outing') {
       console.log(`🔒 Private outing → Disabled button`);
       return (
         <Button

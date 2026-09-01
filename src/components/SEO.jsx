@@ -21,7 +21,7 @@ export default function SEO({
   title = "RétroBus Essonne",
   description = "Association de préservation du patrimoine automobile en Île-de-France. Découvrez notre collection unique de bus historiques, participez à nos événements et soutenez la sauvegarde du patrimoine routier.",
   keywords = "bus anciens, autobus historiques, patrimoine automobile, Essonne, RétroBus, collection bus, véhicules de collection, transports en commun anciens, musée bus, association automobile",
-  image = "https://www.association-rbe.fr/assets/photos/ma-photo-hero.jpg",
+  image = "https://www.association-rbe.fr/assets/photos/partage-retrobus.jpg",
   url = "https://www.association-rbe.fr",
   type = "website",
   jsonLd = null,
@@ -168,7 +168,7 @@ export const jsonLdSchemas = {
         "addressCountry": "FR"
       }
     },
-    "image": eventData.image || "https://www.association-rbe.fr/assets/photos/ma-photo-hero.jpg",
+    "image": eventData.image || "https://www.association-rbe.fr/assets/photos/partage-retrobus.jpg",
     "organizer": {
       "@type": "Organization",
       "name": "RétroBus Essonne",

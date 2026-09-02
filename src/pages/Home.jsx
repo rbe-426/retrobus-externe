@@ -319,7 +319,7 @@ export default function Home() {
         {/* HERO SECTION - Desktop original + adaptation mobile */}
         
         {/* Version Desktop - Design original */}
-        <Hide below="md">
+        <Hide below="lg">
           <Box
             as="section"
             className="full-bleed hero hero-temporary-artwork"
@@ -340,21 +340,21 @@ export default function Home() {
         </Hide>
 
         {/* Version Mobile - Adaptée */}
-        <Show below="md">
+        <Show below="lg">
           <Box
             as="section"
             position="relative"
             width="100vw"
             left="50%"
             ml="-50vw"
-            minH="60vh"
+            minH="clamp(240px, 52vw, 500px)"
             backgroundImage={`url(${HERO_IMAGE_URL})`}
-            backgroundPosition="center"
+            backgroundPosition="60% center"
             backgroundSize="cover"
             aria-label="Bonne rentrée de l'association RétroBus Essonne"
           >
-            <VStack position="absolute" right={4} bottom={4} zIndex={1}>
-              <Button as={RouterLink} to="/evenements" size="md" bg="var(--rbe-red)" color="white" _hover={{ bg: "var(--rbe-accent)" }}>
+            <VStack position="absolute" left={{ base: 3, md: 6 }} bottom={-5} zIndex={1}>
+              <Button as={RouterLink} to="/evenements" size={{ base: "sm", md: "md" }} bg="var(--rbe-red)" color="white" _hover={{ bg: "var(--rbe-accent)" }}>
                 Nos Actions de la rentrée
               </Button>
             </VStack>

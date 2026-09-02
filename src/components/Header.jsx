@@ -24,7 +24,7 @@ const EnvelopeIcon = ({ size = 28 }) => (
 );
 
 const LOGO_PATH = "/assets/rbe_logo.svg";
-const HEADER_BG = "/assets/header-1280.jpg";
+const HEADER_BG = "/assets/header.jpg";
 
 export default function Header() {
   const { isOpen: isDonateOpen, onOpen: onDonateOpen, onClose: onDonateClose } = useDisclosure();

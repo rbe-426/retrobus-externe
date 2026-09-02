@@ -5,12 +5,11 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import pageBg from "../assets/logo_arriere_plan.svg";
-import heroImg from "../assets/photos/ma-photo-hero.jpg";
 import SEO, { jsonLdSchemas } from "../components/SEO";
 import { ENABLE_TEMPORARY_ANNIVERSARY_920 } from "../lib/featureFlags";
 import { RBE_LOGOS } from "../lib/rbeLogos";
 
-const HERO_IMAGE_URL = "/assets/photos/ma-photo-hero.jpg";
+const HERO_IMAGE_URL = "/hero_rentree.jpg";
 const ANNIVERSARY_HERO_BUS_IMAGE = "/assets/bus-25-ans.png";
 const ANNIVERSARY_CARD_LOGO_IMAGE = RBE_LOGOS.anniversaryCard;
 
@@ -323,45 +322,18 @@ export default function Home() {
         <Hide below="md">
           <Box
             as="section"
-            className="full-bleed hero"
+            className="full-bleed hero hero-temporary-artwork"
             style={{
-              backgroundImage: `url(${heroImg})`,
-              '--hero-pos-y': '0%',
+              backgroundImage: `url(${HERO_IMAGE_URL})`,
+              '--hero-pos-y': 'center',
             }}
+            aria-label="Bonne rentrée de l'association RétroBus Essonne"
           >
-            <div className="hero-content">
+            <div className="hero-content hero-temporary-action">
               <div className="hero-box">
-                {ENABLE_ANNIVERSARY_920 ? (
-                  <Heading as="h1" fontSize={ANNIVERSARY_HERO_LAYOUT.desktop.titleFontSize} lineHeight="0.9" textAlign="right" whiteSpace="nowrap" transform={`translateX(${ANNIVERSARY_HERO_LAYOUT.desktop.titleShiftX})`} textShadow="0 0 16px rgba(255,255,255,0.9), 0 0 36px rgba(255,216,77,0.85), 0 0 72px rgba(255,76,120,0.7)">
-                    25 ANS
-                    <Image
-                      src={ANNIVERSARY_HERO_BUS_IMAGE}
-                      alt="Bus RétroBus Essonne"
-                      display="inline-block"
-                      h={ANNIVERSARY_HERO_LAYOUT.desktop.imageHeight}
-                      w="auto"
-                      ml={ANNIVERSARY_HERO_LAYOUT.desktop.imageGap}
-                      verticalAlign={ANNIVERSARY_HERO_LAYOUT.desktop.imageVerticalAlign}
-                    />
-                  </Heading>
-                ) : (
-                  <>
-                    <Heading as="h1" size="2xl" lineHeight="1.05">
-                      Préserver & partager le patrimoine automobile en Essonne
-                    </Heading>
-                    <Text mt={4} fontSize="lg" color="whiteAlpha.800">
-                      L'association RétroBus Essonne est une association régie par la Loi 1901 qui préserve et partage le patrimoine automobile en Essonne.
-                    </Text>
-                    <Stack direction="column" spacing={4} mt={6} alignItems="flex-end">
-                      <Button as={RouterLink} to="/parc" size="lg" bg="var(--rbe-red)" color="white" _hover={{ opacity: 0.9 }}>
-                        Découvrir notre collection
-                      </Button>
-                      <Button as={RouterLink} to="/contact" size="lg" variant="outline" color="white" _hover={{ bg: "whiteAlpha.200" }}>
-                        Nous contacter
-                      </Button>
-                    </Stack>
-                  </>
-                )}
+                <Button as={RouterLink} to="/evenements" size="lg" bg="var(--rbe-red)" color="white" _hover={{ bg: "var(--rbe-accent)" }}>
+                  Nos Actions de la rentrée
+                </Button>
               </div>
             </div>
           </Box>
@@ -376,55 +348,16 @@ export default function Home() {
             left="50%"
             ml="-50vw"
             minH="60vh"
-            backgroundImage={`url(${heroImg})`}
+            backgroundImage={`url(${HERO_IMAGE_URL})`}
             backgroundPosition="center"
             backgroundSize="cover"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-            _before={{
-              content: '""',
-              position: "absolute",
-              inset: 0,
-              background: "linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%)",
-              zIndex: 0,
-            }}
+            aria-label="Bonne rentrée de l'association RétroBus Essonne"
           >
-            <Container position="relative" zIndex={1} px={4}>
-              <VStack align="center" spacing={4} textAlign="center">
-                {ENABLE_ANNIVERSARY_920 ? (
-                  <Heading as="h1" fontSize={ANNIVERSARY_HERO_LAYOUT.mobile.titleFontSize} lineHeight="0.9" color="white" whiteSpace="nowrap" textShadow="0 0 14px rgba(255,255,255,0.9), 0 0 28px rgba(255,216,77,0.85), 0 0 52px rgba(255,76,120,0.7)">
-                    25 ANS
-                    <Image
-                      src={ANNIVERSARY_HERO_BUS_IMAGE}
-                      alt="Bus RétroBus Essonne"
-                      display="inline-block"
-                      h={ANNIVERSARY_HERO_LAYOUT.mobile.imageHeight}
-                      w="auto"
-                      ml={ANNIVERSARY_HERO_LAYOUT.mobile.imageGap}
-                      verticalAlign={ANNIVERSARY_HERO_LAYOUT.mobile.imageVerticalAlign}
-                    />
-                  </Heading>
-                ) : (
-                  <>
-                    <Heading as="h1" fontSize="2xl" lineHeight="1.1" color="white" textShadow="0 2px 20px rgba(0,0,0,0.5)">
-                      Préserver & partager le patrimoine automobile en Essonne
-                    </Heading>
-                    <Text fontSize="md" color="whiteAlpha.900" textShadow="0 1px 10px rgba(0,0,0,0.5)">
-                      L'association RétroBus Essonne est une association régie par la Loi 1901 qui préserve et partage le patrimoine automobile en Essonne.
-                    </Text>
-                    <Stack direction="column" spacing={3} width="full" mt={4}>
-                      <Button as={RouterLink} to="/parc" size="md" bg="var(--rbe-red)" color="white" width="full" _hover={{ opacity: 0.9 }}>
-                        Découvrir notre collection
-                      </Button>
-                      <Button as={RouterLink} to="/contact" size="md" variant="outline" color="white" borderColor="white" width="full" _hover={{ bg: "whiteAlpha.300" }}>
-                        Nous contacter
-                      </Button>
-                    </Stack>
-                  </>
-                )}
-              </VStack>
-            </Container>
+            <VStack position="absolute" right={4} bottom={4} zIndex={1}>
+              <Button as={RouterLink} to="/evenements" size="md" bg="var(--rbe-red)" color="white" _hover={{ bg: "var(--rbe-accent)" }}>
+                Nos Actions de la rentrée
+              </Button>
+            </VStack>
           </Box>
         </Show>
 

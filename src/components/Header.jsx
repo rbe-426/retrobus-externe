@@ -107,7 +107,10 @@ export default function Header() {
             loading="eager"
             fetchPriority="high"
             decoding="async"
-            style={{ height: `${logoHeight}px`, width: 'auto', maxWidth: 'min(80vw, 520px)' }}
+            h={{ base: '46px', md: `${logoHeight}px` }}
+            w="auto"
+            maxW={{ base: 'calc(100% - 60px)', md: 'min(80vw, 520px)' }}
+            flexShrink={1}
           />
           
           {/* Mobile menu trigger on the right inside header */}
@@ -116,13 +119,17 @@ export default function Header() {
               icon={<HamburgerIcon />}
               onClick={navDisclosure.onOpen}
               variant="solid"
-              bg="whiteAlpha.900"
-              color="var(--rbe-red)"
+              bg="var(--rbe-red)"
+              color="white"
               size="md"
-              borderRadius="full"
+              minW="44px"
+              h="44px"
+              borderRadius="md"
               boxShadow="sm"
-              _hover={{ bg: "var(--rbe-red)", color: "white" }}
-              aria-label="Menu"
+              _hover={{ bg: "#960030" }}
+              aria-label="Menu de navigation"
+              aria-controls="navigation-mobile"
+              aria-expanded={navDisclosure.isOpen}
             />
           </Box>
         </div>

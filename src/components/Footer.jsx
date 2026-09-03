@@ -13,7 +13,7 @@ export default function Footer() {
       <footer className="site-footer" style={{ 
         background: "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)",
         marginTop: 0,
-        borderTop: "3px solid var(--rbe-red)"
+        borderTop: "3px solid #ff8ab0"
       }}>
       <Container maxW="100%" px={{ base: 4, md: 8 }} py={6}>
         
@@ -46,7 +46,7 @@ export default function Footer() {
             
             {/* Location */}
             <HStack spacing={2} color="whiteAlpha.700" fontSize="sm">
-              <FaMapMarkerAlt size={16} color="var(--rbe-red)" />
+              <FaMapMarkerAlt size={16} color="#ff8ab0" />
               <Text>Corbeil-Essonnes, Essonne, France.</Text>
             </HStack>
           </VStack>
@@ -60,7 +60,7 @@ export default function Footer() {
               <CLink 
                 href="/" 
                 color="whiteAlpha.800"
-                _hover={{ color: "var(--rbe-red)", pl: 2, transition: "all 0.2s" }}
+                _hover={{ color: "#ff8ab0", pl: 2, transition: "all 0.2s" }}
                 transition="all 0.2s"
               >
                 → Accueil
@@ -68,7 +68,7 @@ export default function Footer() {
               <CLink 
                 href="/evenements" 
                 color="whiteAlpha.800"
-                _hover={{ color: "var(--rbe-red)", pl: 2, transition: "all 0.2s" }}
+                _hover={{ color: "#ff8ab0", pl: 2, transition: "all 0.2s" }}
                 transition="all 0.2s"
               >
                 → Événements
@@ -76,7 +76,7 @@ export default function Footer() {
               <CLink 
                 href="/vehicles" 
                 color="whiteAlpha.800"
-                _hover={{ color: "var(--rbe-red)", pl: 2, transition: "all 0.2s" }}
+                _hover={{ color: "#ff8ab0", pl: 2, transition: "all 0.2s" }}
                 transition="all 0.2s"
               >
                 → Véhicules
@@ -84,7 +84,7 @@ export default function Footer() {
               <CLink 
                 href="/contact" 
                 color="whiteAlpha.800"
-                _hover={{ color: "var(--rbe-red)", pl: 2, transition: "all 0.2s" }}
+                _hover={{ color: "#ff8ab0", pl: 2, transition: "all 0.2s" }}
                 transition="all 0.2s"
               >
                 → Contact
@@ -101,7 +101,7 @@ export default function Footer() {
               <CLink 
                 href="/statuts.pdf" 
                 color="whiteAlpha.800"
-                _hover={{ color: "var(--rbe-red)", pl: 2, transition: "all 0.2s" }}
+                _hover={{ color: "#ff8ab0", pl: 2, transition: "all 0.2s" }}
                 transition="all 0.2s"
                 target="_blank"
               >
@@ -110,7 +110,7 @@ export default function Footer() {
               <CLink 
                 href="/mentions-legales" 
                 color="whiteAlpha.800"
-                _hover={{ color: "var(--rbe-red)", pl: 2, transition: "all 0.2s" }}
+                _hover={{ color: "#ff8ab0", pl: 2, transition: "all 0.2s" }}
                 transition="all 0.2s"
               >
                 → Mentions légales
@@ -118,7 +118,7 @@ export default function Footer() {
               <CLink 
                 href="/rgpd" 
                 color="whiteAlpha.800"
-                _hover={{ color: "var(--rbe-red)", pl: 2, transition: "all 0.2s" }}
+                _hover={{ color: "#ff8ab0", pl: 2, transition: "all 0.2s" }}
                 transition="all 0.2s"
               >
                 → Politique RGPD
@@ -138,7 +138,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Facebook"
-                  _hover={{ color: "var(--rbe-red)", transform: "scale(1.2)" }}
+                  _hover={{ color: "#ff8ab0", transform: "scale(1.2)" }}
                   transition="all 0.2s"
                 >
                   <FaFacebook size={24} color="whiteAlpha.800" />
@@ -148,7 +148,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Instagram"
-                  _hover={{ color: "var(--rbe-red)", transform: "scale(1.2)" }}
+                  _hover={{ color: "#ff8ab0", transform: "scale(1.2)" }}
                   transition="all 0.2s"
                 >
                   <FaInstagram size={24} color="whiteAlpha.800" />
@@ -158,7 +158,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="TikTok"
-                  _hover={{ color: "var(--rbe-red)", transform: "scale(1.2)" }}
+                  _hover={{ color: "#ff8ab0", transform: "scale(1.2)" }}
                   transition="all 0.2s"
                 >
                   <FaTiktok size={24} color="whiteAlpha.800" />
@@ -168,7 +168,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Discord"
-                  _hover={{ color: "var(--rbe-red)", transform: "scale(1.2)" }}
+                  _hover={{ color: "#ff8ab0", transform: "scale(1.2)" }}
                   transition="all 0.2s"
                 >
                   <FaDiscord size={24} color="whiteAlpha.800" />
@@ -178,11 +178,11 @@ export default function Footer() {
 
             {/* Email */}
             <HStack spacing={2} color="whiteAlpha.700" fontSize="sm">
-              <FaEnvelope size={16} color="var(--rbe-red)" />
+              <FaEnvelope size={16} color="#ff8ab0" />
               <CLink 
                 href="mailto:association.rbe@gmail.com"
                 color="whiteAlpha.800"
-                _hover={{ color: "var(--rbe-red)" }}
+                _hover={{ color: "#ff8ab0" }}
               >
                 association.rbe@gmail.com
               </CLink>
@@ -200,7 +200,7 @@ export default function Footer() {
           <Text 
             fontSize="sm" 
             fontWeight={700} 
-            color="var(--rbe-red)" 
+            color="#ff8ab0"
             textTransform="uppercase" 
             letterSpacing="1px"
             mb={4}
@@ -306,7 +306,7 @@ export default function Footer() {
         {/* Divider */}
         <Box 
           height="1px" 
-          background="linear-gradient(90deg, transparent, var(--rbe-red), transparent)"
+          background="linear-gradient(90deg, transparent, #ff8ab0, transparent)"
           mb={6}
         />
 

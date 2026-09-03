@@ -119,7 +119,9 @@ export default function EventHeader({ onNewsletterClick, navDisclosure }) {
                 borderRadius="full"
                 boxShadow="sm"
                 _hover={{ bg: mainColor, color: "white" }}
-                aria-label="Menu"
+                aria-label="Menu de navigation"
+                aria-controls="navigation-mobile"
+                aria-expanded={navDisclosure.isOpen}
               />
             </Box>
           </div>

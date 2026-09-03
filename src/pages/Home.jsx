@@ -381,7 +381,7 @@ export default function Home() {
                     <VStack spacing={2} align="start">
                       <Heading as="h2" size="lg">Notre collection</Heading>
                       <Text color="gray.600" fontSize="sm">
-                        Découvrez un condensé de notre collection de véhicules historiques, témoins de l'évolution des transports en commun en Île-de-France. Chaque véhicule a une histoire unique à raconter !
+                        Découvrez quelques bus de notre collection. Ils racontent l'histoire des transports en commun en Île-de-France.
                       </Text>
                     </VStack>
 
@@ -476,7 +476,7 @@ export default function Home() {
                     <VStack spacing={2} align="start">
                       <Heading as="h2" fontSize={{ base: "xl", md: "2xl" }}>Notre collection</Heading>
                       <Text color="gray.600" fontSize={{ base: "sm", md: "md" }}>
-                        Découvrez un condensé de notre collection de véhicules historiques, témoins de l'évolution des transports en commun en Île-de-France.
+                        Découvrez quelques bus de notre collection. Ils racontent l'histoire des transports en commun en Île-de-France.
                       </Text>
                     </VStack>
 
@@ -568,8 +568,7 @@ export default function Home() {
             <Heading as="h2" size="xl" mb={12} textAlign="center">À propos de nous</Heading>
             <VStack spacing={10} align="stretch">
               <Text fontSize="lg" color="gray.700" lineHeight="tall" textAlign="center" maxW="3xl" mx="auto">
-                <strong>L'Association RétroBus Essonne</strong> est une association à but non lucratif régie par la loi 1901, 
-                fondée par des passionnés de transport en commun et du patrimoine roulant historique.
+                <strong>RétroBus Essonne</strong> rassemble des passionnés qui gardent, réparent et font découvrir les bus qui ont marqué l'histoire de l'Essonne et de l'Île-de-France.
               </Text>
               
               <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6} mt={6}>
@@ -589,7 +588,7 @@ export default function Home() {
                   <Box fontSize="3xl" mb={4}>🎯</Box>
                   <Heading as="h3" size="sm" mb={3} color="var(--rbe-red)">Mission</Heading>
                   <Text fontSize="sm">
-                    Préserver, restaurer et faire revivre le patrimoine automobile à travers nos véhicules.
+                    Garder, réparer et faire découvrir des bus qui ont compté.
                   </Text>
                 </Box>
                 
@@ -609,7 +608,7 @@ export default function Home() {
                   <Box fontSize="3xl" mb={4}>🚍</Box>
                   <Heading as="h3" size="sm" mb={3} color="var(--rbe-red)">Passion</Heading>
                   <Text fontSize="sm">
-                    Sauvegarder des véhicules emblématiques qui ont marqué l'histoire des mobilités partout dans le monde.
+                    Sauver des véhicules qui racontent l'histoire des transports.
                   </Text>
                 </Box>
                 
@@ -680,7 +679,7 @@ export default function Home() {
               <Box fontSize="4xl" mb={4}>🔧</Box>
               <Heading as="h3" size="md" mb={4} color="var(--rbe-red)">Restauration</Heading>
               <Text lineHeight="tall">
-                Restauration complète et entretien méticuleux de véhicules emblématiques. Chaque détail compte pour ramener nos autobus à leur ancienne gloire.
+                Nous réparons et entretenons nos bus pour les garder en bon état et raconter leur histoire.
               </Text>
             </Box>
 
@@ -700,7 +699,7 @@ export default function Home() {
               <Box fontSize="4xl" mb={4}>🚌</Box>
               <Heading as="h3" size="md" mb={4} color="var(--rbe-red)">Événements</Heading>
               <Text lineHeight="tall">
-                Sorties patrimoine, expositions publiques et balades touristiques. Faire découvrir notre passion au plus grand nombre.
+                Nous proposons des sorties, des expositions et des balades pour partager notre passion.
               </Text>
             </Box>
 
@@ -720,7 +719,7 @@ export default function Home() {
               <Box fontSize="4xl" mb={4}>📚</Box>
               <Heading as="h3" size="md" mb={4} color="var(--rbe-red)">Mémoire</Heading>
               <Text lineHeight="tall">
-                Collecte de témoignages, photothèque et sauvegarde des documents techniques. Préserver l'histoire pour demain.
+                Nous recueillons des témoignages, des photos et des documents pour garder une trace de cette histoire.
               </Text>
             </Box>
           </SimpleGrid>

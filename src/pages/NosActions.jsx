@@ -23,7 +23,7 @@ const actions = [
     date: '2026',
     category: 'Transmission',
     title: 'Faire vivre la mémoire des réseaux',
-    description: 'Nos contenus, archives et récits donnent une place durable aux véhicules, aux lignes et aux personnes qui ont marqué le transport francilien.',
+    description: 'Nous partageons des archives et des récits sur les véhicules, les lignes et les personnes qui ont fait vivre les transports en Île-de-France.',
     image: '/assets/photos/ma-photo-hero-1600.jpg',
     icon: FiBookOpen,
   },
@@ -31,7 +31,7 @@ const actions = [
     date: '2026',
     category: 'Patrimoine',
     title: 'Préserver les véhicules qui racontent une époque',
-    description: 'Chaque action de sauvegarde commence par l observation, la documentation et le soin apporté aux détails qui font l identité d un autobus historique.',
+    description: 'Nous observons, documentons et entretenons chaque détail qui fait l histoire d un autobus.',
     image: '/assets/photos/920-cars-soeur.jpg',
     icon: FiArchive,
   },
@@ -39,7 +39,7 @@ const actions = [
     date: '2025 - aujourd hui',
     category: 'Technique',
     title: 'Entretenir, restaurer, remettre en valeur',
-    description: 'Les interventions techniques accompagnent les véhicules sur la durée afin de les conserver, les présenter et les faire découvrir dans de bonnes conditions.',
+    description: 'Nous entretenons et réparons les véhicules pour les garder, les présenter et les faire découvrir.',
     image: '/assets/photos/920-premiere-livree.jpg',
     icon: FiTool,
   },
@@ -47,7 +47,7 @@ const actions = [
     date: 'Au fil de l annee',
     category: 'Partage',
     title: 'Aller a la rencontre du public',
-    description: 'Sorties, expositions et temps d échange permettent de rapprocher les passionnés, les curieux et les générations qui ont connu ces réseaux.',
+    description: 'Les sorties et les expositions réunissent les passionnés, les curieux et celles et ceux qui ont connu ces réseaux.',
     image: '/assets/photos/920-strav-limeil.jpg',
     icon: FiUsers,
   },
@@ -89,7 +89,7 @@ export default function NosActions() {
                 Nos Actions
               </Heading>
               <Text fontSize={{ base: 'lg', md: '2xl' }} lineHeight="tall" color="whiteAlpha.900">
-                Preserver les vehicules, transmettre leur histoire et aller a la rencontre du public.
+                Garder les vehicules, raconter leur histoire et les faire decouvrir au public.
               </Text>
               <Button as={RouterLink} to="/evenements" rightIcon={<FiArrowRight />} bg="var(--rbe-red)" color="white" _hover={{ bg: 'var(--rbe-accent)' }}>
                 Voir les prochains evenements
@@ -116,7 +116,7 @@ export default function NosActions() {
               <Text color="red.600" fontSize="sm" fontWeight="700" textTransform="uppercase" letterSpacing="0.08em" mb={3}>Sur le terrain</Text>
               <Heading as="h2" size="xl" mb={3}>Une association en mouvement</Heading>
               <Text color="gray.600" fontSize="lg" lineHeight="tall">
-                De l atelier aux rencontres publiques, chaque projet aide a sauvegarder et a partager le patrimoine des transports.
+                De l atelier aux rencontres publiques, nous gardons ces bus en vie et partageons leur histoire.
               </Text>
             </Box>
             <Button as={RouterLink} to="/contact" variant="outline" colorScheme="red" leftIcon={<FiUsers />} alignSelf={{ base: 'start', lg: 'end' }}>

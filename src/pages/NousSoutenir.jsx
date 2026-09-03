@@ -221,7 +221,7 @@ export default function NousSoutenir() {
                 Nous soutenir
               </Heading>
               <Text fontSize="lg" color={useColorModeValue('gray.600', 'gray.400')} maxW="2xl">
-                Votre contribution permet de préserver et restaurer les véhicules historiques du transport en commun francilien.
+                Votre aide nous permet de réparer, entretenir et montrer les bus historiques de notre région.
               </Text>
             </VStack>
 
@@ -383,8 +383,7 @@ export default function NousSoutenir() {
                         🚌 Préservation du patrimoine
                       </Heading>
                       <Text color={useColorModeValue('gray.600', 'gray.400')}>
-                        Nous restaurons et entretenons des véhicules historiques du transport en commun francilien 
-                        pour les préserver pour les générations futures.
+                        Nous réparons et entretenons des bus historiques pour que chacun puisse encore les découvrir demain.
                       </Text>
                     </VStack>
                     <VStack align="start" spacing={3}>
@@ -392,8 +391,7 @@ export default function NousSoutenir() {
                         🎓 Transmission et pédagogie
                       </Heading>
                       <Text color={useColorModeValue('gray.600', 'gray.400')}>
-                        Nous organisons des événements et animations pour faire découvrir l'histoire 
-                        des transports en commun au grand public.
+                        Nous organisons des événements pour raconter l'histoire des transports à tous les publics.
                       </Text>
                     </VStack>
                     <VStack align="start" spacing={3}>

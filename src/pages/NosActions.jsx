@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import {
   Badge,
@@ -13,8 +14,9 @@ import {
   Stack,
   Text,
   VStack,
+  Button,
 } from '@chakra-ui/react';
-import { FiArchive, FiBookOpen, FiMapPin, FiTool, FiUsers } from 'react-icons/fi';
+import { FiArchive, FiArrowRight, FiBookOpen, FiCalendar, FiMapPin, FiTool, FiUsers } from 'react-icons/fi';
 
 const actions = [
   {
@@ -66,37 +68,40 @@ export default function NosActions() {
         <meta name="description" content="Carnet de route des actions menées par RétroBus Essonne pour préserver et transmettre le patrimoine des transports." />
       </Helmet>
 
-      <Box bg="white" minH="100vh">
+      <Box bg="var(--site-bg)" minH="100vh">
         <Box
-          minH={{ base: '430px', md: '560px' }}
+          minH={{ base: '380px', md: '500px' }}
           display="flex"
           alignItems="flex-end"
           position="relative"
-          bgImage="url('/assets/photos/ma-photo-hero-1600.jpg')"
-          bgPosition="center"
+          bgImage="url('/hero_rentree.jpg')"
+          bgPosition={{ base: '60% center', md: 'center' }}
           bgSize="cover"
           color="white"
         >
-          <Box position="absolute" inset={0} bg="blackAlpha.700" />
-          <Container maxW="7xl" position="relative" py={{ base: 12, md: 20 }}>
+          <Box position="absolute" inset={0} bg="blackAlpha.500" />
+          <Container maxW="7xl" position="relative" py={{ base: 10, md: 14 }}>
             <VStack align="start" spacing={5} maxW="3xl">
               <Badge bg="white" color="red.700" px={3} py={1} borderRadius="sm" fontWeight="700">
-                Aperçu local
+                RétroBus Essonne
               </Badge>
               <Heading as="h1" fontSize={{ base: '4xl', md: '6xl' }} lineHeight="1.05" letterSpacing={0}>
                 Nos Actions
               </Heading>
               <Text fontSize={{ base: 'lg', md: '2xl' }} lineHeight="tall" color="whiteAlpha.900">
-                Le carnet de route de RétroBus Essonne : les projets, les gestes et les rencontres qui font avancer notre patrimoine.
+                Preserver les vehicules, transmettre leur histoire et aller a la rencontre du public.
               </Text>
+              <Button as={RouterLink} to="/evenements" rightIcon={<FiArrowRight />} bg="var(--rbe-red)" color="white" _hover={{ bg: 'var(--rbe-accent)' }}>
+                Voir les prochains evenements
+              </Button>
             </VStack>
           </Container>
         </Box>
 
         <Container maxW="7xl" py={{ base: 12, md: 20 }}>
-          <SimpleGrid columns={{ base: 1, md: 4 }} spacing={0} borderTopWidth="1px" borderLeftWidth={{ base: 0, md: '1px' }} borderColor="gray.200" mb={{ base: 14, md: 20 }}>
+          <SimpleGrid columns={{ base: 1, sm: 2, lg: 4 }} spacing={0} borderTopWidth="1px" borderLeftWidth={{ base: 0, lg: '1px' }} borderColor="gray.200" mb={{ base: 14, md: 20 }}>
             {themes.map((theme) => (
-              <HStack key={theme.label} spacing={4} py={5} px={{ base: 0, md: 5 }} borderBottomWidth="1px" borderRightWidth={{ base: 0, md: '1px' }} borderColor="gray.200">
+              <HStack key={theme.label} spacing={4} py={5} px={{ base: 0, sm: 5 }} borderBottomWidth="1px" borderRightWidth={{ base: 0, lg: '1px' }} borderColor="gray.200">
                 <Icon as={theme.icon} boxSize={6} color="red.600" />
                 <Box>
                   <Text fontWeight="700">{theme.label}</Text>
@@ -108,13 +113,15 @@ export default function NosActions() {
 
           <Stack direction={{ base: 'column', lg: 'row' }} align={{ base: 'start', lg: 'end' }} justify="space-between" spacing={6} mb={12}>
             <Box maxW="2xl">
-              <Text color="red.600" fontSize="sm" fontWeight="700" textTransform="uppercase" letterSpacing="0.08em" mb={3}>Chronologie</Text>
-              <Heading as="h2" size="xl" mb={3}>Les actions qui construisent notre histoire</Heading>
+              <Text color="red.600" fontSize="sm" fontWeight="700" textTransform="uppercase" letterSpacing="0.08em" mb={3}>Sur le terrain</Text>
+              <Heading as="h2" size="xl" mb={3}>Une association en mouvement</Heading>
               <Text color="gray.600" fontSize="lg" lineHeight="tall">
-                Cette page est pensée comme un journal de bord : elle rassemble les avancées, les temps forts et les chantiers qui jalonnent la vie de l association.
+                De l atelier aux rencontres publiques, chaque projet aide a sauvegarder et a partager le patrimoine des transports.
               </Text>
             </Box>
-            <Text fontSize="sm" color="gray.500" maxW="sm">Les contenus de cette prévisualisation locale peuvent être enrichis à mesure que de nouvelles actions sont menées.</Text>
+            <Button as={RouterLink} to="/contact" variant="outline" colorScheme="red" leftIcon={<FiUsers />} alignSelf={{ base: 'start', lg: 'end' }}>
+              Participer a nos actions
+            </Button>
           </Stack>
 
           <VStack align="stretch" spacing={{ base: 12, md: 16 }}>
@@ -140,6 +147,18 @@ export default function NosActions() {
               </Box>
             ))}
           </VStack>
+
+          <Box borderTopWidth="1px" borderColor="gray.200" mt={{ base: 14, md: 20 }} pt={{ base: 10, md: 14 }}>
+            <Stack direction={{ base: 'column', md: 'row' }} justify="space-between" align={{ base: 'start', md: 'center' }} spacing={6}>
+              <Box maxW="2xl">
+                <Heading as="h2" size="lg" mb={2}>Suivre la suite</Heading>
+                <Text color="gray.600">Retrouvez les prochaines sorties, expositions et rendez-vous ouverts au public.</Text>
+              </Box>
+              <Button as={RouterLink} to="/evenements" size="lg" bg="var(--rbe-red)" color="white" rightIcon={<FiCalendar />} _hover={{ bg: 'var(--rbe-accent)' }}>
+                Agenda des evenements
+              </Button>
+            </Stack>
+          </Box>
         </Container>
       </Box>
     </>

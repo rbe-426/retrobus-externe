@@ -316,6 +316,10 @@ export default function Home() {
         data-pos-x="left"
         data-pos-y="bottom"
       >
+        <Heading as="h1" srOnly>
+          RétroBus Essonne, patrimoine roulant en Île-de-France
+        </Heading>
+
         {/* HERO SECTION - Desktop original + adaptation mobile */}
         
         {/* Version Desktop - Design original */}

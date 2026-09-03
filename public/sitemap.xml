@@ -9,7 +9,7 @@
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://www.association-rbe.fr/assets/photos/ma-photo-hero.jpg</image:loc>
+      <image:loc>https://www.association-rbe.fr/hero_rentree.jpg</image:loc>
       <image:title>Collection RétroBus Essonne - Bus historiques</image:title>
       <image:caption>Découvrez notre collection unique de bus et autocars historiques</image:caption>
     </image:image>
@@ -23,18 +23,18 @@
     <priority>0.9</priority>
   </url>
   
-  <!-- Notre flotte de véhicules -->
+  <!-- Parc de véhicules -->
   <url>
-    <loc>https://www.association-rbe.fr/vehicles</loc>
-    <lastmod>2026-06-16</lastmod>
+    <loc>https://www.association-rbe.fr/parc</loc>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <!-- Événements -->
   <url>
-    <loc>https://www.association-rbe.fr/events</loc>
-    <lastmod>2026-06-16</lastmod>
+    <loc>https://www.association-rbe.fr/evenements</loc>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
@@ -57,8 +57,16 @@
   
   <!-- Nous soutenir / Faire un don -->
   <url>
-    <loc>https://www.association-rbe.fr/donate</loc>
-    <lastmod>2026-06-16</lastmod>
+    <loc>https://www.association-rbe.fr/nous-soutenir</loc>
+    <lastmod>2026-09-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Actions de l'association -->
+  <url>
+    <loc>https://www.association-rbe.fr/nos-actions</loc>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -95,10 +103,10 @@
     <priority>0.3</priority>
   </url>
   
-  <!-- OMSI Add-on -->
+  <!-- Add-on OMSI -->
   <url>
-    <loc>https://www.association-rbe.fr/omsi-addon</loc>
-    <lastmod>2026-06-16</lastmod>
+    <loc>https://www.association-rbe.fr/urbex</loc>
+    <lastmod>2026-09-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>

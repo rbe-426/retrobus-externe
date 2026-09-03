@@ -71,14 +71,6 @@
     <priority>0.7</priority>
   </url>
 
-  <!-- Actions de l'association -->
-  <url>
-    <loc>https://www.association-rbe.fr/nos-actions</loc>
-    <lastmod>2026-09-03</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
   <!-- RétroMerch (boutique) -->
   <url>
     <loc>https://www.association-rbe.fr/retromerch</loc>

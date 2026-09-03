@@ -185,10 +185,11 @@ export default function Contact() {
               <form onSubmit={handleSubmit}>
                 <VStack spacing={3} align="stretch">
                   <Box>
-                    <label style={labelStyle}>
+                    <label htmlFor="contact-name" style={labelStyle}>
                       Nom <span style={{ color: "red" }}>*</span>
                     </label>
                     <input
+                      id="contact-name"
                       type="text"
                       name="name"
                       value={formData.name}
@@ -202,10 +203,11 @@ export default function Contact() {
                   </Box>
 
                   <Box>
-                    <label style={labelStyle}>
+                    <label htmlFor="contact-email" style={labelStyle}>
                       Email <span style={{ color: "red" }}>*</span>
                     </label>
                     <input
+                      id="contact-email"
                       type="email"
                       name="email"
                       value={formData.email}
@@ -219,10 +221,11 @@ export default function Contact() {
                   </Box>
 
                   <Box>
-                    <label style={labelStyle}>
+                    <label htmlFor="contact-subject" style={labelStyle}>
                       Sujet <span style={{ color: "red" }}>*</span>
                     </label>
                     <input
+                      id="contact-subject"
                       type="text"
                       name="subject"
                       value={formData.subject}
@@ -236,10 +239,11 @@ export default function Contact() {
                   </Box>
 
                   <Box>
-                    <label style={labelStyle}>
+                    <label htmlFor="contact-message" style={labelStyle}>
                       Message <span style={{ color: "red" }}>*</span>
                     </label>
                     <textarea
+                      id="contact-message"
                       name="message"
                       value={formData.message}
                       onChange={handleChange}

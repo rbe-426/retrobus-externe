@@ -152,7 +152,7 @@ export default function Vehicles() {
         title="Notre Flotte de Véhicules Historiques - RétroBus Essonne"
         description="Découvrez notre collection unique de bus et autocars historiques : Mercedes Citaro, véhicules RATP vintage et autres pièces du patrimoine automobile français. Histoire, caractéristiques techniques et photos de chaque véhicule."
         keywords="flotte véhicules, bus historiques, autocars collection, Mercedes Citaro, RATP vintage, véhicules anciens, patrimoine transport, collection bus, véhicules restaurés"
-        url="https://www.association-rbe.fr/vehicles"
+        url="https://www.association-rbe.fr/parc"
         image="/assets/920_pres.jpg"
         jsonLd={jsonLdSchemas.itemList([], "Collection de véhicules historiques RétroBus Essonne")}
       />

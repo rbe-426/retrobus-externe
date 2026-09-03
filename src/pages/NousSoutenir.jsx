@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/SEO';
 import {
   Box,
   Container,
@@ -199,13 +199,12 @@ export default function NousSoutenir() {
 
   return (
     <>
-      <Helmet>
-        <title>Nous soutenir - RétroBus Essonne</title>
-        <meta 
-          name="description" 
-          content="Soutenez l'association RétroBus Essonne et contribuez à la préservation du patrimoine du transport en commun francilien." 
-        />
-      </Helmet>
+      <SEO
+        title="Soutenir RétroBus Essonne - Dons, adhésion et mécénat"
+        description="Soutenez RétroBus Essonne par un don, une adhésion ou un mécénat. Votre contribution aide à préserver les bus historiques et le patrimoine des transports franciliens."
+        keywords="soutenir RétroBus Essonne, don patrimoine, adhésion association, mécénat entreprise, bus historiques, patrimoine transports"
+        url="https://www.association-rbe.fr/nous-soutenir"
+      />
 
       <Box minH="calc(100vh - 64px)" py={12}>
         <Container maxW="container.xl">

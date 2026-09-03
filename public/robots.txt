@@ -36,11 +36,13 @@ Disallow: /bulletin-signature
 # Pages prioritaires pour le crawl
 Allow: /
 Allow: /about
-Allow: /vehicles
-Allow: /events
+Allow: /parc
+Allow: /evenements
 Allow: /photos
 Allow: /contact
 Allow: /donate
+Allow: /nous-soutenir
+Allow: /nos-actions
 Allow: /team
 Allow: /retromerch
 Allow: /newsletter

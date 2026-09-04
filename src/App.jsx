@@ -37,6 +37,8 @@ import Actualites from "./pages/Actualites.jsx";
 // Event Mode
 import { useEventMode } from "./utils/eventModeConfig.js";
 
+const isDev = import.meta.env.DEV;
+
 function ScrollToTop() {
   const location = useLocation();
 
@@ -119,8 +121,8 @@ export default function App() {
             <Route path="/newsletter" element={<Newsletter />} />
             <Route path="/urbex" element={<OmsiAddon />} />
             <Route path="/omsi-addon" element={<Navigate to="/urbex" replace />} />
-            <Route path="/actualites" element={<Actualites />} />
-            <Route path="/nos-actions" element={<Navigate to="/actualites" replace />} />
+            <Route path="/actualites" element={isDev ? <Actualites /> : <Navigate to="/" replace />} />
+            <Route path="/nos-actions" element={<Navigate to={isDev ? "/actualites" : "/"} replace />} />
             <Route path="/mentions-legales" element={<MentionsLegales />} />
             <Route path="/rgpd" element={<RGPD />} />
             <Route path="/statuts.pdf" element={<MentionsLegales />} />

@@ -30,6 +30,7 @@ import {
 import { HamburgerIcon } from "@chakra-ui/icons";
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://attractive-kindness-rbe-serveurs.up.railway.app';
+const isDev = import.meta.env.DEV;
 
 export default function Navbar({ donateIcon, newsletterIcon, onDonateClick, onNewsletterClick, isOpen: isOpenProp, onOpen: onOpenProp, onClose: onCloseProp, embedded = false, userName, siteVersion }) {
   const internalDisclosure = useDisclosure();
@@ -134,7 +135,7 @@ export default function Navbar({ donateIcon, newsletterIcon, onDonateClick, onNe
     { to: "/", label: "Accueil" },
     { to: "/parc", label: "Parc de Véhicules" },
     { to: "/evenements", label: "Événements" },
-    { to: "/actualites", label: "Actualités" },
+    ...(isDev ? [{ to: "/actualites", label: "Actualités" }] : []),
     { to: "/nous-soutenir", label: "Nous soutenir" },
     // { to: "/omsi2", label: "AddOn OMSI 2" }, // ← temporairement désactivé
     { to: "/contact", label: "Contact" },

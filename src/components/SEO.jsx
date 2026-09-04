@@ -52,7 +52,7 @@ export default function SEO({
     "logo": "https://www.association-rbe.fr/favicon_rbe.png",
     "description": "Association loi 1901 de préservation et valorisation du patrimoine automobile en Île-de-France, spécialisée dans les bus et autocars historiques.",
     "foundingDate": "2025",
-    "email": "contact@association-rbe.fr",
+    "email": "association.rbe@gmail.com",
     "address": {
       "@type": "PostalAddress",
       "addressRegion": "Île-de-France",
@@ -140,7 +140,7 @@ export const jsonLdSchemas = {
     "logo": "https://www.association-rbe.fr/favicon_rbe.png",
     "description": "Association loi 1901 de préservation et valorisation du patrimoine automobile en Île-de-France, spécialisée dans les bus et autocars historiques.",
     "foundingDate": "2025",
-    "email": "contact@association-rbe.fr",
+    "email": "association.rbe@gmail.com",
     "address": {
       "@type": "PostalAddress",
       "addressRegion": "Île-de-France",
@@ -233,7 +233,7 @@ export const jsonLdSchemas = {
     "mainEntity": {
       "@type": "Organization",
       "name": "RétroBus Essonne",
-      "email": "contact@association-rbe.fr"
+      "email": "association.rbe@gmail.com"
     }
   },
 

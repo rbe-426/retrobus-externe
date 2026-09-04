@@ -14,7 +14,7 @@ import TrafficTracker from "./components/TrafficTracker.jsx";
 import Home from "./pages/Home.jsx";
 import EventHome from "./pages/EventHome.jsx";
 import About from "./pages/About.jsx";
-import Contact from "./pages/Contact.jsx";
+import Contact from "./pages/ContactDirectory.jsx";
 import Vehicles from "./pages/Vehicles.jsx";
 import VehicleDetails from "./pages/VehicleDetails.jsx";
 import Events from "./pages/Events.jsx";

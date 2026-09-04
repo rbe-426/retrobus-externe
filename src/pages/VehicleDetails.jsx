@@ -24,10 +24,9 @@ import {
 } from "@chakra-ui/react";
 import { FiChevronLeft, FiChevronRight, FiArrowLeft } from "react-icons/fi";
 import EventBanner from "../components/EventBanner";
-import { ENABLE_TEMPORARY_ANNIVERSARY_920 } from "../lib/featureFlags";
+import { is920AnniversaryVehiclePageActive } from "../lib/featureFlags";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://attractive-kindness-rbe-serveurs.up.railway.app';
-const ENABLE_TEMPORARY_920_ANNIVERSARY_PAGE = ENABLE_TEMPORARY_ANNIVERSARY_920;
 
 // Fallback global pour les fonds de véhicules
 const DEFAULT_VEHICLE_BG = '/assets/fallback/_MG_1006.jpg';
@@ -327,6 +326,7 @@ function testImage(url) {
 
 export default function VehicleDetails() {
   const { id } = useParams();
+  const is920AnniversaryVehiclePage = id === '920' && is920AnniversaryVehiclePageActive();
   const [vehicle, setVehicle] = useState(null);
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -345,7 +345,7 @@ export default function VehicleDetails() {
     let abort = false;
     setLoading(true);
 
-    if (ENABLE_TEMPORARY_920_ANNIVERSARY_PAGE && id === '920') {
+    if (is920AnniversaryVehiclePage) {
       setVehicle({ modele: '920', gallery: ['/assets/photos/p1-960.jpg'] });
       setEvents([]);
       setError(null);
@@ -373,7 +373,7 @@ export default function VehicleDetails() {
       .finally(() => !abort && setLoading(false));
 
     return () => { abort = true; };
-  }, [id]);
+  }, [id, is920AnniversaryVehiclePage]);
 
   // Safe normalization
   const galleryArrayTop = Array.isArray(vehicle?.gallery) ? vehicle.gallery : [];
@@ -465,7 +465,7 @@ export default function VehicleDetails() {
     );
   }
 
-  if (ENABLE_TEMPORARY_920_ANNIVERSARY_PAGE && id === '920') {
+  if (is920AnniversaryVehiclePage) {
     return <Anniversary920VehiclePage />;
   }
 

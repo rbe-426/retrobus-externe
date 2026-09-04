@@ -32,12 +32,10 @@ import RGPD from "./pages/RGPD.jsx";
 import BulletinSignature from "./pages/BulletinSignature.jsx";
 import MobileRedirect from "./pages/MobileRedirect.jsx";
 import OmsiAddon from "./pages/OmsiAddon.jsx";
-import NosActions from "./pages/NosActions.jsx";
+import Actualites from "./pages/Actualites.jsx";
 
 // Event Mode
 import { useEventMode } from "./utils/eventModeConfig.js";
-
-const isDev = import.meta.env.DEV; // true en dev, false en prod
 
 function ScrollToTop() {
   const location = useLocation();
@@ -121,7 +119,8 @@ export default function App() {
             <Route path="/newsletter" element={<Newsletter />} />
             <Route path="/urbex" element={<OmsiAddon />} />
             <Route path="/omsi-addon" element={<Navigate to="/urbex" replace />} />
-            <Route path="/nos-actions" element={isDev ? <NosActions /> : <Navigate to="/" replace />} />
+            <Route path="/actualites" element={<Actualites />} />
+            <Route path="/nos-actions" element={<Navigate to="/actualites" replace />} />
             <Route path="/mentions-legales" element={<MentionsLegales />} />
             <Route path="/rgpd" element={<RGPD />} />
             <Route path="/statuts.pdf" element={<MentionsLegales />} />

@@ -42,7 +42,7 @@ Allow: /photos
 Allow: /contact
 Allow: /donate
 Allow: /nous-soutenir
-Allow: /nos-actions
+Allow: /actualites
 Allow: /team
 Allow: /retromerch
 Allow: /newsletter

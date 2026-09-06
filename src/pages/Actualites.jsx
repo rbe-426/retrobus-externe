@@ -86,7 +86,7 @@ export default function Actualites() {
                 <CardBody>
                   <VStack align="stretch" spacing={4} h="full">
                     <HStack justify="space-between" align="start" spacing={3}>
-                      <Badge colorScheme="red" variant="subtle">
+                      <Badge bg="#f8bfd0" color="#9f063a" variant="subtle">
                         {actualite.category}
                       </Badge>
                       <HStack spacing={1} color="gray.500" fontSize="sm" flexShrink={0}>
@@ -104,7 +104,9 @@ export default function Actualites() {
                       as={RouterLink}
                       to={`/actualites/${actualite.id || actualite.slug}`}
                       alignSelf="start"
-                      colorScheme="red"
+                      bg="var(--rbe-red)"
+                      color="white"
+                      _hover={{ bg: 'var(--rbe-accent)' }}
                       rightIcon={<FiArrowRight />}
                     >
                       Lire l'article
@@ -131,7 +133,14 @@ export default function Actualites() {
                 Consultez les prochains rendez-vous ou contactez-nous pour partager un projet, une archive ou un témoignage.
               </Text>
             </Box>
-            <Button as={RouterLink} to="/contact" colorScheme="red" leftIcon={<FiUsers />}>
+            <Button
+              as={RouterLink}
+              to="/contact"
+              bg="var(--rbe-red)"
+              color="white"
+              _hover={{ bg: 'var(--rbe-accent)' }}
+              leftIcon={<FiUsers />}
+            >
               Contacter l'association
             </Button>
           </Stack>

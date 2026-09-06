@@ -28,7 +28,7 @@ const formatDate = (date) => new Intl.DateTimeFormat('fr-FR', {
 
 const PublicArticleImage = ({ title, alt, ...props }) => {
   const width = /^width:(33%|50%|100%)$/.test(title || '') ? title.slice(6) : '100%';
-  return <Image {...props} alt={alt || ''} w={width} maxW="100%" mx={width === '100%' ? 0 : 'auto'} />;
+  return <Image {...props} alt={alt || ''} w={width} maxW="100%" mx={0} />;
 };
 
 export default function ActualiteArticle() {
@@ -71,13 +71,13 @@ export default function ActualiteArticle() {
       />
 
       <Box minH="calc(100vh - 64px)" py={{ base: 8, md: 12 }} bg="#f8fafc">
-        <Container maxW="container.md">
+        <Container maxW="container.xl">
           <Button as={RouterLink} to="/actualites" variant="ghost" color="#9f063a" leftIcon={<FiArrowLeft />} mb={8}>
             Toutes les actualités
           </Button>
 
           <Box bg="white" borderTop="4px solid" borderColor="#be003c" boxShadow="sm" borderRadius="md" overflow="hidden">
-            <Image src={article.image} alt={article.imageAlt} w="full" maxH={{ base: '280px', md: '430px' }} objectFit="cover" />
+            <Image src={article.image} alt={article.imageAlt} w="full" maxH={{ base: '320px', md: '500px' }} objectFit="cover" />
             <VStack align="stretch" spacing={7} p={{ base: 6, md: 10 }}>
               <HStack spacing={3} wrap="wrap">
                 <Badge bg="#f8bfd0" color="#9f063a" px={2.5} py={1} borderRadius="full">{article.category}</Badge>

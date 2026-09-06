@@ -26,6 +26,11 @@ const formatDate = (date) => new Intl.DateTimeFormat('fr-FR', {
   year: 'numeric',
 }).format(new Date(`${date}T12:00:00`));
 
+const PublicArticleImage = ({ title, alt, ...props }) => {
+  const width = /^width:(33%|50%|100%)$/.test(title || '') ? title.slice(6) : '100%';
+  return <Image {...props} alt={alt || ''} w={width} maxW="100%" mx={width === '100%' ? 0 : 'auto'} />;
+};
+
 export default function ActualiteArticle() {
   const { slug } = useParams();
   const [article, setArticle] = useState(null);
@@ -86,7 +91,7 @@ export default function ActualiteArticle() {
 
               {article.content ? (
                 <Box color="#475569" sx={{ '& h1, & h2, & h3': { color: '#d30c4c', marginTop: 6, marginBottom: 3 }, '& p': { marginBottom: 4, lineHeight: 'tall' }, '& img': { maxWidth: '100%', borderRadius: '6px', marginTop: 5, marginBottom: 2 }, '& a': { color: '#be003c', textDecoration: 'underline' } }}>
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{article.content}</ReactMarkdown>
+                  <ReactMarkdown remarkPlugins={[remarkGfm]} components={{ img: PublicArticleImage }}>{article.content}</ReactMarkdown>
                 </Box>
               ) : article.sections.map((section) => (
                 <Box key={section.title}>

@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import {
   Badge,
@@ -16,8 +17,9 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { FiArrowRight, FiCalendar, FiUsers } from 'react-icons/fi';
-import SEO from '../components/SEO.jsx';
+import SEO, { jsonLdSchemas } from '../components/SEO.jsx';
 import { actualites } from '../data/actualites.js';
+import { fetchPublicNews } from '../lib/news.js';
 
 const formatDate = (date) => new Intl.DateTimeFormat('fr-FR', {
   day: 'numeric',
@@ -26,34 +28,47 @@ const formatDate = (date) => new Intl.DateTimeFormat('fr-FR', {
 }).format(new Date(`${date}T12:00:00`));
 
 export default function Actualites() {
+  const [articles, setArticles] = useState(actualites);
+
+  useEffect(() => {
+    fetchPublicNews()
+      .then((news) => {
+        if (news.length > 0) setArticles([...news, ...actualites]);
+      })
+      .catch(() => {
+        // The launch article remains available if the API is temporarily unavailable.
+      });
+  }, []);
+
   return (
     <>
       <SEO
         title="Actualités - RétroBus Essonne"
         description="Les actualités de RétroBus Essonne : préservation, restauration, rencontres et patrimoine des transports en Île-de-France."
         url="https://www.association-rbe.fr/actualites"
-        type="article"
+        jsonLd={jsonLdSchemas.itemList(articles.map((actualite) => ({
+          name: actualite.title,
+          url: `https://www.association-rbe.fr/actualites/${actualite.id || actualite.slug}`,
+          image: `https://www.association-rbe.fr${actualite.image}`,
+        })), 'Actualités RétroBus Essonne')}
         image="/hero_rentree.jpg"
       />
 
       <Box minH="calc(100vh - 64px)" py={{ base: 10, md: 12 }}>
         <Container maxW="container.xl">
-          <VStack spacing={4} textAlign="center" mb={{ base: 10, md: 12 }}>
-            <Badge colorScheme="red" fontSize="sm" px={3} py={1} borderRadius="full">
-              RétroBus Essonne
-            </Badge>
-            <Heading as="h1" size="2xl" color="var(--rbe-red)">
+          <VStack className="page-header" spacing={4} textAlign="center" mb={8}>
+            <Heading as="h1" size="2xl" className="page-title">
               Actualités
             </Heading>
-            <Text fontSize="lg" color="gray.600" maxW="2xl">
+            <Text className="page-subtitle">
               Retrouvez les actions, les rencontres et les projets qui font vivre notre patrimoine roulant.
             </Text>
           </VStack>
 
           <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
-            {actualites.map((actualite) => (
+            {articles.map((actualite) => (
               <Card
-                key={actualite.slug}
+                key={actualite.id || actualite.slug}
                 variant="outline"
                 overflow="hidden"
                 borderColor="gray.200"
@@ -87,12 +102,12 @@ export default function Actualites() {
                     </Text>
                     <Button
                       as={RouterLink}
-                      to={actualite.to}
+                      to={`/actualites/${actualite.id || actualite.slug}`}
                       alignSelf="start"
                       colorScheme="red"
                       rightIcon={<FiArrowRight />}
                     >
-                      {actualite.cta}
+                      Lire l'article
                     </Button>
                   </VStack>
                 </CardBody>

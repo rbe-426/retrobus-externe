@@ -35,6 +35,11 @@ export async function autoDetectAndActivateEventMode() {
       localStorage.removeItem('rbe:public-event-mode');
     }
   } catch (error) {
+    const isLocalApi = /^https?:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/.test(API_URL);
+    if (isLocalApi) {
+      console.info('ℹ️ API locale indisponible : le mode événement JEP reste désactivé.');
+      return;
+    }
     console.error('❌ Erreur lors de la détection automatique de l\'événement JEP:', error);
   }
 }

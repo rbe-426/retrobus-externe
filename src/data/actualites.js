@@ -1,35 +1,38 @@
 export const actualites = [
   {
-    slug: 'citaro-920-25-ans',
-    publishedAt: '2026-09-04',
-    category: 'Patrimoine roulant',
-    title: 'Le Citaro 920 fête ses 25 ans',
-    excerpt: "Notre Mercedes-Benz Citaro 920, surnommé La Dame Grise, célèbre un quart de siècle. Retrouvez son parcours et les informations préparées pour cet anniversaire.",
+    slug: 'forum-des-associations-corbeil-essonnes-2026',
+    publishedAt: '2026-09-06',
+    category: 'Vie associative',
+    title: 'Retour sur le Forum des associations 2026',
+    excerpt: "Le 5 septembre, RétroBus Essonne a participé au Forum des associations de Corbeil-Essonnes. Une journée de rencontres autour du patrimoine roulant et du Citaro 920.",
     image: '/assets/photos/p1-960.jpg',
-    imageAlt: 'Mercedes-Benz Citaro 920 de RetroBus Essonne',
-    to: '/vehicles/920',
-    cta: 'Découvrir le 920',
-  },
-  {
-    slug: 'rencontres-rentree-2026',
-    publishedAt: '2026-09-01',
-    category: 'Rencontres',
-    title: 'La rentrée de RétroBus Essonne',
-    excerpt: "La saison reprend avec de nouvelles occasions de rencontrer l'association, découvrir les véhicules et échanger autour de l'histoire des transports en Île-de-France.",
-    image: '/hero_rentree.jpg',
-    imageAlt: 'Véhicule historique présenté par RétroBus Essonne',
-    to: '/evenements',
-    cta: 'Voir les événements',
-  },
-  {
-    slug: 'memoire-reseaux-franciliens',
-    publishedAt: '2026-08-20',
-    category: 'Mémoire',
-    title: 'Conserver la mémoire des réseaux franciliens',
-    excerpt: "Chaque véhicule préservé raconte une histoire de ligne, de dépôt et de territoire. La collection permet de transmettre cette mémoire aux visiteurs et aux passionnés.",
-    image: '/assets/photos/920-cars-soeur.jpg',
-    imageAlt: 'Mercedes Citaro 920 dans sa livrée Cars Sœur',
-    to: '/parc',
-    cta: 'Explorer le parc',
+    imageAlt: 'Mercedes-Benz Citaro 920 de RétroBus Essonne',
+    sections: [
+      {
+        title: 'Une journée de rencontres à Corbeil-Essonnes',
+        paragraphs: [
+          "Samedi 5 septembre 2026, RétroBus Essonne a participé au Forum des associations au Palais des Sports de Corbeil-Essonnes.",
+          "Ce rendez-vous de rentrée a permis de présenter l'association, son projet de sauvegarde du patrimoine des transports et les actions menées autour des véhicules historiques.",
+        ],
+      },
+      {
+        title: 'Le 920 au coeur des échanges',
+        paragraphs: [
+          "Le Mercedes-Benz Citaro 920, surnommé La Dame Grise, était au centre de cette journée. Son histoire illustre le travail de mémoire et de préservation porté par l'association.",
+          "A l'occasion de ses 25 ans, le véhicule a permis de partager des souvenirs, de répondre aux questions des visiteurs et de faire connaître son parcours.",
+        ],
+      },
+      {
+        title: 'Merci pour les échanges',
+        paragraphs: [
+          "Nous remercions les personnes venues nous rencontrer, ainsi que les organisateurs du Forum des associations. Ces moments sont essentiels pour faire vivre le patrimoine roulant et créer de nouveaux liens locaux.",
+          "La saison continue : retrouvez les prochains rendez-vous de RétroBus Essonne et suivez les évolutions de notre collection sur le site.",
+        ],
+      },
+    ],
+    relatedLinks: [
+      { to: '/vehicles/920', label: 'Découvrir la fiche du 920' },
+      { to: '/evenements', label: 'Voir les prochains événements' },
+    ],
   },
 ];

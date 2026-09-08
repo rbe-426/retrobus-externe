@@ -335,7 +335,7 @@ export default function Home() {
           >
             <div className="hero-content hero-temporary-action">
               <div className="hero-box">
-                <Button as={RouterLink} to="/evenements" size="lg" bg="var(--rbe-red)" color="white" _hover={{ bg: "var(--rbe-accent)" }}>
+                <Button as={RouterLink} to="/actualites/7a70bed7-aa8c-4e9d-84b5-a5eaf6459528" size="lg" bg="var(--rbe-red)" color="white" _hover={{ bg: "var(--rbe-accent)" }}>
                   Nos Actions de la rentrée
                 </Button>
               </div>
@@ -358,7 +358,7 @@ export default function Home() {
             aria-label="Bonne rentrée de l'association RétroBus Essonne"
           >
             <VStack position="absolute" left={{ base: 3, md: 6 }} bottom={-5} zIndex={1}>
-              <Button as={RouterLink} to="/evenements" size={{ base: "sm", md: "md" }} bg="var(--rbe-red)" color="white" _hover={{ bg: "var(--rbe-accent)" }}>
+              <Button as={RouterLink} to="/actualites/7a70bed7-aa8c-4e9d-84b5-a5eaf6459528" size={{ base: "sm", md: "md" }} bg="var(--rbe-red)" color="white" _hover={{ bg: "var(--rbe-accent)" }}>
                 Nos Actions de la rentrée
               </Button>
             </VStack>

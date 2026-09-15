@@ -276,21 +276,25 @@ export default function NousSoutenir() {
 
               {/* Adhésion */}
               <Card 
-                bg={cardBg} 
+                bg="linear-gradient(135deg, #7d0530 0%, #9f063a 54%, #5b0326 100%)"
                 borderWidth="1px" 
-                borderColor={borderColor}
+                borderColor="rgba(255,255,255,0.24)"
                 h="100%"
-                shadow="md"
+                color="white"
+                shadow="xl"
                 transition="all 0.3s"
-                _hover={{ shadow: 'xl', transform: 'translateY(-4px)' }}
+                _hover={{ shadow: '2xl', transform: 'translateY(-4px)' }}
               >
                 <CardBody display="flex">
                   <VStack spacing={4} align="start" h="100%" w="100%">
+                    <Badge bg="gold" color="black" fontSize="sm" px={3} py={1} borderRadius="full" fontWeight="bold" boxShadow="lg">
+                      Rejoignez-nous
+                    </Badge>
                     <HStack>
-                      <Icon as={FiUsers} boxSize={8} color="blue.500" />
+                      <Icon as={FiUsers} boxSize={8} color="white" />
                       <Heading size="md">Adhésion</Heading>
                     </HStack>
-                    <Text color={useColorModeValue('gray.600', 'gray.400')}>
+                    <Text color="whiteAlpha.900">
                       Devenez membre de l'association et participez activement à nos activités.
                     </Text>
                     <List spacing={2} w="full">
@@ -308,11 +312,14 @@ export default function NousSoutenir() {
                       </ListItem>
                     </List>
                     <Button
-                      colorScheme="blue"
                       size="lg"
                       w="full"
                       mt="auto"
                       rightIcon={<FiUsers />}
+                      bg="white"
+                      color="#9f063a"
+                      fontWeight="800"
+                      _hover={{ bg: "gray.100", transform: "translateY(-1px)" }}
                       onClick={onAdhesionModalOpen}
                     >
                       Adhérer

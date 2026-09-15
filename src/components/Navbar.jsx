@@ -172,7 +172,7 @@ export default function Navbar({ donateIcon, newsletterIcon, onDonateClick, onNe
               <Link
                 key={it.to}
                 to={it.to}
-                className={`nav-btn ${location.pathname === it.to ? "active" : ""}`}
+                className={`nav-btn ${['/actualites', '/nous-soutenir'].includes(it.to) ? 'nav-btn--rbe-profond' : ''} ${location.pathname === it.to ? "active" : ""}`}
                 aria-current={location.pathname === it.to ? "page" : undefined}
               >
                 {it.label}
@@ -279,11 +279,11 @@ export default function Navbar({ donateIcon, newsletterIcon, onDonateClick, onNe
                 >
                   <Box
                     p={4}
-                    bg={location.pathname === item.to ? "var(--rbe-red)" : "white"}
-                    color={location.pathname === item.to ? "white" : "gray.700"}
+                    bg={['/actualites', '/nous-soutenir'].includes(item.to) ? '#9f063a' : (location.pathname === item.to ? 'var(--rbe-red)' : 'white')}
+                    color={['/actualites', '/nous-soutenir'].includes(item.to) || location.pathname === item.to ? 'white' : 'gray.700'}
                     borderBottom="1px solid"
                     borderColor="gray.200"
-                    _hover={{ bg: "gray.50" }}
+                    _hover={{ bg: ['/actualites', '/nous-soutenir'].includes(item.to) ? '#7d0530' : 'gray.50' }}
                     transition="all 0.2s"
                     fontWeight="600"
                   >

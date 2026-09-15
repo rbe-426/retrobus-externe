@@ -356,11 +356,11 @@ export default function Home() {
             ml="-50vw"
             minH="clamp(240px, 52vw, 500px)"
             backgroundImage={`url(${MEMBERSHIP_CAMPAIGN_HERO_IMAGE})`}
-            backgroundPosition="60% center"
+            backgroundPosition="68% center"
             backgroundSize="cover"
             aria-label="Campagne d'adhésion RétroBus Essonne"
           >
-            <VStack position="absolute" left={{ base: 2, md: 5 }} bottom={-17} zIndex={1}>
+            <VStack position="absolute" left={{ base: 2, md: 5 }} bottom={-5} zIndex={1}>
               <Button as={RouterLink} to="/actualites" size={{ base: "sm", md: "md" }} bg="#011537" color="white" _hover={{ bg: "#0f172a" }}>
                 Actualités
               </Button>

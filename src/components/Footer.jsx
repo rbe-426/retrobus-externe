@@ -319,20 +319,31 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} <strong>RétroBus Essonne</strong> • Tous droits réservés
           </Text>
 
-          <CLink
-            href="https://www.retrobus-interne.fr/login"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Pointage URBEX"
-            title="Accéder au pointage"
-            display="inline-flex"
-            alignItems="center"
-            justifyContent="center"
-            _hover={{ transform: "translateY(-2px) scale(1.08)", opacity: 0.85 }}
-            transition="all 0.2s"
-          >
-            <Image src="/assets/urbex-icon.svg" alt="URBEX" boxSize="28px" />
-          </CLink>
+          <HStack spacing={4}>
+            <CLink
+              href="/retrobus-status"
+              fontSize="sm"
+              fontWeight="700"
+              color="whiteAlpha.800"
+              _hover={{ color: "#ff8ab0", textDecoration: "none" }}
+            >
+              Statuts des services
+            </CLink>
+            <CLink
+              href="https://www.retrobus-interne.fr/login"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Pointage URBEX"
+              title="Accéder au pointage"
+              display="inline-flex"
+              alignItems="center"
+              justifyContent="center"
+              _hover={{ transform: "translateY(-2px) scale(1.08)", opacity: 0.85 }}
+              transition="all 0.2s"
+            >
+              <Image src="/assets/urbex-icon.svg" alt="URBEX" boxSize="28px" />
+            </CLink>
+          </HStack>
           
           <Text 
             fontSize="xs" 

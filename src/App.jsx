@@ -34,6 +34,7 @@ import MobileRedirect from "./pages/MobileRedirect.jsx";
 import OmsiAddon from "./pages/OmsiAddon.jsx";
 import Actualites from "./pages/Actualites.jsx";
 import ActualiteArticle from "./pages/ActualiteArticle.jsx";
+import RetroBusStatus from "./pages/RetroBusStatus.jsx";
 
 // Event Mode
 import { useEventMode } from "./utils/eventModeConfig.js";
@@ -116,6 +117,7 @@ export default function App() {
             <Route path="/photos" element={<Photos />} />
             <Route path="/donate" element={<Donate />} />
             <Route path="/changelog" element={<Changelog />} />
+            <Route path="/retrobus-status" element={<RetroBusStatus />} />
             <Route path="/team" element={<Team />} />
             <Route path="/newsletter" element={<Newsletter />} />
             <Route path="/urbex" element={<OmsiAddon />} />

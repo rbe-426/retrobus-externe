@@ -208,6 +208,28 @@ export default function Footer() {
             wrap="wrap"
           >
             <CLink
+              href="https://www.nedroma.fr/"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Groupe Nedroma"
+              _hover={{ opacity: 0.8, transform: "translateY(-2px)" }}
+              transition="all 0.2s"
+            >
+              <Image
+                src="/supporters/nedroma.png"
+                alt="Groupe Nedroma"
+                h={{ base: "52px", md: "64px" }}
+                w="auto"
+                maxW={{ base: "180px", md: "240px" }}
+                objectFit="contain"
+                loading="lazy"
+                decoding="async"
+                style={{ filter: "drop-shadow(0 0 4px rgba(0,0,0,0.4))" }}
+                fallback={<Text fontSize="xs" color="whiteAlpha.700">Groupe Nedroma</Text>}
+              />
+            </CLink>
+
+            <CLink
               href="https://www.cars-soeur.com/"
               target="_blank"
               rel="noopener noreferrer"
@@ -271,6 +293,28 @@ export default function Footer() {
                 decoding="async"
                 style={{ filter: "drop-shadow(0 0 4px rgba(0,0,0,0.4))" }}
                 fallback={<Text fontSize="xs" color="whiteAlpha.700">BNP Paribas</Text>}
+              />
+            </CLink>
+
+            <CLink
+              href="https://controleplus.fr/"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="controleplus.fr - Contrôle technique de véhicules"
+              _hover={{ opacity: 0.8, transform: "translateY(-2px)" }}
+              transition="all 0.2s"
+            >
+              <Image
+                src="/supporters/controleplus.png"
+                alt="controleplus.fr - Contrôle technique de véhicules"
+                h={{ base: "52px", md: "64px" }}
+                w="auto"
+                maxW={{ base: "180px", md: "240px" }}
+                objectFit="contain"
+                loading="lazy"
+                decoding="async"
+                style={{ filter: "drop-shadow(0 0 4px rgba(0,0,0,0.4))" }}
+                fallback={<Text fontSize="xs" color="whiteAlpha.700">controleplus.fr</Text>}
               />
             </CLink>
 

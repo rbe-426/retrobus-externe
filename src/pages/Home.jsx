@@ -11,7 +11,7 @@ import { RBE_LOGOS } from "../lib/rbeLogos";
 
 const ANNIVERSARY_HERO_BUS_IMAGE = "/assets/bus-25-ans.png";
 const ANNIVERSARY_CARD_LOGO_IMAGE = RBE_LOGOS.anniversaryCard;
-const MEMBERSHIP_CAMPAIGN_HERO_IMAGE = "/assets/hero_campagne_adhesion.jpg";
+const HOME_HERO_IMAGE = "/assets/hero.jpg";
 
 // Bloc temporaire pour l'anniversaire des 25 ans : ajuster ici la disposition du titre hero.
 const ANNIVERSARY_HERO_LAYOUT = Object.freeze({
@@ -300,7 +300,7 @@ export default function Home() {
         description="Association de préservation du patrimoine automobile en Île-de-France. Découvrez notre collection unique de bus et autocars historiques, participez à nos événements et soutenez la sauvegarde du patrimoine routier français."
         keywords="bus anciens, autobus historiques, patrimoine automobile, Essonne, Île-de-France, RétroBus, collection bus, véhicules de collection, transports en commun anciens, musée bus, association automobile, Mercedes Citaro, RATP vintage, restauration véhicules, sorties patrimoine, association 1901"
         url="https://www.association-rbe.fr/"
-        image={MEMBERSHIP_CAMPAIGN_HERO_IMAGE}
+        image={HOME_HERO_IMAGE}
         type="website"
         jsonLd={jsonLdSchemas.organization}
       />
@@ -326,24 +326,11 @@ export default function Home() {
             as="section"
             className="full-bleed hero hero-temporary-artwork"
             style={{
-              backgroundImage: `url(${MEMBERSHIP_CAMPAIGN_HERO_IMAGE})`,
+              backgroundImage: `url(${HOME_HERO_IMAGE})`,
               '--hero-pos-y': 'center',
             }}
             aria-label="Campagne d'adhésion RétroBus Essonne"
-          >
-            <div className="hero-content hero-temporary-action">
-              <div className="hero-box">
-                <HStack spacing={3}>
-                  <Button as={RouterLink} to="/actualites" size="lg" bg="#011537" color="white" _hover={{ bg: "#0f172a" }}>
-                    Actualités
-                  </Button>
-                  <Button as={RouterLink} to="/nous-soutenir" size="lg" bg="var(--rbe-red)" color="white" _hover={{ bg: "var(--rbe-accent)" }}>
-                    J'adhère !
-                  </Button>
-                </HStack>
-              </div>
-            </div>
-          </Box>
+          />
         </Hide>
 
         {/* Version mobile */}
@@ -355,20 +342,11 @@ export default function Home() {
             left="50%"
             ml="-50vw"
             minH="clamp(240px, 52vw, 500px)"
-            backgroundImage={`url(${MEMBERSHIP_CAMPAIGN_HERO_IMAGE})`}
+            backgroundImage={`url(${HOME_HERO_IMAGE})`}
             backgroundPosition="68% center"
             backgroundSize="cover"
             aria-label="Campagne d'adhésion RétroBus Essonne"
-          >
-            <VStack position="absolute" left={{ base: 2, md: 5 }} bottom={-5} zIndex={1}>
-              <Button as={RouterLink} to="/actualites" size={{ base: "sm", md: "md" }} bg="#011537" color="white" _hover={{ bg: "#0f172a" }}>
-                Actualités
-              </Button>
-              <Button as={RouterLink} to="/nous-soutenir" size={{ base: "sm", md: "md" }} bg="var(--rbe-red)" color="white" _hover={{ bg: "var(--rbe-accent)" }}>
-                J'adhère !
-              </Button>
-            </VStack>
-          </Box>
+          />
         </Show>
 
         {/* COLLECTION & DISCORD SECTION */}

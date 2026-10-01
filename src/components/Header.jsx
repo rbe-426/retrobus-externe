@@ -9,6 +9,7 @@ import { HamburgerIcon } from "@chakra-ui/icons";
 import logoDefault from "../assets/rbe_logo.svg";
 import Navbar from "./Navbar.jsx";
 import CompatImg from "./CompatImg.jsx";
+import { isOctoberRoseActive } from "../lib/featureFlags";
 
 // Icônes (remplies en rouge rétrobus)
 const SimpleHeartIcon = ({ size = 28 }) => (
@@ -25,8 +26,11 @@ const EnvelopeIcon = ({ size = 28 }) => (
 
 const LOGO_PATH = "/assets/rbe_logo.svg";
 const HEADER_BG = "/assets/header.jpg";
+const OCTOBER_ROSE_HEADER_BG = "/assets/header_octobrose.png";
+const OCTOBER_ROSE_LOGO = "/assets/logo_octobrose.png";
 
 export default function Header() {
+  const isOctoberRose = isOctoberRoseActive();
   const { isOpen: isDonateOpen, onOpen: onDonateOpen, onClose: onDonateClose } = useDisclosure();
   const { isOpen: isNewsletterOpen, onOpen: onNewsletterOpen, onClose: onNewsletterClose } = useDisclosure();
   const navDisclosure = useDisclosure();
@@ -86,13 +90,13 @@ export default function Header() {
   return (
     <>
       <header className="site-header">
-        {/* Background - toujours depuis le fichier public /assets/header.jpg */}
+        {/* Background saisonnier pour Octobre Rose, fond habituel le reste de l'année */}
         <div
           className="header-bg"
           style={{
-            backgroundImage: `url(${HEADER_BG})`,
+            backgroundImage: `url(${isOctoberRose ? OCTOBER_ROSE_HEADER_BG : HEADER_BG})`,
             backgroundSize: headerBgSize || 'cover',
-            backgroundPosition: `50% 50%`
+            backgroundPosition: isOctoberRose ? 'center center' : `50% 50%`
           }}
         />
         
@@ -101,8 +105,8 @@ export default function Header() {
           {/* Logo affiché en individuel */}
           <CompatImg 
             className="header-logo" 
-            path={LOGO_PATH}
-            alt="Logo RBE"
+            path={isOctoberRose ? OCTOBER_ROSE_LOGO : LOGO_PATH}
+            alt={isOctoberRose ? "Logo RBE Octobre Rose" : "Logo RBE"}
             fallback={logoDefault}
             loading="eager"
             fetchPriority="high"

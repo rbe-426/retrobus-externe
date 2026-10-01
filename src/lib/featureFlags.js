@@ -1,6 +1,15 @@
 export const HIDE_TEMPORARY_ANNIVERSARY_920 = true;
 export const ENABLE_TEMPORARY_ANNIVERSARY_920 = !HIDE_TEMPORARY_ANNIVERSARY_920;
 
+export const isOctoberRoseActive = () => {
+	const month = new Intl.DateTimeFormat('en-CA', {
+		timeZone: 'Europe/Paris',
+		month: '2-digit'
+	}).format(new Date());
+
+	return month === '10';
+};
+
 export const is920AnniversaryVehiclePageActive = () => {
 	const dateParts = new Intl.DateTimeFormat('en-CA', {
 		timeZone: 'Europe/Paris',

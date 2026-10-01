@@ -84,6 +84,14 @@ export default function Footer() {
               >
                 → Contact
               </CLink>
+              <CLink 
+                href="/partenaires" 
+                color="whiteAlpha.800"
+                _hover={{ color: "#ff8ab0", pl: 2, transition: "all 0.2s" }}
+                transition="all 0.2s"
+              >
+                → Nos partenaires
+              </CLink>
             </VStack>
           </VStack>
 

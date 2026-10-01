@@ -17,6 +17,7 @@ import About from "./pages/About.jsx";
 import Contact from "./pages/ContactDirectory.jsx";
 import Vehicles from "./pages/Vehicles.jsx";
 import VehicleDetails from "./pages/VehicleDetails.jsx";
+import Vehicle920Test from "./pages/Vehicle920Test.jsx";
 import Events from "./pages/Events.jsx";
 import EventRegistration from "./pages/EventRegistration.jsx";
 import HelloAssoCallback from "./pages/HelloAssoCallback.jsx";
@@ -35,6 +36,7 @@ import OmsiAddon from "./pages/OmsiAddon.jsx";
 import Actualites from "./pages/Actualites.jsx";
 import ActualiteArticle from "./pages/ActualiteArticle.jsx";
 import RetroBusStatus from "./pages/RetroBusStatus.jsx";
+import Partners from "./pages/Partners.jsx";
 
 // Event Mode
 import { useEventMode } from "./utils/eventModeConfig.js";
@@ -101,6 +103,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<HomeComponent />} />
             <Route path="/parc" element={<Vehicles />} />
+            <Route path="/vehicles/920-test" element={<Vehicle920Test />} />
             <Route path="/vehicles/:id" element={<VehicleDetails />} />
             <Route path="/vehicules/:id" element={<VehicleDetails />} />
             <Route path="/vehicles" element={<Navigate to="/parc" replace />} />
@@ -118,6 +121,7 @@ export default function App() {
             <Route path="/donate" element={<Donate />} />
             <Route path="/changelog" element={<Changelog />} />
             <Route path="/retrobus-status" element={<RetroBusStatus />} />
+            <Route path="/partenaires" element={<Partners />} />
             <Route path="/team" element={<Team />} />
             <Route path="/newsletter" element={<Newsletter />} />
             <Route path="/urbex" element={<OmsiAddon />} />

@@ -324,9 +324,9 @@ function testImage(url) {
   });
 }
 
-export default function VehicleDetails() {
+export default function VehicleDetails({ force920Anniversary = false }) {
   const { id } = useParams();
-  const is920AnniversaryVehiclePage = id === '920' && is920AnniversaryVehiclePageActive();
+  const is920AnniversaryVehiclePage = force920Anniversary || (id === '920' && is920AnniversaryVehiclePageActive());
   const [vehicle, setVehicle] = useState(null);
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);

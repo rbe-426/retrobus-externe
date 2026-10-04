@@ -779,13 +779,13 @@ export default function Home() {
                 <Text>Vos dons nous aident à financer la restauration et l'entretien.</Text>
                 <Button 
                   as={RouterLink}
-                  to="/donate"
+                  to="/nous-soutenir"
                   bg="white"
                   color="var(--rbe-red)"
                   _hover={{ opacity: 0.9 }}
                   mt={2}
                 >
-                  Faire un don
+                  Voir les soutiens possibles
                 </Button>
               </VStack>
             </SimpleGrid>

@@ -33,7 +33,7 @@ import {
   GridItem,
   useDisclosure,
 } from '@chakra-ui/react';
-import { FiHeart, FiUsers, FiTruck, FiCheckCircle, FiExternalLink, FiCreditCard, FiMail, FiDollarSign } from 'react-icons/fi';
+import { FiHeart, FiUsers, FiTruck, FiCheckCircle, FiExternalLink, FiCreditCard, FiMail, FiDollarSign, FiShield } from 'react-icons/fi';
 import { apiUrl } from '../lib/api';
 
 const CSRF_STORAGE_KEY = 'EXTERNE_CSRF_TOKEN';
@@ -87,6 +87,8 @@ const fetchCsrfToken = async (forceRefresh = false) => {
 export default function NousSoutenir() {
   const cardBg = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
+  const pageBg = useColorModeValue('gray.50', 'gray.900');
+  const mutedText = useColorModeValue('gray.600', 'gray.400');
   const { isOpen: isDonationModalOpen, onOpen: onDonationModalOpen, onClose: onDonationModalClose } = useDisclosure();
   const { isOpen: isAdhesionModalOpen, onOpen: onAdhesionModalOpen, onClose: onAdhesionModalClose } = useDisclosure();
   const [selectedDonationMethod, setSelectedDonationMethod] = useState('cheque');
@@ -206,23 +208,20 @@ export default function NousSoutenir() {
         url="https://www.association-rbe.fr/nous-soutenir"
       />
 
-      <Box minH="calc(100vh - 64px)" py={12}>
+      <Box minH="calc(100vh - 64px)" py={{ base: 8, md: 12 }} bg={pageBg}>
         <Container maxW="container.xl">
           <VStack spacing={8} align="stretch">
             {/* Header */}
-            <VStack spacing={4} textAlign="center">
-              <Badge colorScheme="red" fontSize="md" px={3} py={1} borderRadius="full">
-                💝 Soutien à l'association
-              </Badge>
-              <Heading 
-                size="2xl" 
-                color="#d30c4c"
-              >
-                Nous soutenir
-              </Heading>
-              <Text fontSize="lg" color={useColorModeValue('gray.600', 'gray.400')} maxW="2xl">
+            <VStack className="page-header" spacing={4} textAlign="center" pb={2}>
+              <HStack color="var(--rbe-red)" fontSize="sm" fontWeight="700" textTransform="uppercase" letterSpacing="0.08em">
+                <Icon as={FiHeart} />
+                <Text>Soutenir l'association</Text>
+              </HStack>
+              <Heading as="h1" size="2xl" className="page-title">Nous soutenir</Heading>
+              <Text fontSize="lg" color={mutedText} maxW="2xl">
                 Votre aide nous permet de réparer, entretenir et montrer les bus historiques de notre région.
               </Text>
+              <Box w="72px" h="4px" bg="var(--rbe-red)" />
             </VStack>
 
             {/* Cards principales */}
@@ -232,36 +231,41 @@ export default function NousSoutenir() {
                 bg={cardBg} 
                 borderWidth="1px" 
                 borderColor={borderColor}
+                borderTopWidth="4px"
+                borderTopColor="var(--rbe-red)"
+                borderRadius="md"
                 h="100%"
-                shadow="md"
+                shadow="sm"
                 transition="all 0.3s"
-                _hover={{ shadow: 'xl', transform: 'translateY(-4px)' }}
+                _hover={{ shadow: 'md', transform: 'translateY(-4px)' }}
               >
                 <CardBody display="flex">
                   <VStack spacing={4} align="start" h="100%" w="100%">
                     <HStack>
-                      <Icon as={FiHeart} boxSize={8} color="red.500" />
+                      <Icon as={FiHeart} boxSize={7} color="var(--rbe-red)" />
                       <Heading size="md">Don ponctuel</Heading>
                     </HStack>
-                    <Text color={useColorModeValue('gray.600', 'gray.400')}>
+                    <Text color={mutedText}>
                       Faites un don unique pour soutenir nos projets de restauration et nos événements.
                     </Text>
                     <List spacing={2} w="full">
                       <ListItem>
-                        <ListIcon as={FiCheckCircle} color="green.500" />
+                        <ListIcon as={FiCheckCircle} color="var(--rbe-red)" />
                         Reçu fiscal (66% de déduction)
                       </ListItem>
                       <ListItem>
-                        <ListIcon as={FiCheckCircle} color="green.500" />
+                        <ListIcon as={FiCheckCircle} color="var(--rbe-red)" />
                         Paiement sécurisé HelloAsso
                       </ListItem>
                       <ListItem>
-                        <ListIcon as={FiCheckCircle} color="green.500" />
+                        <ListIcon as={FiCheckCircle} color="var(--rbe-red)" />
                         Montant libre
                       </ListItem>
                     </List>
                     <Button
-                      colorScheme="red"
+                      bg="var(--rbe-red)"
+                      color="white"
+                      _hover={{ bg: 'var(--rbe-accent)' }}
                       size="lg"
                       w="full"
                       mt="auto"
@@ -279,36 +283,41 @@ export default function NousSoutenir() {
                 bg={cardBg}
                 borderWidth="1px" 
                 borderColor={borderColor}
+                borderTopWidth="4px"
+                borderTopColor="#011537"
+                borderRadius="md"
                 h="100%"
-                shadow="md"
+                shadow="sm"
                 transition="all 0.3s"
-                _hover={{ shadow: 'xl', transform: 'translateY(-4px)' }}
+                _hover={{ shadow: 'md', transform: 'translateY(-4px)' }}
               >
                 <CardBody display="flex">
                   <VStack spacing={4} align="start" h="100%" w="100%">
                     <HStack>
-                      <Icon as={FiUsers} boxSize={8} color="blue.500" />
+                      <Icon as={FiUsers} boxSize={7} color="#011537" />
                       <Heading size="md">Adhésion</Heading>
                     </HStack>
-                    <Text color={useColorModeValue('gray.600', 'gray.400')}>
+                    <Text color={mutedText}>
                       Devenez membre de l'association et participez activement à nos activités.
                     </Text>
                     <List spacing={2} w="full">
                       <ListItem>
-                        <ListIcon as={FiCheckCircle} color="green.500" />
+                        <ListIcon as={FiCheckCircle} color="var(--rbe-red)" />
                         Accès aux événements membres
                       </ListItem>
                       <ListItem>
-                        <ListIcon as={FiCheckCircle} color="green.500" />
+                        <ListIcon as={FiCheckCircle} color="var(--rbe-red)" />
                         Newsletter exclusive
                       </ListItem>
                       <ListItem>
-                        <ListIcon as={FiCheckCircle} color="green.500" />
+                        <ListIcon as={FiCheckCircle} color="var(--rbe-red)" />
                         Tarifs préférentiels
                       </ListItem>
                     </List>
                     <Button
-                      colorScheme="red"
+                      bg="var(--rbe-red)"
+                      color="white"
+                      _hover={{ bg: 'var(--rbe-accent)' }}
                       size="lg"
                       w="full"
                       mt="auto"
@@ -326,36 +335,41 @@ export default function NousSoutenir() {
                 bg={cardBg} 
                 borderWidth="1px" 
                 borderColor={borderColor}
+                borderTopWidth="4px"
+                borderTopColor="var(--rbe-red)"
+                borderRadius="md"
                 h="100%"
-                shadow="md"
+                shadow="sm"
                 transition="all 0.3s"
-                _hover={{ shadow: 'xl', transform: 'translateY(-4px)' }}
+                _hover={{ shadow: 'md', transform: 'translateY(-4px)' }}
               >
                 <CardBody display="flex">
                   <VStack spacing={4} align="start" h="100%" w="100%">
                     <HStack>
-                      <Icon as={FiTruck} boxSize={8} color="purple.500" />
+                      <Icon as={FiTruck} boxSize={7} color="var(--rbe-red)" />
                       <Heading size="md">Mécénat entreprise</Heading>
                     </HStack>
-                    <Text color={useColorModeValue('gray.600', 'gray.400')}>
+                    <Text color={mutedText}>
                       Votre entreprise souhaite nous soutenir ? Contactez-nous pour un partenariat.
                     </Text>
                     <List spacing={2} w="full">
                       <ListItem>
-                        <ListIcon as={FiCheckCircle} color="green.500" />
+                        <ListIcon as={FiCheckCircle} color="var(--rbe-red)" />
                         Visibilité sur nos événements
                       </ListItem>
                       <ListItem>
-                        <ListIcon as={FiCheckCircle} color="green.500" />
+                        <ListIcon as={FiCheckCircle} color="var(--rbe-red)" />
                         Réduction d'impôt (60%)
                       </ListItem>
                       <ListItem>
-                        <ListIcon as={FiCheckCircle} color="green.500" />
+                        <ListIcon as={FiCheckCircle} color="var(--rbe-red)" />
                         Communication sur nos supports
                       </ListItem>
                     </List>
                     <Button
-                      colorScheme="purple"
+                      bg="#011537"
+                      color="white"
+                      _hover={{ bg: '#172554' }}
                       size="lg"
                       w="full"
                       mt="auto"
@@ -371,43 +385,35 @@ export default function NousSoutenir() {
             </SimpleGrid>
 
             {/* Section pourquoi nous soutenir */}
-            <Card bg={cardBg} borderWidth="1px" borderColor={borderColor}>
+            <Card bg={cardBg} borderWidth="1px" borderColor={borderColor} borderRadius="md">
               <CardBody>
                 <VStack spacing={6} align="stretch">
-                  <Heading size="lg" textAlign="center">
+                  <Heading size="lg" textAlign="center" color="#011537">
                     Pourquoi nous soutenir ?
                   </Heading>
                   <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
-                    <VStack align="start" spacing={3}>
-                      <Heading size="sm" color="red.500">
-                        🚌 Préservation du patrimoine
-                      </Heading>
-                      <Text color={useColorModeValue('gray.600', 'gray.400')}>
+                    <VStack align="start" spacing={3} borderLeft="3px solid" borderColor="var(--rbe-red)" pl={4}>
+                      <Heading size="sm" color="var(--rbe-red)">Préservation du patrimoine</Heading>
+                      <Text color={mutedText}>
                         Nous réparons et entretenons des bus historiques pour que chacun puisse encore les découvrir demain.
                       </Text>
                     </VStack>
-                    <VStack align="start" spacing={3}>
-                      <Heading size="sm" color="red.500">
-                        🎓 Transmission et pédagogie
-                      </Heading>
-                      <Text color={useColorModeValue('gray.600', 'gray.400')}>
+                    <VStack align="start" spacing={3} borderLeft="3px solid" borderColor="#011537" pl={4}>
+                      <Heading size="sm" color="#011537">Transmission et pédagogie</Heading>
+                      <Text color={mutedText}>
                         Nous organisons des événements pour raconter l'histoire des transports à tous les publics.
                       </Text>
                     </VStack>
-                    <VStack align="start" spacing={3}>
-                      <Heading size="sm" color="red.500">
-                        🔧 Savoir-faire technique
-                      </Heading>
-                      <Text color={useColorModeValue('gray.600', 'gray.400')}>
+                    <VStack align="start" spacing={3} borderLeft="3px solid" borderColor="var(--rbe-red)" pl={4}>
+                      <Heading size="sm" color="var(--rbe-red)">Savoir-faire technique</Heading>
+                      <Text color={mutedText}>
                         Nos bénévoles passionnés restaurent avec soin chaque véhicule dans le respect 
                         de son authenticité d'origine.
                       </Text>
                     </VStack>
-                    <VStack align="start" spacing={3}>
-                      <Heading size="sm" color="red.500">
-                        🎉 Événements publics
-                      </Heading>
-                      <Text color={useColorModeValue('gray.600', 'gray.400')}>
+                    <VStack align="start" spacing={3} borderLeft="3px solid" borderColor="#011537" pl={4}>
+                      <Heading size="sm" color="#011537">Événements publics</Heading>
+                      <Text color={mutedText}>
                         Nous participons à de nombreux événements pour faire vivre notre patrimoine 
                         et partager notre passion avec le public.
                       </Text>
@@ -419,15 +425,14 @@ export default function NousSoutenir() {
 
             {/* Section transparence */}
             <Card 
-              bg={useColorModeValue('blue.50', 'blue.900')} 
+              bg={useColorModeValue('#fff5f8', 'gray.800')} 
               borderWidth="1px" 
-              borderColor={useColorModeValue('blue.200', 'blue.700')}
+              borderColor={useColorModeValue('#f3b7cb', 'gray.700')}
+              borderRadius="md"
             >
               <CardBody>
                 <VStack spacing={4}>
-                  <Heading size="md" textAlign="center">
-                    💎 Transparence et confiance
-                  </Heading>
+                  <HStack color="#011537"><Icon as={FiShield} /><Heading size="md">Transparence et confiance</Heading></HStack>
                   <Text textAlign="center" color={useColorModeValue('gray.700', 'gray.300')}>
                     RétroBus Essonne est une association loi 1901 reconnue d'intérêt général.
                     <br />
@@ -446,8 +451,8 @@ export default function NousSoutenir() {
 
       <Modal isOpen={isDonationModalOpen} onClose={onDonationModalClose} size="3xl" isCentered>
         <ModalOverlay bg="blackAlpha.600" backdropFilter="blur(6px)" />
-        <ModalContent borderRadius="2xl" overflow="hidden">
-          <Box bg="linear-gradient(120deg, #9f1239 0%, #d30c4c 45%, #ef4444 100%)" color="white" px={6} py={5}>
+        <ModalContent borderRadius="md" overflow="hidden">
+          <Box bg="#011537" borderBottom="4px solid" borderColor="var(--rbe-red)" color="white" px={6} py={5}>
             <ModalHeader p={0}>Don ponctuel</ModalHeader>
             <Text opacity={0.95} mt={1}>
               Choisissez votre mode de contribution
@@ -466,9 +471,12 @@ export default function NousSoutenir() {
                       justifyContent="flex-start"
                       leftIcon={<Icon as={method.icon} />}
                       variant={selectedDonationMethod === method.key ? 'solid' : 'outline'}
-                      colorScheme={selectedDonationMethod === method.key ? 'red' : 'gray'}
+                      bg={selectedDonationMethod === method.key ? 'var(--rbe-red)' : 'transparent'}
+                      color={selectedDonationMethod === method.key ? 'white' : '#011537'}
+                      borderColor={selectedDonationMethod === method.key ? 'var(--rbe-red)' : 'gray.300'}
+                      _hover={{ bg: selectedDonationMethod === method.key ? 'var(--rbe-accent)' : 'gray.50' }}
                       onClick={() => setSelectedDonationMethod(method.key)}
-                      borderRadius="xl"
+                      borderRadius="md"
                     >
                       {method.label}
                     </Button>
@@ -481,13 +489,13 @@ export default function NousSoutenir() {
                   bg={useColorModeValue('white', 'gray.800')}
                   borderWidth="1px"
                   borderColor={useColorModeValue('gray.200', 'gray.700')}
-                  borderRadius="xl"
+                  borderRadius="md"
                   p={{ base: 4, md: 5 }}
                   minH="250px"
                 >
                   {selectedDonationMethod === 'cheque' && (
                     <VStack align="start" spacing={3}>
-                      <Heading size="sm" color="red.600">Don par cheque</Heading>
+                      <Heading size="sm" color="var(--rbe-red)">Don par cheque</Heading>
                       <Text>
                         a l'ordre de :
                       </Text>
@@ -504,7 +512,7 @@ export default function NousSoutenir() {
 
                   {selectedDonationMethod === 'especes' && (
                     <VStack align="start" spacing={3}>
-                      <Heading size="sm" color="red.600">Don en especes</Heading>
+                      <Heading size="sm" color="var(--rbe-red)">Don en especes</Heading>
                       <Text>
                         Merci de nous adresser un e-mail via le mail de l'association.
                       </Text>
@@ -512,7 +520,8 @@ export default function NousSoutenir() {
                         as="a"
                         href="mailto:contact@retrobus-essonne.fr"
                         leftIcon={<Icon as={FiMail} />}
-                        colorScheme="red"
+                        borderColor="var(--rbe-red)"
+                        color="var(--rbe-red)"
                         variant="outline"
                       >
                         Envoyer un e-mail
@@ -522,7 +531,7 @@ export default function NousSoutenir() {
 
                   {selectedDonationMethod === 'cb' && (
                     <VStack align="start" spacing={3}>
-                      <Heading size="sm" color="red.600">Don par CB via HelloAsso</Heading>
+                      <Heading size="sm" color="var(--rbe-red)">Don par CB via HelloAsso</Heading>
                       <Text>
                         Paiement securise en ligne par carte bancaire.
                       </Text>
@@ -531,7 +540,9 @@ export default function NousSoutenir() {
                         href="https://www.helloasso.com/associations/association-retrobus-essonne/formulaires/3"
                         target="_blank"
                         rel="noopener noreferrer"
-                        colorScheme="red"
+                        bg="var(--rbe-red)"
+                        color="white"
+                        _hover={{ bg: 'var(--rbe-accent)' }}
                         rightIcon={<FiExternalLink />}
                       >
                         Acceder a HelloAsso
@@ -541,14 +552,15 @@ export default function NousSoutenir() {
 
                   {selectedDonationMethod === 'virement' && (
                     <VStack align="start" spacing={3}>
-                      <Heading size="sm" color="red.600">Don par virement bancaire</Heading>
+                      <Heading size="sm" color="var(--rbe-red)">Don par virement bancaire</Heading>
                       <Text>
                         Cliquez sur "Afficher" pour consulter les coordonnees bancaires de l'association.
                       </Text>
                       <Button
                         onClick={() => setShowBankDetails((prev) => !prev)}
                         leftIcon={<Icon as={FiExternalLink} />}
-                        colorScheme="red"
+                        borderColor="var(--rbe-red)"
+                        color="var(--rbe-red)"
                         variant="outline"
                       >
                         Afficher
@@ -557,9 +569,9 @@ export default function NousSoutenir() {
                       {showBankDetails && (
                         <Box
                           w="100%"
-                          bg={useColorModeValue('red.50', 'gray.700')}
+                          bg={useColorModeValue('#fff5f8', 'gray.700')}
                           borderWidth="1px"
-                          borderColor={useColorModeValue('red.100', 'gray.600')}
+                          borderColor={useColorModeValue('#f3b7cb', 'gray.600')}
                           borderRadius="md"
                           p={3}
                         >
@@ -581,8 +593,8 @@ export default function NousSoutenir() {
 
       <Modal isOpen={isAdhesionModalOpen} onClose={closeAdhesionModal} size="3xl" isCentered>
         <ModalOverlay bg="blackAlpha.600" backdropFilter="blur(6px)" />
-        <ModalContent borderRadius="2xl" overflow="hidden">
-          <Box bg="linear-gradient(120deg, #1e3a8a 0%, #2563eb 45%, #38bdf8 100%)" color="white" px={6} py={5}>
+        <ModalContent borderRadius="md" overflow="hidden">
+          <Box bg="#011537" borderBottom="4px solid" borderColor="var(--rbe-red)" color="white" px={6} py={5}>
             <ModalHeader p={0}>Adhesion</ModalHeader>
             <Text opacity={0.95} mt={1}>
               Candidature d'adhesion en ligne
@@ -600,8 +612,9 @@ export default function NousSoutenir() {
                     justifyContent="flex-start"
                     leftIcon={<Icon as={FiUsers} />}
                     variant="solid"
-                    colorScheme="blue"
-                    borderRadius="xl"
+                    bg="var(--rbe-red)"
+                    color="white"
+                    borderRadius="md"
                   >
                     Demande d'adhesion
                   </Button>
@@ -616,12 +629,12 @@ export default function NousSoutenir() {
                   bg={useColorModeValue('white', 'gray.800')}
                   borderWidth="1px"
                   borderColor={useColorModeValue('gray.200', 'gray.700')}
-                  borderRadius="xl"
+                  borderRadius="md"
                   p={{ base: 4, md: 5 }}
                   minH="250px"
                 >
                   <VStack align="stretch" spacing={4}>
-                    <Heading size="sm" color="blue.600">Candidater en quelques lignes</Heading>
+                    <Heading size="sm" color="var(--rbe-red)">Candidater en quelques lignes</Heading>
 
                     {adhesionError && (
                       <Alert status="error" borderRadius="md">
@@ -689,7 +702,9 @@ export default function NousSoutenir() {
                     <HStack justify="flex-end">
                       <Button variant="ghost" onClick={closeAdhesionModal}>Fermer</Button>
                       <Button
-                        colorScheme="blue"
+                        bg="var(--rbe-red)"
+                        color="white"
+                        _hover={{ bg: 'var(--rbe-accent)' }}
                         onClick={handleAdhesionSubmit}
                         isLoading={adhesionLoading}
                         loadingText="Envoi..."

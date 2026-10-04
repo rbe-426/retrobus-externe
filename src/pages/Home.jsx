@@ -11,7 +11,7 @@ import { RBE_LOGOS } from "../lib/rbeLogos";
 
 const ANNIVERSARY_HERO_BUS_IMAGE = "/assets/bus-25-ans.png";
 const ANNIVERSARY_CARD_LOGO_IMAGE = RBE_LOGOS.anniversaryCard;
-const HOME_HERO_IMAGE = "/assets/hero.jpg";
+const HOME_HERO_IMAGE = "/assets/hero_slogan.jpg";
 
 // Bloc temporaire pour l'anniversaire des 25 ans : ajuster ici la disposition du titre hero.
 const ANNIVERSARY_HERO_LAYOUT = Object.freeze({
@@ -320,7 +320,7 @@ export default function Home() {
           RétroBus Essonne, patrimoine roulant en Île-de-France
         </Heading>
 
-        {/* HERO SECTION - Campagne d'adhésion */}
+        {/* HERO SECTION - Campagne slogan temporaire */}
         <Hide below="lg">
           <Box
             as="section"
@@ -329,8 +329,14 @@ export default function Home() {
               backgroundImage: `url(${HOME_HERO_IMAGE})`,
               '--hero-pos-y': 'center',
             }}
-            aria-label="Campagne d'adhésion RétroBus Essonne"
-          />
+            aria-label="Slogan RétroBus Essonne"
+            position="relative"
+            
+          >
+            <Button as={RouterLink} to="/actualites" size="lg" bg="var(--rbe-red)" color="white" _hover={{ bg: "var(--rbe-accent)" }} position="absolute" right={{ lg: 10, xl: 16 }} top="50%" transform="translateY(-50%)">
+              Découvrir le slogan
+            </Button>
+          </Box>
         </Hide>
 
         {/* Version mobile */}
@@ -345,8 +351,13 @@ export default function Home() {
             backgroundImage={`url(${HOME_HERO_IMAGE})`}
             backgroundPosition="68% center"
             backgroundSize="cover"
-            aria-label="Campagne d'adhésion RétroBus Essonne"
-          />
+            aria-label="Slogan RétroBus Essonne"
+            
+          >
+            <Button as={RouterLink} to="/actualites" size="md" bg="var(--rbe-red)" color="white" _hover={{ bg: "var(--rbe-accent)" }} position="absolute" right={4} top="50%" transform="translateY(-50%)">
+              Découvrir le slogan
+            </Button>
+          </Box>
         </Show>
 
         {/* COLLECTION & DISCORD SECTION */}

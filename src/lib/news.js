@@ -6,6 +6,7 @@ export const normalizeNewsArticle = (article) => {
 
   return {
     ...article,
+    legacyId: String(article.id),
     id: article.slug || String(article.id),
     publishedAt: String(article.publishedAt || article.createdAt || '').slice(0, 10),
     excerpt: article.excerpt || String(article.content || article.body || '').replace(/[#*_[\]()`>-]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 180),

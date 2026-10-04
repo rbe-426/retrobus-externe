@@ -1,0 +1,30 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://association-rbe.fr/sitemap.xml
+
+# Optimisations pour les moteurs de recherche
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Bloquer l'accès aux fichiers sensibles
+Disallow: /src/
+Disallow: /*.json$
+Disallow: /node_modules/
+Disallow: /package.json
+Disallow: /vite.config.*
+
+# Pages prioritaires
+Allow: /
+Allow: /about
+Allow: /vehicles
+Allow: /events
+Allow: /photos
+Allow: /contact
+Allow: /donate

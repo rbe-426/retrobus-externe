@@ -39,7 +39,7 @@ export default function ActualiteArticle() {
   useEffect(() => {
     fetchPublicNews()
       .then((news) => setArticle(
-        news.find((item) => item.id === slug) || actualites.find((item) => item.slug === slug) || null
+        news.find((item) => item.id === slug || item.legacyId === slug) || actualites.find((item) => item.slug === slug) || null
       ))
       .catch(() => setArticle(actualites.find((item) => item.slug === slug) || null))
       .finally(() => setLoading(false));

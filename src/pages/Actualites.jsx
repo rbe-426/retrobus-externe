@@ -48,7 +48,7 @@ export default function Actualites() {
         url="https://www.association-rbe.fr/actualites"
         jsonLd={jsonLdSchemas.itemList(articles.map((actualite) => ({
           name: actualite.title,
-          url: `https://www.association-rbe.fr/actualites/${actualite.id || actualite.slug}`,
+          url: `https://www.association-rbe.fr/actualites/${actualite.slug || actualite.id}`,
           image: `https://www.association-rbe.fr${actualite.image}`,
         })), 'Actualités RétroBus Essonne')}
         image="/hero_rentree.jpg"
@@ -68,7 +68,7 @@ export default function Actualites() {
           <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
             {articles.map((actualite) => (
               <Card
-                key={actualite.id || actualite.slug}
+                key={actualite.slug || actualite.id}
                 variant="outline"
                 overflow="hidden"
                 borderColor="gray.200"
@@ -102,7 +102,7 @@ export default function Actualites() {
                     </Text>
                     <Button
                       as={RouterLink}
-                      to={`/actualites/${actualite.id || actualite.slug}`}
+                      to={`/actualites/${actualite.slug || actualite.id}`}
                       alignSelf="start"
                       bg="var(--rbe-red)"
                       color="white"

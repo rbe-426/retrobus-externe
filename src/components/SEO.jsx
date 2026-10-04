@@ -1,5 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
+const SITE_URL = 'https://www.association-rbe.fr';
+
 /**
  * Composant SEO complet pour améliorer le référencement
  * 
@@ -21,8 +23,8 @@ export default function SEO({
   title = "RétroBus Essonne",
   description = "Association de préservation du patrimoine automobile en Île-de-France. Découvrez notre collection unique de bus historiques, participez à nos événements et soutenez la sauvegarde du patrimoine routier.",
   keywords = "bus anciens, autobus historiques, patrimoine automobile, Essonne, RétroBus, collection bus, véhicules de collection, transports en commun anciens, musée bus, association automobile",
-  image = "https://www.association-rbe.fr/assets/photos/partage-retrobus.jpg",
-  url = "https://www.association-rbe.fr",
+  image = `${SITE_URL}/assets/photos/partage-retrobus.jpg`,
+  url = SITE_URL,
   type = "website",
   jsonLd = null,
   locale = "fr_FR",
@@ -33,43 +35,54 @@ export default function SEO({
   modifiedTime
 }) {
   // Assurer que l'URL de l'image est absolue
-  const fullImageUrl = image.startsWith('http') 
+  const fullImageUrl = image.startsWith('http')
     ? image 
-    : `https://www.association-rbe.fr${image}`;
+    : `${SITE_URL}${image}`;
   
   // Assurer que l'URL est absolue
   const canonicalUrl = url.startsWith('http') 
     ? url 
-    : `https://www.association-rbe.fr${url}`;
+    : `${SITE_URL}${url}`;
+  const imageType = fullImageUrl.endsWith('.png') ? 'image/png' : fullImageUrl.endsWith('.webp') ? 'image/webp' : 'image/jpeg';
 
   // JSON-LD par défaut (Organisation)
   const defaultJsonLd = {
     "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "RétroBus Essonne",
-    "alternateName": "RBE",
-    "url": "https://www.association-rbe.fr",
-    "logo": "https://www.association-rbe.fr/favicon_rbe.png",
-    "description": "Association loi 1901 de préservation et valorisation du patrimoine automobile en Île-de-France, spécialisée dans les bus et autocars historiques.",
-    "foundingDate": "2025",
-    "email": "association.rbe@gmail.com",
-    "address": {
-      "@type": "PostalAddress",
-      "addressRegion": "Île-de-France",
-      "addressCountry": "FR"
-    },
-    "sameAs": [
-      "https://www.facebook.com/RetrobusEssonne",
-      "https://www.instagram.com/retrobus_essonne",
-      "https://www.youtube.com/@RetrobusEssonne"
-    ],
-    "memberOf": {
-      "@type": "Organization",
-      "name": "Associations de préservation du patrimoine français"
-    }
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": `${SITE_URL}/#organization`,
+        "name": "RétroBus Essonne",
+        "alternateName": "RBE",
+        "url": SITE_URL,
+        "logo": `${SITE_URL}/favicon_rbe.png`,
+        "description": "Association loi 1901 de préservation et valorisation du patrimoine automobile en Île-de-France, spécialisée dans les bus et autocars historiques.",
+        "foundingDate": "2025",
+        "email": "association.rbe@gmail.com",
+        "address": {
+          "@type": "PostalAddress",
+          "addressRegion": "Île-de-France",
+          "addressCountry": "FR"
+        },
+        "sameAs": [
+          "https://www.facebook.com/RetrobusEssonne",
+          "https://www.instagram.com/retrobus_essonne",
+          "https://www.youtube.com/@RetrobusEssonne"
+        ]
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${SITE_URL}/#website`,
+        "url": SITE_URL,
+        "name": "RétroBus Essonne",
+        "inLanguage": "fr-FR",
+        "publisher": { "@id": `${SITE_URL}/#organization` }
+      }
+    ]
   };
 
   const structuredData = jsonLd || defaultJsonLd;
+  const structuredDataItems = Array.isArray(structuredData) ? structuredData : [structuredData];
 
   return (
     <Helmet>
@@ -85,9 +98,10 @@ export default function SEO({
       <meta property="og:locale" content={locale} />
       
       {/* Robots */}
-      {noIndex && <meta name="robots" content="noindex, nofollow" />}
+      {noIndex && <meta name="robots" content="noindex, follow" />}
       {!noIndex && <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />}
       <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+      <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
       
       {/* Open Graph (Facebook, LinkedIn) */}
       <meta property="og:type" content={type} />
@@ -97,6 +111,7 @@ export default function SEO({
       <meta property="og:url" content={canonicalUrl} />
       <meta property="og:image" content={fullImageUrl} />
       <meta property="og:image:secure_url" content={fullImageUrl} />
+      <meta property="og:image:type" content={imageType} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
       <meta property="og:image:alt" content={title} />
@@ -117,9 +132,11 @@ export default function SEO({
       <meta name="msapplication-TileColor" content="#D32F2F" />
       
       {/* Données structurées JSON-LD */}
-      <script type="application/ld+json">
-        {JSON.stringify(structuredData)}
-      </script>
+      {structuredDataItems.map((item, index) => (
+        <script key={`structured-data-${index}`} type="application/ld+json">
+          {JSON.stringify(item).replace(/</g, '\\u003c')}
+        </script>
+      ))}
     </Helmet>
   );
 }

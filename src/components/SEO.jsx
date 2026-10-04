@@ -54,6 +54,7 @@ export default function SEO({
         "@id": `${SITE_URL}/#organization`,
         "name": "RétroBus Essonne",
         "alternateName": "RBE",
+        "slogan": "Parce que collectionner devient un sixième sens !",
         "url": SITE_URL,
         "logo": `${SITE_URL}/favicon_rbe.png`,
         "description": "Association loi 1901 de préservation et valorisation du patrimoine automobile en Île-de-France, spécialisée dans les bus et autocars historiques.",
@@ -145,6 +146,18 @@ export default function SEO({
  * Données structurées prédéfinies pour différents types de pages
  */
 export const jsonLdSchemas = {
+  website: {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${SITE_URL}/#website`,
+    "url": SITE_URL,
+    "name": "RétroBus Essonne",
+    "inLanguage": "fr-FR",
+    "publisher": {
+      "@id": `${SITE_URL}/#organization`
+    }
+  },
+
   /**
    * Page À propos / Organisation
    */
@@ -153,6 +166,7 @@ export const jsonLdSchemas = {
     "@type": "Organization",
     "name": "RétroBus Essonne",
     "alternateName": "RBE",
+    "slogan": "Parce que collectionner devient un sixième sens !",
     "url": "https://www.association-rbe.fr",
     "logo": "https://www.association-rbe.fr/favicon_rbe.png",
     "description": "Association loi 1901 de préservation et valorisation du patrimoine automobile en Île-de-France, spécialisée dans les bus et autocars historiques.",
@@ -252,6 +266,28 @@ export const jsonLdSchemas = {
       "name": "RétroBus Essonne",
       "email": "association.rbe@gmail.com"
     }
+  },
+
+  supportPage: {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "Soutenir RétroBus Essonne",
+    "description": "Soutenez la préservation des bus historiques par un don, une adhésion ou un mécénat.",
+    "url": `${SITE_URL}/nous-soutenir`,
+    "inLanguage": "fr-FR",
+    "about": {
+      "@id": `${SITE_URL}/#organization`
+    },
+    "potentialAction": [
+      {
+        "@type": "DonateAction",
+        "target": `${SITE_URL}/nous-soutenir`
+      },
+      {
+        "@type": "JoinAction",
+        "target": `${SITE_URL}/nous-soutenir`
+      }
+    ]
   },
 
   /**

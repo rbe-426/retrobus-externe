@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import SEO from '../components/SEO';
+import SEO, { jsonLdSchemas } from '../components/SEO';
 import {
   Box,
   Container,
@@ -206,6 +206,8 @@ export default function NousSoutenir() {
         description="Soutenez RétroBus Essonne par un don, une adhésion ou un mécénat. Votre contribution aide à préserver les bus historiques et le patrimoine des transports franciliens."
         keywords="soutenir RétroBus Essonne, don patrimoine, adhésion association, mécénat entreprise, bus historiques, patrimoine transports"
         url="https://www.association-rbe.fr/nous-soutenir"
+        image="/assets/photos/partage-retrobus.jpg"
+        jsonLd={jsonLdSchemas.supportPage}
       />
 
       <Box minH="calc(100vh - 64px)" py={{ base: 8, md: 12 }} bg={pageBg}>

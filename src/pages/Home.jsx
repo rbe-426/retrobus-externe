@@ -302,7 +302,7 @@ export default function Home() {
         url="https://www.association-rbe.fr/"
         image={HOME_HERO_IMAGE}
         type="website"
-        jsonLd={jsonLdSchemas.organization}
+        jsonLd={[jsonLdSchemas.organization, jsonLdSchemas.website]}
       />
 
       <Box
@@ -319,6 +319,9 @@ export default function Home() {
         <Heading as="h1" srOnly>
           RétroBus Essonne, patrimoine roulant en Île-de-France
         </Heading>
+        <Text srOnly>
+          Notre slogan : Parce que collectionner devient un sixième sens !
+        </Text>
 
         {/* HERO SECTION - Campagne slogan temporaire */}
         <Hide below="lg">

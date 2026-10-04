@@ -360,6 +360,23 @@ export default function Home() {
           </Box>
         </Show>
 
+        <Box bg="white" py={{ base: 10, md: 14 }} borderBottomWidth="1px" borderColor="gray.200">
+          <Container maxW="5xl">
+            <Stack direction={{ base: "column", lg: "row" }} spacing={{ base: 6, lg: 12 }} align={{ lg: "center" }} justify="space-between">
+              <VStack align="start" spacing={3} maxW="3xl">
+                <Text color="var(--rbe-red)" fontSize="sm" fontWeight="700" textTransform="uppercase">L’association</Text>
+                <Heading as="h2" size="lg">Préserver le patrimoine roulant de l’Essonne</Heading>
+                <Text color="gray.700" fontSize={{ base: "md", md: "lg" }} lineHeight="tall">
+                  RétroBus Essonne est une association de passionnés qui sauvegarde, restaure et fait découvrir les bus et autocars ayant marqué l’histoire des transports en commun en Île-de-France.
+                </Text>
+              </VStack>
+              <Button as={RouterLink} to="/about" size="lg" flexShrink={0} bg="var(--rbe-red)" color="white" _hover={{ bg: "var(--rbe-accent)" }}>
+                Découvrir l’association
+              </Button>
+            </Stack>
+          </Container>
+        </Box>
+
         {/* COLLECTION & DISCORD SECTION */}
         <Box bg="var(--site-bg)" py={16}>
           <Container maxW="7xl">

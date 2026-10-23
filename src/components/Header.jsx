@@ -6,7 +6,6 @@ import {
   useDisclosure, VStack, Text, Heading, Button, Input, FormControl, FormLabel, HStack, IconButton
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
-import logoDefault from "../assets/rbe_logo.svg";
 import Navbar from "./Navbar.jsx";
 import CompatImg from "./CompatImg.jsx";
 import { isOctoberRoseActive } from "../lib/featureFlags";
@@ -24,7 +23,6 @@ const EnvelopeIcon = ({ size = 28 }) => (
   </svg>
 );
 
-const LOGO_PATH = "/assets/rbe_logo.svg";
 const HEADER_BG = "/assets/header.jpg";
 const OCTOBER_ROSE_HEADER_BG = "/assets/header_octobrose.png";
 const OCTOBER_ROSE_LOGO = "/assets/logo_octobrose.png";
@@ -107,7 +105,6 @@ export default function Header() {
             className="header-logo" 
             path={isOctoberRose ? OCTOBER_ROSE_LOGO : LOGO_PATH}
             alt={isOctoberRose ? "Logo RBE Octobre Rose" : "Logo RBE"}
-            fallback={logoDefault}
             loading="eager"
             fetchPriority="high"
             decoding="async"

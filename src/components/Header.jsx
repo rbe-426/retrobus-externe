@@ -7,7 +7,6 @@ import {
 } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import Navbar from "./Navbar.jsx";
-import CompatImg from "./CompatImg.jsx";
 import { isOctoberRoseActive } from "../lib/featureFlags";
 
 // Icônes (remplies en rouge rétrobus)
@@ -25,7 +24,6 @@ const EnvelopeIcon = ({ size = 28 }) => (
 
 const HEADER_BG = "/assets/header.jpg";
 const OCTOBER_ROSE_HEADER_BG = "/assets/header_octobrose.png";
-const OCTOBER_ROSE_LOGO = "/assets/logo_octobrose.png";
 
 export default function Header() {
   const isOctoberRose = isOctoberRoseActive();
@@ -46,7 +44,6 @@ export default function Header() {
   // Valeurs par défaut immédiates pour éviter le clignotement
   const [headerBgSize, setHeaderBgSize] = useState('cover');
   const [headerBgFocal, setHeaderBgFocal] = useState({ x: 50, y: 50 });
-  const [logoHeight, setLogoHeight] = useState(120);
   const [configLoaded, setConfigLoaded] = useState(false);
 
     useEffect(() => {
@@ -72,7 +69,6 @@ export default function Header() {
             if (Number.isFinite(data?.headerBgFocalX) && Number.isFinite(data?.headerBgFocalY)) {
               setHeaderBgFocal({ x: data.headerBgFocalX, y: data.headerBgFocalY });
             }
-            if (Number.isFinite(data?.logoWidth)) setLogoHeight(parseInt(data.logoWidth, 10));
             setConfigLoaded(true);
             break;
           } catch {}
@@ -88,32 +84,18 @@ export default function Header() {
   return (
     <>
       <header className="site-header">
-        {/* Background saisonnier pour Octobre Rose, fond habituel le reste de l'année */}
+        {/* Seule image du header : la bannière de fond (version Octobre Rose en saison) */}
         <div
           className="header-bg"
           style={{
             backgroundImage: `url(${isOctoberRose ? OCTOBER_ROSE_HEADER_BG : HEADER_BG})`,
             backgroundSize: headerBgSize || 'cover',
-            backgroundPosition: isOctoberRose ? 'center center' : `50% 50%`
+            backgroundPosition: isOctoberRose ? 'center center' : '50% 50%'
           }}
         />
         
         {/* Content */}
         <div className="header-inner">
-          {/* Logo affiché en individuel */}
-          <CompatImg 
-            className="header-logo" 
-            path={isOctoberRose ? OCTOBER_ROSE_LOGO : LOGO_PATH}
-            alt={isOctoberRose ? "Logo RBE Octobre Rose" : "Logo RBE"}
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
-            h={{ base: '46px', md: `${logoHeight}px` }}
-            w="auto"
-            maxW={{ base: 'calc(100% - 60px)', md: 'min(80vw, 520px)' }}
-            flexShrink={1}
-          />
-          
           {/* Mobile menu trigger on the right inside header */}
           <Box display={{ base: "block", md: "none" }}>
             <IconButton
